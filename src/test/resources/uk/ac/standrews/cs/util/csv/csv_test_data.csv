@@ -1,0 +1,10 @@
+id,ano,sex,year,jobtitle,hisco,hisco_labels,mergeHiscoLabels,socn,socn_soch_label,mergeSocnLabels,d4,flag
+2070,48,1,1840,gentleman,0,,1,0,gent,3,1,0
+1839,11,2,1860,lady,0,,1,0,gent,3,1,0
+3733,16,1,1853,gent,0,,1,0,gent,3,1,1
+997,4,1,1893,abc \ def,0,,1,0,gent,3,1,0
+998,12,1,1906,"""quoted string""",0,,1,0,gent,3,1,0
+999,12,1,1906,"abc, def",0,,1,0,gent,3,1,0
+1924,62,1,1845,gentleman,0,,1,0,gent,3,1,0
+2115,8,1,1909,gentleman,0,,1,0,gent,3,1,0
+1886,31,2,1845,independent means,0,,1,0,gent,3,1,0
