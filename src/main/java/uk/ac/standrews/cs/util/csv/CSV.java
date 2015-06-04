@@ -16,6 +16,12 @@ public class CSV {
     private List<String> labels;
     private List<List<String>> records;
 
+    public CSV(List<String> labels) {
+
+        this.labels = labels;
+        records = new ArrayList<>();
+    }
+
     public CSV(InputStreamReader reader) throws IOException {
 
         CSVParser parser = new CSVParser(reader, CSVFormat.RFC4180.withHeader());
@@ -41,6 +47,11 @@ public class CSV {
         labels = projector.getProjectedColumnLabels();
     }
 
+    public void addRecord(List<String> record) {
+
+        records.add(record);
+    }
+
     public void print(Appendable out) throws IOException {
 
         String[] header_array = labels.toArray(new String[labels.size()]);
@@ -51,7 +62,7 @@ public class CSV {
         }
     }
 
-    public List<List<String>> filterRecords(Selector selector) {
+    private List<List<String>> filterRecords(Selector selector) {
 
         List<List<String>> filtered_records = new ArrayList<>();
 
@@ -64,7 +75,7 @@ public class CSV {
         return filtered_records;
     }
 
-    public List<List<String>> projectRecords(Projector projector) {
+    private List<List<String>> projectRecords(Projector projector) {
 
         List<List<String>> projected_records = new ArrayList<>();
 
