@@ -5,38 +5,38 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 
-public abstract class CSVProcessor {
+public abstract class DataSetProcessor {
 
-    protected CSV processed_csv;
+    protected DataSet processed_data_set;
 
-    public CSVProcessor() throws IOException {
+    public DataSetProcessor() throws IOException {
 
         Selector selector = getSelector();
         Projector projector = getProjector();
 
-        processed_csv = getSourceCSV();
+        processed_data_set = getSourceCSV();
 
         if (selector != null) {
-            processed_csv = new CSV(processed_csv, selector);
+            processed_data_set = new DataSet(processed_data_set, selector);
         }
 
         if (projector != null) {
-            processed_csv = new CSV(processed_csv, projector);
+            processed_data_set = new DataSet(processed_data_set, projector);
         }
     }
 
     public void outputRecords() throws IOException {
 
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getPrintStream());
-        processed_csv.print(outputStreamWriter);
+        processed_data_set.print(outputStreamWriter);
         outputStreamWriter.flush();
 
-        getPrintStream().println("number of lines selected: " + processed_csv.getRecords().size());
+        getPrintStream().println("number of lines selected: " + processed_data_set.getRecords().size());
     }
 
-    public CSV getProcessedCSV() throws IOException {
+    public DataSet getProcessedDataSet() throws IOException {
 
-        return processed_csv;
+        return processed_data_set;
     }
 
     protected Selector getSelector() {
@@ -47,7 +47,7 @@ public abstract class CSVProcessor {
         return null;
     }
 
-    protected abstract CSV getSourceCSV() throws IOException;
+    protected abstract DataSet getSourceCSV() throws IOException;
 
     protected PrintStream getPrintStream() {
         return System.out;

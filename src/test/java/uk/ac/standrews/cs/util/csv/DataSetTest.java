@@ -14,37 +14,37 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CSVTest {
+public class DataSetTest {
 
     private static final String DATA_FILE_NAME = "csv_test_data.csv";
 
-    private CSV csv;
+    private DataSet dataSet;
 
     @Before
     public void CSVCreatedWithoutError() throws IOException {
 
         try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(DATA_FILE_NAME))) {
 
-            csv = new CSV(reader);
+            dataSet = new DataSet(reader);
         }
     }
 
     @Test
     public void CSVHasCorrectNumberOfRecords() throws IOException {
 
-        assertEquals(9, csv.getRecords().size());
+        assertEquals(9, dataSet.getRecords().size());
     }
 
     @Test
     public void CSVRecordHasCorrectNumberOfFields() throws IOException {
 
-        assertEquals(13, csv.getRecords().get(0).size());
+        assertEquals(13, dataSet.getRecords().get(0).size());
     }
 
     @Test
     public void CSVHasExpectedLabels() throws IOException {
 
-        List<String> labels = csv.getLabels();
+        List<String> labels = dataSet.getCSVLabels();
         assertEquals(13, labels.size());
         assertEquals("id", labels.get(0));
         assertTrue(labels.contains("year"));
@@ -55,109 +55,109 @@ public class CSVTest {
     @Test
     public void CSVFilteredByJobTitleGivesExpectedResults() throws IOException {
 
-        CSV filtered_csv = new CSV(csv, new Selector() {
-            public boolean select(List<String> record, CSV original_csv) {
+        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+            public boolean select(List<String> record, DataSet original_csv) {
 
                 String job = original_csv.getValue(record, "jobtitle");
                 return job.contains("gent");
             }
         });
 
-        assertEquals(4, filtered_csv.getRecords().size());
+        assertEquals(4, filtered_dataSet.getRecords().size());
     }
 
     @Test
     public void CSVFilteredContainsExpectedData() throws IOException {
 
-        CSV filtered_csv = new CSV(csv, new Selector() {
-            public boolean select(List<String> record, CSV original_csv) {
+        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+            public boolean select(List<String> record, DataSet original_csv) {
 
                 return original_csv.getValue(record, "id").equals("2115");
             }
         });
 
-        assertEquals(1, filtered_csv.getRecords().size());
-        assertEquals("gentleman", filtered_csv.getValue(filtered_csv.getRecords().get(0), "jobtitle"));
-        assertEquals("1909", filtered_csv.getValue(filtered_csv.getRecords().get(0), "year"));
+        assertEquals(1, filtered_dataSet.getRecords().size());
+        assertEquals("gentleman", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "jobtitle"));
+        assertEquals("1909", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "year"));
     }
 
     @Test
     public void CSVReadsCommaCorrectly() throws IOException {
 
-        CSV filtered_csv = new CSV(csv, new Selector() {
-            public boolean select(List<String> record, CSV original_csv) {
+        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+            public boolean select(List<String> record, DataSet original_csv) {
 
                 return original_csv.getValue(record, "id").equals("999");
             }
         });
 
-        assertEquals(1, filtered_csv.getRecords().size());
-        assertEquals("abc, def", filtered_csv.getValue(filtered_csv.getRecords().get(0), "jobtitle"));
+        assertEquals(1, filtered_dataSet.getRecords().size());
+        assertEquals("abc, def", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "jobtitle"));
     }
 
     @Test
     public void CSVReadsQuotesCorrectly() throws IOException {
 
-        CSV filtered_csv = new CSV(csv, new Selector() {
-            public boolean select(List<String> record, CSV original_csv) {
+        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+            public boolean select(List<String> record, DataSet original_csv) {
 
                 return original_csv.getValue(record, "id").equals("998");
             }
         });
 
-        assertEquals(1, filtered_csv.getRecords().size());
-        assertEquals("\"quoted string\"", filtered_csv.getValue(filtered_csv.getRecords().get(0), "jobtitle"));
+        assertEquals(1, filtered_dataSet.getRecords().size());
+        assertEquals("\"quoted string\"", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "jobtitle"));
     }
 
     @Test
     public void CSVReadsBackslashesCorrectly() throws IOException {
 
-        CSV filtered_csv = new CSV(csv, new Selector() {
-            public boolean select(List<String> record, CSV original_csv) {
+        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+            public boolean select(List<String> record, DataSet original_csv) {
 
                 return original_csv.getValue(record, "id").equals("997");
             }
         });
 
-        assertEquals(1, filtered_csv.getRecords().size());
-        assertEquals("abc \\ def", filtered_csv.getValue(filtered_csv.getRecords().get(0), "jobtitle"));
+        assertEquals(1, filtered_dataSet.getRecords().size());
+        assertEquals("abc \\ def", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "jobtitle"));
     }
 
     @Test
     public void CSVProjectedGivesExpectedResults() throws IOException {
 
-        CSV projected_csv = new CSV(csv, new Projector() {
+        DataSet projected_dataSet = new DataSet(dataSet, new Projector() {
             @Override
             public List<String> getProjectedColumnLabels() {
                 return Arrays.asList("id", "jobtitle", "flag");
             }
         });
 
-        assertEquals(9, projected_csv.getRecords().size());
-        assertEquals(3, projected_csv.getRecords().get(0).size());
-        assertEquals("gentleman", projected_csv.getValue(projected_csv.getRecords().get(0), "jobtitle"));
+        assertEquals(9, projected_dataSet.getRecords().size());
+        assertEquals(3, projected_dataSet.getRecords().get(0).size());
+        assertEquals("gentleman", projected_dataSet.getValue(projected_dataSet.getRecords().get(0), "jobtitle"));
     }
 
     @Test
     public void CSVFilteredAndProjectedGivesExpectedResults() throws IOException {
 
-        CSV filtered_csv = new CSV(csv, new Selector() {
-            public boolean select(List<String> record, CSV original_csv) {
+        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+            public boolean select(List<String> record, DataSet original_csv) {
 
                 return original_csv.getValue(record, "id").equals("1886");
             }
         });
 
-        CSV projected_csv = new CSV(filtered_csv, new Projector() {
+        DataSet projected_dataSet = new DataSet(filtered_dataSet, new Projector() {
             @Override
             public List<String> getProjectedColumnLabels() {
                 return Arrays.asList("id", "jobtitle", "flag");
             }
         });
 
-        assertEquals(1, projected_csv.getRecords().size());
-        assertEquals(3, projected_csv.getRecords().get(0).size());
-        assertEquals("independent means", projected_csv.getValue(projected_csv.getRecords().get(0), "jobtitle"));
+        assertEquals(1, projected_dataSet.getRecords().size());
+        assertEquals(3, projected_dataSet.getRecords().get(0).size());
+        assertEquals("independent means", projected_dataSet.getValue(projected_dataSet.getRecords().get(0), "jobtitle"));
     }
 
     @Test
@@ -167,12 +167,12 @@ public class CSVTest {
 
         try (OutputStreamWriter writer = new OutputStreamWriter(Files.newOutputStream(tempFile))) {
 
-            csv.print(writer);
+            dataSet.print(writer);
         }
 
         try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(tempFile))) {
 
-            csv = new CSV(reader);
+            dataSet = new DataSet(reader);
 
             CSVReadsCommaCorrectly();
             CSVReadsBackslashesCorrectly();
