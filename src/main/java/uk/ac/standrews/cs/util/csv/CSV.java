@@ -24,14 +24,15 @@ public class CSV {
 
     public CSV(InputStreamReader reader) throws IOException {
 
-        CSVParser parser = new CSVParser(reader, CSVFormat.RFC4180.withHeader());
+        try (CSVParser parser = new CSVParser(reader, CSVFormat.RFC4180.withHeader())) {
 
-        records = new ArrayList<>();
-        labels = getLabels(parser);
+            records = new ArrayList<>();
+            labels = getLabels(parser);
 
-        for (CSVRecord record : parser) {
+            for (CSVRecord record : parser) {
 
-            records.add(csvRecordToList(record));
+                records.add(csvRecordToList(record));
+            }
         }
     }
 
@@ -50,6 +51,19 @@ public class CSV {
     public void addRecord(List<String> record) {
 
         records.add(record);
+    }
+
+    public List<List<String>> getRecords() {
+        return records;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public String getValue(List<String> record, String label) {
+
+        return record.get(labels.indexOf(label));
     }
 
     public void print(Appendable out) throws IOException {
@@ -84,19 +98,6 @@ public class CSV {
         }
 
         return projected_records;
-    }
-
-    public List<List<String>> getRecords() {
-        return records;
-    }
-
-    public List<String> getLabels() {
-        return labels;
-    }
-
-    public String getValue(List<String> record, String label) {
-
-        return record.get(labels.indexOf(label));
     }
 
     private List<String> getLabels(CSVParser parser) {
