@@ -47,7 +47,7 @@ public class TableGenerator {
             String row_label = row_labels.get(row_number);
             DataSet dataSet = data_sets.get(row_number);
 
-            processed_data.add(getProcessedRow(row_label, dataSet));
+            processed_data.addRow(getProcessedRow(row_label, dataSet));
         }
 
         return processed_data;

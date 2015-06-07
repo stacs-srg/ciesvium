@@ -15,14 +15,30 @@ public class DataSet {
 
     public static final CSVFormat DEFAULT_CSV_FORMAT = CSVFormat.RFC4180;
 
-    private List<String> labels;
-    private List<List<String>> records;
-    private CSVFormat csv_format;
+    private final List<String> labels;
+    private final List<List<String>> records;
+    private final CSVFormat csv_format;
+
+    private DataSet(List<String> labels, List<List<String>> records, CSVFormat csv_format) {
+
+        this.labels = labels;
+        this.records = records;
+        this.csv_format = csv_format;
+    }
+
+    private DataSet(List<String> labels, List<List<String>> records) {
+
+        this(labels, records, DEFAULT_CSV_FORMAT);
+    }
+
+    private DataSet() {
+
+        this(new ArrayList<String>(), new ArrayList<List<String>>(), DEFAULT_CSV_FORMAT);
+    }
 
     public DataSet(List<String> labels) {
 
-        records = new ArrayList<>();
-        this.labels = labels;
+        this(labels, new ArrayList<List<String>>(), DEFAULT_CSV_FORMAT);
     }
 
     public DataSet(InputStreamReader reader) throws IOException {
@@ -32,15 +48,13 @@ public class DataSet {
 
     public DataSet(InputStreamReader reader, CSVFormat csv_format) throws IOException {
 
-        this.csv_format = csv_format;
+        this();
 
         try (CSVParser parser = new CSVParser(reader, csv_format.withHeader())) {
 
-            records = new ArrayList<>();
-            labels = getCSVLabels(parser);
+            labels.addAll(getCSVLabels(parser));
 
             for (CSVRecord record : parser) {
-
                 records.add(csvRecordToList(record));
             }
         }
@@ -48,17 +62,15 @@ public class DataSet {
 
     public DataSet(DataSet existing_records, Selector selector) throws IOException {
 
-        records = existing_records.filterRecords(selector);
-        labels = existing_records.getCSVLabels();
+        this(existing_records.getCSVLabels(), existing_records.filterRecords(selector));
     }
 
     public DataSet(DataSet existing_records, Projector projector) throws IOException {
 
-        records = existing_records.projectRecords(projector);
-        labels = projector.getProjectedColumnLabels();
+        this(projector.getProjectedColumnLabels(), existing_records.projectRecords(projector));
     }
 
-    public void add(List<String> record) {
+    public void addRow(List<String> record) {
 
         records.add(record);
     }
