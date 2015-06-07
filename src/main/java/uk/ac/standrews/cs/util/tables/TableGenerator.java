@@ -17,9 +17,9 @@ public class TableGenerator {
     private final String table_caption;
     private final String first_column_heading;
     private final boolean display_output_as_percentages;
-    private final String output_separator;
+    private final char output_separator;
 
-    public TableGenerator(List<String> row_labels, List<DataSet> data_sets, PrintStream writer, String table_caption, String first_column_heading, boolean display_output_as_percentages, String output_separator) {
+    public TableGenerator(List<String> row_labels, List<DataSet> data_sets, PrintStream writer, String table_caption, String first_column_heading, boolean display_output_as_percentages, char output_separator) {
 
         this.row_labels = row_labels;
         this.data_sets = data_sets;
@@ -43,7 +43,7 @@ public class TableGenerator {
         column_labels.add(0, first_column_heading);
 
         DataSet processed_data = new DataSet(column_labels);
-        processed_data.setOutputFormat(DataSet.DEFAULT_CSV_FORMAT.withDelimiter('\t'));
+        processed_data.setOutputFormat(DataSet.DEFAULT_CSV_FORMAT.withDelimiter(output_separator));
 
         for (int row_number = 0; row_number < data_sets.size(); row_number++) {
 
