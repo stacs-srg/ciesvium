@@ -17,28 +17,24 @@ public class DataSet {
 
     private final List<String> labels;
     private final List<List<String>> records;
-    private final CSVFormat csv_format;
 
-    private DataSet(List<String> labels, List<List<String>> records, CSVFormat csv_format) {
-
-        this.labels = labels;
-        this.records = records;
-        this.csv_format = csv_format;
-    }
-
-    private DataSet(List<String> labels, List<List<String>> records) {
-
-        this(labels, records, DEFAULT_CSV_FORMAT);
-    }
+    private CSVFormat input_format = DEFAULT_CSV_FORMAT;
+    private CSVFormat output_format = DEFAULT_CSV_FORMAT;
 
     private DataSet() {
 
-        this(new ArrayList<String>(), new ArrayList<List<String>>(), DEFAULT_CSV_FORMAT);
+        this(new ArrayList<String>(), new ArrayList<List<String>>());
     }
 
     public DataSet(List<String> labels) {
 
-        this(labels, new ArrayList<List<String>>(), DEFAULT_CSV_FORMAT);
+        this(labels, new ArrayList<List<String>>());
+    }
+
+    private DataSet(List<String> labels, List<List<String>> records) {
+
+        this.labels = labels;
+        this.records = records;
     }
 
     public DataSet(InputStreamReader reader) throws IOException {
@@ -46,13 +42,13 @@ public class DataSet {
         this(reader, DEFAULT_CSV_FORMAT);
     }
 
-    public DataSet(InputStreamReader reader, CSVFormat csv_format) throws IOException {
+    public DataSet(InputStreamReader reader, CSVFormat input_format) throws IOException {
 
         this();
 
-        try (CSVParser parser = new CSVParser(reader, csv_format.withHeader())) {
+        try (CSVParser parser = new CSVParser(reader, input_format.withHeader())) {
 
-            labels.addAll(getCSVLabels(parser));
+            labels.addAll(getColumnLabels(parser));
 
             for (CSVRecord record : parser) {
                 records.add(csvRecordToList(record));
@@ -62,12 +58,17 @@ public class DataSet {
 
     public DataSet(DataSet existing_records, Selector selector) throws IOException {
 
-        this(existing_records.getCSVLabels(), existing_records.filterRecords(selector));
+        this(existing_records.getColumnLabels(), existing_records.filterRecords(selector));
     }
 
     public DataSet(DataSet existing_records, Projector projector) throws IOException {
 
         this(projector.getProjectedColumnLabels(), existing_records.projectRecords(projector));
+    }
+
+    public void setOutputFormat(CSVFormat output_format){
+
+        this.output_format = output_format;
     }
 
     public void addRow(List<String> record) {
@@ -79,7 +80,7 @@ public class DataSet {
         return records;
     }
 
-    public List<String> getCSVLabels() {
+    public List<String> getColumnLabels() {
         return labels;
     }
 
@@ -91,7 +92,7 @@ public class DataSet {
     public void print(Appendable out) throws IOException {
 
         String[] header_array = labels.toArray(new String[labels.size()]);
-        CSVPrinter printer = new CSVPrinter(out, csv_format.withHeader(header_array));
+        CSVPrinter printer = new CSVPrinter(out, output_format.withHeader(header_array));
 
         for (List<String> record : records) {
             printer.printRecord(record);
@@ -122,7 +123,7 @@ public class DataSet {
         return projected_records;
     }
 
-    private List<String> getCSVLabels(CSVParser parser) {
+    private List<String> getColumnLabels(CSVParser parser) {
 
         Map<String, Integer> headerMap = parser.getHeaderMap();
         List<String> labels = new ArrayList<>(headerMap.size());

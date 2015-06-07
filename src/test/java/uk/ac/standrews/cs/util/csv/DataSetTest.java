@@ -44,7 +44,7 @@ public class DataSetTest {
     @Test
     public void CSVHasExpectedLabels() throws IOException {
 
-        List<String> labels = dataSet.getCSVLabels();
+        List<String> labels = dataSet.getColumnLabels();
         assertEquals(13, labels.size());
         assertEquals("id", labels.get(0));
         assertTrue(labels.contains("year"));

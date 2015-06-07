@@ -17,8 +17,9 @@ public class TableGenerator {
     private final String table_caption;
     private final String first_column_heading;
     private final boolean display_output_as_percentages;
+    private final String output_separator;
 
-    public TableGenerator(List<String> row_labels, List<DataSet> data_sets, PrintStream writer, String table_caption, String first_column_heading, boolean display_output_as_percentages) {
+    public TableGenerator(List<String> row_labels, List<DataSet> data_sets, PrintStream writer, String table_caption, String first_column_heading, boolean display_output_as_percentages, String output_separator) {
 
         this.row_labels = row_labels;
         this.data_sets = data_sets;
@@ -26,6 +27,7 @@ public class TableGenerator {
         this.table_caption = table_caption;
         this.first_column_heading = first_column_heading;
         this.display_output_as_percentages = display_output_as_percentages;
+        this.output_separator = output_separator;
     }
 
     public void printTable() throws IOException {
@@ -37,10 +39,11 @@ public class TableGenerator {
     public DataSet getProcessedData() throws IOException {
 
         // Get the labels from the data set for the first row - all rows should have the same labels.
-        List<String> column_labels = data_sets.get(0).getCSVLabels();
+        List<String> column_labels = data_sets.get(0).getColumnLabels();
         column_labels.add(0, first_column_heading);
 
         DataSet processed_data = new DataSet(column_labels);
+        processed_data.setOutputFormat(DataSet.DEFAULT_CSV_FORMAT.withDelimiter('\t'));
 
         for (int row_number = 0; row_number < data_sets.size(); row_number++) {
 
