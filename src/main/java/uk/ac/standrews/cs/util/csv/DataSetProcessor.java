@@ -14,7 +14,7 @@ public abstract class DataSetProcessor {
         Selector selector = getSelector();
         Projector projector = getProjector();
 
-        processed_data_set = getSourceCSV();
+        processed_data_set = getSourceDataSet();
 
         if (selector != null) {
             processed_data_set = new DataSet(processed_data_set, selector);
@@ -47,7 +47,7 @@ public abstract class DataSetProcessor {
         return null;
     }
 
-    protected abstract DataSet getSourceCSV() throws IOException;
+    protected abstract DataSet getSourceDataSet() throws IOException;
 
     protected PrintStream getPrintStream() {
         return System.out;
