@@ -1,4 +1,4 @@
-package uk.ac.standrews.cs.util.csv;
+package uk.ac.standrews.cs.util.dataset;
 
 import org.junit.Before;
 import org.junit.Test;

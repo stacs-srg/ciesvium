@@ -1,4 +1,4 @@
-package uk.ac.standrews.cs.util.csv;
+package uk.ac.standrews.cs.util.dataset;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -18,7 +18,6 @@ public class DataSet {
     private final List<String> labels;
     private final List<List<String>> records;
 
-    private CSVFormat input_format = DEFAULT_CSV_FORMAT;
     private CSVFormat output_format = DEFAULT_CSV_FORMAT;
 
     private DataSet() {

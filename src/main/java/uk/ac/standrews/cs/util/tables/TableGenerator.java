@@ -1,6 +1,6 @@
 package uk.ac.standrews.cs.util.tables;
 
-import uk.ac.standrews.cs.util.csv.DataSet;
+import uk.ac.standrews.cs.util.dataset.DataSet;
 
 import java.io.IOException;
 import java.io.PrintStream;
