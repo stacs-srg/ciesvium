@@ -61,7 +61,7 @@ public class TableGenerator {
         List<List<Double>> numerical_values = StatisticValues.parseStrings(dataSet.getRecords());
 
         StatisticValues means = new Means(numerical_values);
-        StatisticValues confidence_intervals = new ConfidenceIntervals(numerical_values);
+        StatisticValues confidence_intervals = numerical_values.size() > 1 ? new ConfidenceIntervals(numerical_values) : null;
 
         List<String> values = new ArrayList<>();
         values.add(row_label);
@@ -76,9 +76,9 @@ public class TableGenerator {
     private String getSummary(StatisticValues means, StatisticValues confidence_intervals, int column_number) {
 
         String formatted_mean = format(means.getResults().get(column_number), display_output_as_percentages);
-        String formatted_interval = format(confidence_intervals.getResults().get(column_number), display_output_as_percentages);
+        String formatted_interval = confidence_intervals != null ? (" ± " + format(confidence_intervals.getResults().get(column_number), display_output_as_percentages)) : "";
 
-        String summary = formatted_mean + " ± " + formatted_interval;
+        String summary = formatted_mean + formatted_interval;
         if (display_output_as_percentages) summary += "%";
 
         return summary;
