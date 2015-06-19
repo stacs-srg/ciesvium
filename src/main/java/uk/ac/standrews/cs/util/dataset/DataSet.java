@@ -1,15 +1,9 @@
 package uk.ac.standrews.cs.util.dataset;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.*;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 public class DataSet {
 
@@ -36,12 +30,12 @@ public class DataSet {
         this.records = records;
     }
 
-    public DataSet(InputStreamReader reader) throws IOException {
+    public DataSet(Reader reader) throws IOException {
 
         this(reader, DEFAULT_CSV_FORMAT);
     }
 
-    public DataSet(InputStreamReader reader, CSVFormat input_format) throws IOException {
+    public DataSet(Reader reader, CSVFormat input_format) throws IOException {
 
         this();
 
