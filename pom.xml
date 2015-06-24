@@ -39,11 +39,8 @@
 						<include>src/**</include>
 					</includes>
 					<excludes>
-						<exclude>**/README</exclude>
 						<exclude>src/test/resources/**</exclude>
 						<exclude>src/main/resources/**</exclude>
-						<exclude>src/docs/**</exclude>
-						<exclude>**/*.R</exclude>
 					</excludes>
 				</configuration>
 				<executions>
