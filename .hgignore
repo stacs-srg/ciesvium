@@ -1,4 +1,6 @@
 syntax: glob
-.idea
-*.iml
+
 .DS_Store
+*.iml
+.idea
+target
