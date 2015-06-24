@@ -14,6 +14,50 @@
 	<name>ciesvium</name>
 	<url>https://builds.cs.st-andrews.ac.uk/job/ciesvium</url>
 
+	<build>
+		<plugins>
+
+			<plugin>
+				<!-- This plugin checks that the required licence (currently GPL3, specified in the licence
+                     template file, is applied to all source files. The build will fail if any such files
+                     do not contain the licence. -->
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<header>src/main/resources/license-template.txt</header>
+					<headerDefinitions>
+						<!-- This custom style is used to override the default formatting for Java files,
+                             which uses Javadoc format, therefore causing confusion with the actual class-level
+                             Javadoc. -->
+						<headerDefinition>src/main/resources/license-custom-style.xml</headerDefinition>
+					</headerDefinitions>
+					<mapping>
+						<java>JAVA_STYLE</java>
+					</mapping>
+					<includes>
+						<include>src/**</include>
+					</includes>
+					<excludes>
+						<exclude>**/README</exclude>
+						<exclude>src/test/resources/**</exclude>
+						<exclude>src/main/resources/**</exclude>
+						<exclude>src/docs/**</exclude>
+						<exclude>**/*.R</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
 	<properties>
 		<repository.type>hg</repository.type>
 		<repository.location>http://quicksilver.hg.cs.st-andrews.ac.uk/ciesvium</repository.location>

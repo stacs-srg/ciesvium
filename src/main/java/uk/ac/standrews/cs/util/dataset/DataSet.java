@@ -59,6 +59,11 @@ public class DataSet {
         this(projector.getProjectedColumnLabels(), existing_records.projectRecords(projector));
     }
 
+    public DataSet(DataSet existing_records, Mapper mapper) throws IOException {
+
+        this(existing_records.getColumnLabels(), existing_records.mapRecords(mapper));
+    }
+
     public void setOutputFormat(CSVFormat output_format){
 
         this.output_format = output_format;
@@ -114,6 +119,17 @@ public class DataSet {
         }
 
         return projected_records;
+    }
+
+    private List<List<String>> mapRecords(Mapper mapper) {
+
+        List<List<String>> mapped_records = new ArrayList<>();
+
+        for (List<String> record : records) {
+            mapped_records.add(mapper.map(record, this));
+        }
+
+        return mapped_records;
     }
 
     private List<String> getColumnLabels(CSVParser parser) {
