@@ -99,6 +99,14 @@
 			<version>3.4.1</version>
 		</dependency>
 
+		<dependency>
+			<!-- Manipulation of MS Access files -->
+			<groupId>com.healthmarketscience.jackcess</groupId>
+			<artifactId>jackcess</artifactId>
+			<version>2.1.2</version>
+		</dependency>
+
+
 	</dependencies>
 
 </project>
