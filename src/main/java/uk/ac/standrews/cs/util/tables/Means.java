@@ -31,6 +31,7 @@ public class Means extends StatisticValues {
         for (Double value : values) {
             total += value;
         }
+
         return total / values.size();
     }
 }

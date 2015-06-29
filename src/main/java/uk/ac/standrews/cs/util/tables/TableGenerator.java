@@ -17,6 +17,7 @@
 package uk.ac.standrews.cs.util.tables;
 
 import uk.ac.standrews.cs.util.dataset.DataSet;
+import uk.ac.standrews.cs.util.tools.Formatting;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -32,17 +33,17 @@ public class TableGenerator {
     private final PrintStream writer;
     private final String table_caption;
     private final String first_column_heading;
-    private final boolean display_output_as_percentages;
+    private final List<Boolean> display_as_percentage;
     private final char output_separator;
 
-    public TableGenerator(List<String> row_labels, List<DataSet> data_sets, PrintStream writer, String table_caption, String first_column_heading, boolean display_output_as_percentages, char output_separator) {
+    public TableGenerator(List<String> row_labels, List<DataSet> data_sets, PrintStream writer, String table_caption, String first_column_heading, List<Boolean> display_as_percentage, char output_separator) {
 
         this.row_labels = row_labels;
         this.data_sets = data_sets;
         this.writer = writer;
         this.table_caption = table_caption;
         this.first_column_heading = first_column_heading;
-        this.display_output_as_percentages = display_output_as_percentages;
+        this.display_as_percentage = display_as_percentage;
         this.output_separator = output_separator;
     }
 
@@ -54,7 +55,7 @@ public class TableGenerator {
 
     public DataSet getProcessedData() throws IOException {
 
-        // Get the labels from the data set for the first row - all rows should have the same labels.
+        // Get the column labels from the data set for the first row - all rows should have the same labels.
         List<String> column_labels = data_sets.get(0).getColumnLabels();
         column_labels.add(0, first_column_heading);
 
@@ -91,11 +92,12 @@ public class TableGenerator {
 
     private String getSummary(StatisticValues means, StatisticValues confidence_intervals, int column_number) {
 
-        String formatted_mean = format(means.getResults().get(column_number), display_output_as_percentages);
-        String formatted_interval = confidence_intervals != null ? (" ± " + format(confidence_intervals.getResults().get(column_number), display_output_as_percentages)) : "";
+        boolean percentage = display_as_percentage.get(column_number);
+        String formatted_mean = format(means.getResults().get(column_number), percentage);
+        String formatted_interval = confidence_intervals != null ? (" ± " + format(confidence_intervals.getResults().get(column_number), percentage)) : "";
 
         String summary = formatted_mean + formatted_interval;
-        if (display_output_as_percentages) summary += "%";
+        if (percentage) summary += "%";
 
         return summary;
     }
@@ -104,6 +106,6 @@ public class TableGenerator {
 
         int multiplier = display_output_as_percentages ? 100 : 1;
 
-        return String.format(FORMAT_ONE_DECIMAL_PLACE, value * multiplier);
+        return Formatting.format(value * multiplier, 1);
     }
 }
