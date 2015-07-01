@@ -16,13 +16,11 @@
  */
 package uk.ac.standrews.cs.util.tables;
 
-import uk.ac.standrews.cs.util.dataset.DataSet;
-import uk.ac.standrews.cs.util.tools.Formatting;
+import uk.ac.standrews.cs.util.dataset.*;
+import uk.ac.standrews.cs.util.tools.*;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class TableGenerator {
 
@@ -56,7 +54,8 @@ public class TableGenerator {
     public DataSet getProcessedData() throws IOException {
 
         // Get the column labels from the data set for the first row - all rows should have the same labels.
-        List<String> column_labels = data_sets.get(0).getColumnLabels();
+        // Construct a new array list for column labels since DataSet#getColumnLabels() returns an unmodifiable list.
+        List<String> column_labels = new ArrayList<>(data_sets.get(0).getColumnLabels());
         column_labels.add(0, first_column_heading);
 
         DataSet processed_data = new DataSet(column_labels);
