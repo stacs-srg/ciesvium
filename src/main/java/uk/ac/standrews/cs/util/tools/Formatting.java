@@ -18,6 +18,7 @@ package uk.ac.standrews.cs.util.tools;
 
 
 import java.text.NumberFormat;
+import java.time.Duration;
 
 public class Formatting {
 
@@ -39,5 +40,15 @@ public class Formatting {
     public static String format(int value) {
 
         return NumberFormat.getNumberInstance().format(value);
+    }
+
+    public static String format(Duration duration) {
+
+        long seconds = duration.getSeconds();
+
+        int minutes = (int) (seconds / 60);
+        int seconds_remaining = (int) (seconds - minutes * 60);
+
+        return String.format("%s:%02d min", minutes, seconds_remaining);
     }
 }

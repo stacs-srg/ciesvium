@@ -14,6 +14,12 @@
 	<name>ciesvium</name>
 	<url>https://builds.cs.st-andrews.ac.uk/job/ciesvium</url>
 
+	<properties>
+		<jdk.version>1.8</jdk.version>
+		<maven.compiler.source>${jdk.version}</maven.compiler.source>
+		<maven.compiler.target>${jdk.version}</maven.compiler.target>
+	</properties>
+
 	<build>
 		<plugins>
 
