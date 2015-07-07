@@ -17,6 +17,7 @@
 package uk.ac.standrews.cs.util.tools;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
@@ -46,6 +47,23 @@ public class FileManipulation {
 
         OutputStream output_stream = Files.newOutputStream(path);
         return new OutputStreamWriter(output_stream, FILE_CHARSET);
+    }
+
+    public static String getResourceFilePath(Class the_class, String resource_name) {
+
+        URL resource = the_class.getResource(resource_name);
+        return resource.getFile();
+    }
+
+    public static InputStreamReader getInputStreamReaderForResource(Class the_class, String resource_name) {
+
+        String resource_name_prefixed_with_class = the_class.getSimpleName() + "/" + resource_name;
+        return new InputStreamReader(the_class.getResourceAsStream(resource_name_prefixed_with_class));
+    }
+
+    public static InputStreamReader getInputStreamReader(String resource_name) throws FileNotFoundException {
+
+        return new InputStreamReader(new FileInputStream(resource_name));
     }
 
     public static void deleteDirectory(final String directory_path) throws IOException {
