@@ -24,8 +24,6 @@ import java.util.*;
 
 public class TableGenerator {
 
-    private static final String FORMAT_ONE_DECIMAL_PLACE = "%.1f";
-
     private final List<String> row_labels;
     private final List<DataSet> data_sets;
     private final PrintStream writer;
