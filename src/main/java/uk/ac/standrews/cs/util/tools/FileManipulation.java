@@ -51,19 +51,34 @@ public class FileManipulation {
 
     public static String getResourceFilePath(Class the_class, String resource_name) {
 
-        URL resource = the_class.getResource(resource_name);
+        URL resource = getResource(the_class, resource_name);
         return resource.getFile();
+    }
+
+    public static File getResourceFile(Class the_class, String resource_name) {
+
+        URL resource = getResource(the_class, resource_name);
+        return new File(resource.getFile());
+    }
+
+    public static URL getResource(Class the_class, String resource_name) {
+
+        return the_class.getResource(getResourceNamePrefixedWithClass(the_class, resource_name));
     }
 
     public static InputStreamReader getInputStreamReaderForResource(Class the_class, String resource_name) {
 
-        String resource_name_prefixed_with_class = the_class.getSimpleName() + "/" + resource_name;
-        return new InputStreamReader(the_class.getResourceAsStream(resource_name_prefixed_with_class));
+        return new InputStreamReader(getResourceAsStream(the_class, resource_name));
     }
 
-    public static InputStreamReader getInputStreamReader(String resource_name) throws FileNotFoundException {
+    public static InputStream getResourceAsStream(Class the_class, String resource_name) {
 
-        return new InputStreamReader(new FileInputStream(resource_name));
+        return the_class.getResourceAsStream(getResourceNamePrefixedWithClass(the_class, resource_name));
+    }
+
+    protected static String getResourceNamePrefixedWithClass(Class the_class, String resource_name) {
+
+        return the_class.getSimpleName() + "/" + resource_name;
     }
 
     public static void deleteDirectory(final String directory_path) throws IOException {
