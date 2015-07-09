@@ -20,6 +20,7 @@ import org.apache.commons.csv.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataSet {
 
@@ -32,12 +33,12 @@ public class DataSet {
 
     private DataSet() {
 
-        this(new ArrayList<String>(), new ArrayList<List<String>>());
+        this(new ArrayList<>(), new ArrayList<>());
     }
 
     public DataSet(List<String> labels) {
 
-        this(labels, new ArrayList<List<String>>());
+        this(labels, new ArrayList<>());
     }
 
     private DataSet(List<String> labels, List<List<String>> records) {
@@ -115,37 +116,17 @@ public class DataSet {
 
     private List<List<String>> filterRecords(Selector selector) {
 
-        List<List<String>> filtered_records = new ArrayList<>();
-
-        for (List<String> record : records) {
-            if (selector.select(record, this)) {
-                filtered_records.add(record);
-            }
-        }
-
-        return filtered_records;
+        return records.stream().filter(record -> selector.select(record, this)).collect(Collectors.toList());
     }
 
     private List<List<String>> projectRecords(Projector projector) {
 
-        List<List<String>> projected_records = new ArrayList<>();
-
-        for (List<String> record : records) {
-            projected_records.add(project(record, projector.getProjectedColumnLabels()));
-        }
-
-        return projected_records;
+        return records.stream().map(record -> project(record, projector.getProjectedColumnLabels())).collect(Collectors.toList());
     }
 
     private List<List<String>> mapRecords(Mapper mapper) {
 
-        List<List<String>> mapped_records = new ArrayList<>();
-
-        for (List<String> record : records) {
-            mapped_records.add(mapper.map(record, this));
-        }
-
-        return mapped_records;
+        return records.stream().map(record -> mapper.map(record, this)).collect(Collectors.toList());
     }
 
     private List<String> getColumnLabels(CSVParser parser) {
