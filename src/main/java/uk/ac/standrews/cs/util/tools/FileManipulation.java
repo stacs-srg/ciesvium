@@ -61,6 +61,12 @@ public class FileManipulation {
         return new File(resource.getFile());
     }
 
+    public static Path getResourcePath(Class the_class, String resource_name) {
+
+        URL resource = getResource(the_class, resource_name);
+        return Paths.get(resource.getFile());
+    }
+
     public static URL getResource(Class the_class, String resource_name) {
 
         return the_class.getResource(getResourceNamePrefixedWithClass(the_class, resource_name));

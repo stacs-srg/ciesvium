@@ -47,12 +47,12 @@ public class DataSet {
         this.records = records;
     }
 
-    public DataSet(Reader reader) throws IOException {
+    public DataSet(Reader reader)  {
 
         this(reader, DEFAULT_CSV_FORMAT);
     }
 
-    public DataSet(Reader reader, CSVFormat input_format) throws IOException {
+    public DataSet(Reader reader, CSVFormat input_format)  {
 
         this();
 
@@ -63,20 +63,22 @@ public class DataSet {
             for (CSVRecord record : parser) {
                 records.add(csvRecordToList(record));
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public DataSet(DataSet existing_records, Selector selector) throws IOException {
+    public DataSet(DataSet existing_records, Selector selector)  {
 
         this(existing_records.getColumnLabels(), existing_records.filterRecords(selector));
     }
 
-    public DataSet(DataSet existing_records, Projector projector) throws IOException {
+    public DataSet(DataSet existing_records, Projector projector)  {
 
         this(projector.getProjectedColumnLabels(), existing_records.projectRecords(projector));
     }
 
-    public DataSet(DataSet existing_records, Mapper mapper) throws IOException {
+    public DataSet(DataSet existing_records, Mapper mapper) {
 
         this(existing_records.getColumnLabels(), existing_records.mapRecords(mapper));
     }
