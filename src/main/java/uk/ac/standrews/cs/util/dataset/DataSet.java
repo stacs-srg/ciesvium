@@ -30,6 +30,7 @@ public class DataSet {
     private final List<List<String>> records;
 
     private CSVFormat output_format = DEFAULT_CSV_FORMAT;
+    private static final char DEFAULT_DELIMITER = ',';
 
     private DataSet() {
 
@@ -49,7 +50,12 @@ public class DataSet {
 
     public DataSet(Reader reader)  {
 
-        this(reader, DEFAULT_CSV_FORMAT);
+        this(reader, DEFAULT_DELIMITER);
+    }
+
+    public DataSet(Reader reader, char delimiter)  {
+
+        this(reader, DEFAULT_CSV_FORMAT.withDelimiter(delimiter));
     }
 
     public DataSet(Reader reader, CSVFormat input_format)  {

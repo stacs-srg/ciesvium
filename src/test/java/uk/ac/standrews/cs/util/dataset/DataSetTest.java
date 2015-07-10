@@ -33,6 +33,7 @@ import static org.junit.Assert.assertTrue;
 public class DataSetTest {
 
     private static final String DATA_FILE_NAME = "csv_test_data.csv";
+    private static final char DELIMITER = ',';
 
     private DataSet dataSet;
 
@@ -41,7 +42,7 @@ public class DataSetTest {
 
         try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(DATA_FILE_NAME))) {
 
-            dataSet = new DataSet(reader);
+            dataSet = new DataSet(reader, DELIMITER);
         }
     }
 
@@ -188,7 +189,7 @@ public class DataSetTest {
 
         try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(tempFile))) {
 
-            dataSet = new DataSet(reader);
+            dataSet = new DataSet(reader, DELIMITER);
 
             CSVReadsCommaCorrectly();
             CSVReadsBackslashesCorrectly();
