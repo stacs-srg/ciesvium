@@ -17,6 +17,7 @@
 package uk.ac.standrews.cs.util.tools;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.DirectoryIteratorException;
@@ -49,27 +50,15 @@ public class FileManipulation {
         return new OutputStreamWriter(output_stream, FILE_CHARSET);
     }
 
-    public static String getResourceFilePath(Class the_class, String resource_name) {
-
-        URL resource = getResource(the_class, resource_name);
-        return resource.getFile();
-    }
-
-    public static File getResourceFile(Class the_class, String resource_name) {
-
-        URL resource = getResource(the_class, resource_name);
-        return new File(resource.getFile());
-    }
-
     public static Path getResourcePath(Class the_class, String resource_name) {
 
         URL resource = getResource(the_class, resource_name);
-        return Paths.get(resource.getFile());
-    }
+        try {
+            return Paths.get(resource.toURI());
 
-    public static URL getResource(Class the_class, String resource_name) {
-
-        return the_class.getResource(getResourceNamePrefixedWithClass(the_class, resource_name));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("invalid URI for resource path: " + e.getMessage());
+        }
     }
 
     public static InputStreamReader getInputStreamReaderForResource(Class the_class, String resource_name) {
@@ -171,5 +160,10 @@ public class FileManipulation {
             }
             assertNull(reader2.readLine());
         }
+    }
+
+    private static URL getResource(Class the_class, String resource_name) {
+
+        return the_class.getResource(getResourceNamePrefixedWithClass(the_class, resource_name));
     }
 }
