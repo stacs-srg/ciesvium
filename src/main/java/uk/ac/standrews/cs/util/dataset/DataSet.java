@@ -16,10 +16,18 @@
  */
 package uk.ac.standrews.cs.util.dataset;
 
-import org.apache.commons.csv.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+import uk.ac.standrews.cs.util.tools.FileManipulation;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DataSet {
@@ -72,6 +80,11 @@ public class DataSet {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public DataSet(Path path) throws IOException {
+
+        this(FileManipulation.getInputStreamReader(path));
     }
 
     public DataSet(DataSet existing_records, Selector selector)  {
