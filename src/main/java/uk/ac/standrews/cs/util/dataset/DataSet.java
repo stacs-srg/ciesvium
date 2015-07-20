@@ -56,17 +56,17 @@ public class DataSet {
         this.records = records;
     }
 
-    public DataSet(Reader reader)  {
+    public DataSet(Reader reader) {
 
         this(reader, DEFAULT_DELIMITER);
     }
 
-    public DataSet(Reader reader, char delimiter)  {
+    public DataSet(Reader reader, char delimiter) {
 
         this(reader, DEFAULT_CSV_FORMAT.withDelimiter(delimiter));
     }
 
-    public DataSet(Reader reader, CSVFormat input_format)  {
+    public DataSet(Reader reader, CSVFormat input_format) {
 
         this();
 
@@ -75,7 +75,14 @@ public class DataSet {
             labels.addAll(getColumnLabels(parser));
 
             for (CSVRecord record : parser) {
-                records.add(csvRecordToList(record));
+
+                final List<String> items = csvRecordToList(record);
+                final int size = items.size();
+
+                // Don't add row if the line was empty.
+                if (size > 1 || (size == 1 && items.get(0).length() > 0)) {
+                    records.add(items);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -87,12 +94,12 @@ public class DataSet {
         this(FileManipulation.getInputStreamReader(path));
     }
 
-    public DataSet(DataSet existing_records, Selector selector)  {
+    public DataSet(DataSet existing_records, Selector selector) {
 
         this(existing_records.getColumnLabels(), existing_records.filterRecords(selector));
     }
 
-    public DataSet(DataSet existing_records, Projector projector)  {
+    public DataSet(DataSet existing_records, Projector projector) {
 
         this(projector.getProjectedColumnLabels(), existing_records.projectRecords(projector));
     }
@@ -102,7 +109,7 @@ public class DataSet {
         this(existing_records.getColumnLabels(), existing_records.mapRecords(mapper));
     }
 
-    public void setOutputFormat(CSVFormat output_format){
+    public void setOutputFormat(CSVFormat output_format) {
 
         this.output_format = output_format;
     }
