@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -117,6 +118,11 @@ public class DataSet {
     public void addRow(List<String> record) {
 
         records.add(record);
+    }
+
+    public void addRow(String... values) {
+
+        addRow(Arrays.asList(values));
     }
 
     public List<List<String>> getRecords() {
