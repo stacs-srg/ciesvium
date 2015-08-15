@@ -45,7 +45,7 @@ public class Logging {
     public static void output(InfoLevel threshold, String message, String... values) {
 
         if (info_level.compareTo(threshold) >= 0) {
-            System.out.format(message, values);
+            System.out.format(message, (Object[]) values);
         }
     }
 
