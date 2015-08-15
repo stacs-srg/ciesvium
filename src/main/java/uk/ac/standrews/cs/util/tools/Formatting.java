@@ -22,14 +22,14 @@ import java.time.Duration;
 
 public class Formatting {
 
-    public static void printMetric(String label, double value) {
+    public static void printMetric(InfoLevel info_level, String label, double value) {
 
-        System.out.println(label + ": " + format(value, 2));
+        Logging.output(info_level, label + ": " + format(value, 2));
     }
 
-    public static void printMetric(String label, int value) {
+    public static void printMetric(InfoLevel info_level, String label, int value) {
 
-        System.out.println(label + ": " + format(value));
+        Logging.output(info_level, label + ": " + format(value));
     }
 
     public static String format(double value, int decimal_places) {
