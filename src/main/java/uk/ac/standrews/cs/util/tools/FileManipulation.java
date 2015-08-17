@@ -20,13 +20,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.file.DirectoryIteratorException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
@@ -144,6 +138,16 @@ public class FileManipulation {
             throw e.getCause();
         }
         return result;
+    }
+
+    public static int countLinesInFile(final Path path) throws IOException {
+
+        try (BufferedReader reader = Files.newBufferedReader(path, FILE_CHARSET)) {
+
+            int count = 0;
+            while (reader.readLine() != null) count++;
+            return count;
+        }
     }
 
     public static void assertThatFilesHaveSameContent(final Path path1, final Path path2) throws IOException {
