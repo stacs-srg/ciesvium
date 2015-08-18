@@ -29,6 +29,7 @@ public abstract class DataSetProcessor {
         Selector selector = getSelector();
         Projector projector = getProjector();
         Mapper mapper = getMapper();
+        Extender extender = getExtender();
 
         processed_data_set = getSourceDataSet();
 
@@ -42,6 +43,10 @@ public abstract class DataSetProcessor {
 
         if (mapper != null) {
             processed_data_set = new DataSet(processed_data_set, mapper);
+        }
+
+        if (extender != null) {
+            processed_data_set = new DataSet(processed_data_set, extender);
         }
     }
 
@@ -68,6 +73,10 @@ public abstract class DataSetProcessor {
     }
 
     protected Mapper getMapper() {
+        return null;
+    }
+
+    protected Extender getExtender() {
         return null;
     }
 

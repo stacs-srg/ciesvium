@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DataSet {
@@ -110,6 +111,11 @@ public class DataSet {
         this(existing_records.getColumnLabels(), existing_records.mapRecords(mapper));
     }
 
+    public DataSet(DataSet existing_records, Extender extender) {
+
+        this(extender.getColumnLabels(), existing_records.extendRecords(extender));
+    }
+
     public void setOutputFormat(CSVFormat output_format) {
 
         this.output_format = output_format;
@@ -160,7 +166,22 @@ public class DataSet {
 
     private List<List<String>> mapRecords(Mapper mapper) {
 
-        return records.stream().map(record -> mapper.map(record, this)).collect(Collectors.toList());
+        Function<List<String>, List<String>> listListFunction = record -> mapper.map(record, this);
+        return records.stream().map(listListFunction).collect(Collectors.toList());
+    }
+
+    private List<List<String>> extendRecords(Extender extender) {
+
+        List<List<String>> result = new ArrayList<>();
+
+        for (List<String> record : records) {
+
+            List<String> new_record = extender.getAdditionalValues(record, this);
+            new_record.addAll(record);
+            result.add(new_record);
+        }
+
+        return result;
     }
 
     private List<String> getColumnLabels(CSVParser parser) {
