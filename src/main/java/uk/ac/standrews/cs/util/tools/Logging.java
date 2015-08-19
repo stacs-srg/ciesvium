@@ -55,9 +55,9 @@ public class Logging {
         progress_indicator.setTotalSteps(number_of_steps);
     }
 
-    public static void progressStep() {
+    public static void progressStep(InfoLevel threshold) {
 
-        if (info_level != InfoLevel.NONE) {
+        if (info_level.compareTo(threshold) >= 0) {
             progress_indicator.progressStep();
         }
     }
