@@ -27,6 +27,11 @@ public class Means extends StatisticValues {
 
     protected double calculate(List<Double> values) {
 
+        return calculateMean(values);
+    }
+
+    public static double calculateMean(List<Double> values) {
+
         double total = 0;
         for (Double value : values) {
             total += value;

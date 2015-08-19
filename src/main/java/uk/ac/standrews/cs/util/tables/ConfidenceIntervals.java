@@ -32,17 +32,22 @@ public class ConfidenceIntervals extends StatisticValues {
         super(data);
     }
 
-    protected double calculate(List<Double> values) {
+    public static double calculateConfidenceInterval(List<Double> values) {
 
         return standardError(values) * criticalValue(sampleSize(values));
     }
 
-    private double standardError(List<Double> values) {
+    protected double calculate(List<Double> values) {
+
+        return calculateConfidenceInterval(values);
+    }
+
+    private static double standardError(List<Double> values) {
 
         return standardDeviation(values) / Math.sqrt(sampleSize(values));
     }
 
-    private double standardDeviation(List<Double> values) {
+    private static double standardDeviation(List<Double> values) {
 
         double[] array = new double[values.size()];
         for (int i = 0; i < array.length; i++) {
@@ -57,7 +62,7 @@ public class ConfidenceIntervals extends StatisticValues {
         return new TDistribution(degrees_of_freedom).inverseCumulativeProbability(ONE_TAILED_CONFIDENCE_LEVEL);
     }
 
-    private int sampleSize(List<Double> values) {
+    private static int sampleSize(List<Double> values) {
 
         return values.size();
     }
