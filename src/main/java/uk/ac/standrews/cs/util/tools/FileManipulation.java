@@ -20,6 +20,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import static org.junit.Assert.assertNull;
 
 public class FileManipulation {
 
-    public static final Charset FILE_CHARSET = Charset.forName("UTF-8");
+    public static Charset FILE_CHARSET = StandardCharsets.UTF_8;
 
     public static InputStreamReader getInputStreamReader(Path path) throws IOException {
 
