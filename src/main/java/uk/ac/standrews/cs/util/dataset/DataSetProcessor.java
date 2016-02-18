@@ -23,6 +23,7 @@ import java.io.PrintStream;
 public abstract class DataSetProcessor {
 
     protected DataSet processed_data_set;
+    private PrintStream print_stream = System.out;
 
     public DataSetProcessor() throws IOException {
 
@@ -55,8 +56,6 @@ public abstract class DataSetProcessor {
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getPrintStream());
         processed_data_set.print(outputStreamWriter);
         outputStreamWriter.flush();
-
-        getPrintStream().println("number of lines selected: " + processed_data_set.getRecords().size());
     }
 
     public DataSet getProcessedDataSet() throws IOException {
@@ -82,7 +81,13 @@ public abstract class DataSetProcessor {
 
     protected abstract DataSet getSourceDataSet() throws IOException;
 
-    protected PrintStream getPrintStream() {
-        return System.out;
+    public PrintStream getPrintStream() {
+
+        return print_stream;
+    }
+
+    public void setPrintStream(PrintStream print_stream) {
+
+        this.print_stream = print_stream;
     }
 }

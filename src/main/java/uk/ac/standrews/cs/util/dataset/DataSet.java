@@ -151,6 +151,7 @@ public class DataSet {
 
         for (List<String> record : records) {
             printer.printRecord(record);
+            printer.flush();
         }
     }
 
