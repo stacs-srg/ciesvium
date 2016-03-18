@@ -19,19 +19,26 @@ package uk.ac.standrews.cs.util.tools;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class FileManipulation {
 
-    public static Charset FILE_CHARSET = StandardCharsets.UTF_8;
+    public static final Charset FILE_CHARSET = StandardCharsets.UTF_8;
+
+    private static final String JAR_PREFIX = "jar";
+    private static final String FILE_PREFIX = "file";
+    private static final int LENGTH_OF_FILE_PREFIX = (FILE_PREFIX + ":").length();
+
 
     public static InputStreamReader getInputStreamReader(Path path) throws IOException {
 
@@ -66,7 +73,7 @@ public class FileManipulation {
         return the_class.getResourceAsStream(getResourceNamePrefixedWithClass(the_class, resource_name));
     }
 
-    protected static String getResourceNamePrefixedWithClass(Class the_class, String resource_name) {
+    private static String getResourceNamePrefixedWithClass(Class the_class, String resource_name) {
 
         return the_class.getSimpleName() + "/" + resource_name;
     }
@@ -165,6 +172,123 @@ public class FileManipulation {
             }
             assertNull(reader2.readLine());
         }
+    }
+
+    /**
+     * Returns the top-level entries in the given resource directory.
+     *
+     * @param resource_directory_path the absolute path to a directory, with initial slash mapping to the root of the resource directory
+     * @param class_loader
+     */
+    public static List<String> getResourceDirectoryEntries(String resource_directory_path, ClassLoader class_loader) throws IOException {
+
+        final String relative_path = getRelativePath(resource_directory_path);
+        final URL path_url = class_loader.getResource(relative_path);
+
+        if (path_url != null) {
+
+            final String path_url_protocol = path_url.getProtocol();
+
+            if (path_url_protocol.equals(FILE_PREFIX)) {
+                return getResourceDirectoryEntriesFromFileSystem(path_url);
+            }
+
+            if (path_url_protocol.equals(JAR_PREFIX)) {
+                return getResourceDirectoryEntriesFromJar(relative_path, path_url);
+            }
+        }
+
+        throw new IOException("can't access resource directory: " + resource_directory_path);
+    }
+
+    /**
+     * Returns the top-level entries in the given resource directory.
+     *
+     * @param relative_directory_path the path to a directory relative to the root of the resource directory e.g. "directory/path/"
+     * @param resource_directory_url  the URL for the directory, in the form "file:/absolute/path/of/jar!/directory/path/"
+     */
+    private static List<String> getResourceDirectoryEntriesFromJar(final String relative_directory_path, final URL resource_directory_url) throws IOException {
+
+        JarFile jar_file = getJarFile(resource_directory_url);
+
+        // Gets all entries in the jar file, including sub-directories and files.
+        Enumeration<JarEntry> jar_entries = jar_file.entries();
+
+        Set<String> entries = new HashSet<>();
+
+        while (jar_entries.hasMoreElements()) {
+
+            // The path of this entry relative to the resource root.
+            final String entry_path = jar_entries.nextElement().getName();
+
+            // Check whether this entry is a child of the specified resource directory.
+            if (entry_path.startsWith(relative_directory_path) && !entry_path.equals(relative_directory_path)) {
+
+                entries.add(getChildName(entry_path, relative_directory_path));
+            }
+        }
+
+        return setToList(entries);
+    }
+
+    private static List<String> setToList(Set<String> entries) {
+
+        return Arrays.asList(entries.toArray(new String[entries.size()]));
+    }
+
+    /**
+     * @param entry_path              "a/b/c/d/e"
+     * @param relative_directory_path e.g. "a/b/c"
+     * @return the name of the element that is a child of the relative directory e.g. "d"
+     */
+    private static String getChildName(String entry_path, String relative_directory_path) {
+
+        return firstPartOfPath(remainingPathAfter(entry_path, relative_directory_path.length()));
+    }
+
+    private static String firstPartOfPath(String path) {
+
+        int i = path.indexOf("/");
+
+        if (i == -1) {
+            return path;
+        } else {
+            return path.substring(0, i);
+        }
+    }
+
+    /**
+     * @param resource_directory_url the URL for the directory, in the form "file:/absolute/path/of/jar!/directory/path/"
+     */
+    private static JarFile getJarFile(URL resource_directory_url) throws IOException {
+
+        // String representation of the full path including absolute path of jar file and path to directory relative to resource root within jar.
+        final String path = resource_directory_url.getPath();
+
+        // Discard "file:" prefix and resource directory to give jar file path.
+        final String absolute_path_of_jar_file = path.substring(LENGTH_OF_FILE_PREFIX, path.indexOf("!"));
+
+        return new JarFile(URLDecoder.decode(absolute_path_of_jar_file, "UTF-8"));
+    }
+
+    private static List<String> getResourceDirectoryEntriesFromFileSystem(URL path_url) throws IOException {
+
+        try {
+            return Arrays.asList(new File(path_url.toURI()).list());
+
+        } catch (URISyntaxException e) {
+            throw new IOException("can't access resource URL: " + path_url);
+        }
+    }
+
+    private static String getRelativePath(String resource_directory_path) {
+
+        return resource_directory_path.startsWith("/") ? remainingPathAfter(resource_directory_path, 1) : resource_directory_path;
+    }
+
+    private static String remainingPathAfter(String resource_directory_path, int start_index) {
+
+        return resource_directory_path.substring(start_index);
     }
 
     private static URL getResource(Class the_class, String resource_name) {
