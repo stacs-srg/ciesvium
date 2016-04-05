@@ -201,6 +201,11 @@ public class FileManipulation {
         throw new IOException("can't access resource directory: " + resource_directory_path);
     }
 
+    public static List<String> getResourceDirectoryEntries(Path resource_directory_path, ClassLoader class_loader) throws IOException {
+
+        return getResourceDirectoryEntries(resource_directory_path.toString(), class_loader);
+    }
+
     /**
      * Returns the top-level entries in the given resource directory.
      *
