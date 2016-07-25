@@ -49,132 +49,187 @@ public class DataSetTest {
     @Test
     public void CSVHasCorrectNumberOfRecords() throws IOException {
 
-        assertEquals(9, dataSet.getRecords().size());
+        assertEquals(7, dataSet.getRecords().size());
     }
 
     @Test
     public void CSVRecordHasCorrectNumberOfFields() throws IOException {
 
-        assertEquals(13, dataSet.getRecords().get(0).size());
+        assertEquals(4, dataSet.getRecords().get(0).size());
     }
 
     @Test
     public void CSVHasExpectedLabels() throws IOException {
 
         List<String> labels = dataSet.getColumnLabels();
-        assertEquals(13, labels.size());
+        assertEquals(4, labels.size());
         assertEquals("id", labels.get(0));
-        assertTrue(labels.contains("year"));
-        assertTrue(labels.contains("hisco_labels"));
-        assertTrue(labels.contains("flag"));
+        assertTrue(labels.contains("col2"));
+        assertTrue(labels.contains("col3"));
+        assertTrue(labels.contains("col4"));
     }
 
     @Test
-    public void CSVFilteredByJobTitleGivesExpectedResults() throws IOException {
+    public void CSVFilteredGivesExpectedNumberOfResults() throws IOException {
 
         DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+
             public boolean select(List<String> record, DataSet original_csv) {
 
-                String job = original_csv.getValue(record, "jobtitle");
-                return job.contains("gent");
+                String job = original_csv.getValue(record, "col4");
+                return job.contains("jkl");
             }
         });
 
-        assertEquals(4, filtered_dataSet.getRecords().size());
+        assertEquals(3, filtered_dataSet.getRecords().size());
     }
 
     @Test
     public void CSVFilteredContainsExpectedData() throws IOException {
 
         DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+
             public boolean select(List<String> record, DataSet original_csv) {
 
-                return original_csv.getValue(record, "id").equals("2115");
+                return original_csv.getValue(record, "id").equals("5");
             }
         });
 
         assertEquals(1, filtered_dataSet.getRecords().size());
-        assertEquals("gentleman", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "jobtitle"));
-        assertEquals("1909", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "year"));
+        assertEquals("def", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "col2"));
+        assertEquals("ghi", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "col3"));
     }
 
     @Test
     public void CSVReadsCommaCorrectly() throws IOException {
 
         DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+
             public boolean select(List<String> record, DataSet original_csv) {
 
-                return original_csv.getValue(record, "id").equals("999");
+                return original_csv.getValue(record, "id").equals("7");
             }
         });
 
         assertEquals(1, filtered_dataSet.getRecords().size());
-        assertEquals("abc, def", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "jobtitle"));
+        assertEquals("def, xyz", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "col2"));
     }
 
     @Test
-    public void CSVReadsQuotesCorrectly() throws IOException {
+    public void CSVReadsFieldWithQuotesAndNoCommaCorrectly() {
 
-        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+        DataSet filtered_data_set = new DataSet(dataSet, new Selector() {
+
             public boolean select(List<String> record, DataSet original_csv) {
 
-                return original_csv.getValue(record, "id").equals("998");
+                return original_csv.getValue(record, "id").equals("8");
             }
         });
 
-        assertEquals(1, filtered_dataSet.getRecords().size());
-        assertEquals("\"quoted string\"", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "jobtitle"));
+        assertEquals(1, filtered_data_set.getRecords().size());
+        assertEquals("def", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col2"));
+    }
+
+    @Test
+    public void CSVReadsEntireFieldWithEscapedQuotesCorrectly() {
+
+        DataSet filtered_data_set = new DataSet(dataSet, new Selector() {
+
+            public boolean select(List<String> record, DataSet original_csv) {
+
+                return original_csv.getValue(record, "id").equals("9");
+            }
+        });
+
+        assertEquals(1, filtered_data_set.getRecords().size());
+        assertEquals("\"def\"", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col2"));
+    }
+
+    @Test
+    public void CSVReadsFieldIncludingEscapedQuotesCorrectly() {
+
+        DataSet filtered_data_set = new DataSet(dataSet, new Selector() {
+
+            public boolean select(List<String> record, DataSet original_csv) {
+
+                return original_csv.getValue(record, "id").equals("10");
+            }
+        });
+
+        assertEquals(1, filtered_data_set.getRecords().size());
+        assertEquals("\"def\" ghi", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col2"));
+    }
+
+    @Test
+    public void CSVReadsUnescapedQuotesWhenNotFirstCharCorrectly() throws IOException {
+
+        DataSet filtered_data_set = new DataSet(dataSet, new Selector() {
+
+            public boolean select(List<String> record, DataSet original_csv) {
+
+                return original_csv.getValue(record, "id").equals("11");
+            }
+        });
+
+        assertEquals(1, filtered_data_set.getRecords().size());
+        assertEquals(" \"def\" x", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col2"));
     }
 
     @Test
     public void CSVReadsBackslashesCorrectly() throws IOException {
 
         DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+
             public boolean select(List<String> record, DataSet original_csv) {
 
-                return original_csv.getValue(record, "id").equals("997");
+                return original_csv.getValue(record, "id").equals("6");
             }
         });
 
         assertEquals(1, filtered_dataSet.getRecords().size());
-        assertEquals("abc \\ def", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "jobtitle"));
+        assertEquals("ghi \\ xyz", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "col3"));
     }
 
     @Test
     public void CSVProjectedGivesExpectedResults() throws IOException {
 
         DataSet projected_dataSet = new DataSet(dataSet, new Projector() {
+
             @Override
             public List<String> getProjectedColumnLabels() {
-                return Arrays.asList("id", "jobtitle", "flag");
+
+                return Arrays.asList("id", "col3", "col4");
             }
         });
 
-        assertEquals(9, projected_dataSet.getRecords().size());
+        assertEquals(7, projected_dataSet.getRecords().size());
         assertEquals(3, projected_dataSet.getRecords().get(0).size());
-        assertEquals("gentleman", projected_dataSet.getValue(projected_dataSet.getRecords().get(0), "jobtitle"));
+        assertEquals("jkl", projected_dataSet.getValue(projected_dataSet.getRecords().get(0), "col4"));
     }
 
     @Test
     public void CSVFilteredAndProjectedGivesExpectedResults() throws IOException {
 
         DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+
             public boolean select(List<String> record, DataSet original_csv) {
 
-                return original_csv.getValue(record, "id").equals("1886");
+                return original_csv.getValue(record, "id").equals("5");
             }
         });
 
         DataSet projected_dataSet = new DataSet(filtered_dataSet, new Projector() {
+
             @Override
             public List<String> getProjectedColumnLabels() {
-                return Arrays.asList("id", "jobtitle", "flag");
+
+                return Arrays.asList("id", "col3", "col4");
             }
         });
 
         assertEquals(1, projected_dataSet.getRecords().size());
         assertEquals(3, projected_dataSet.getRecords().get(0).size());
-        assertEquals("independent means", projected_dataSet.getValue(projected_dataSet.getRecords().get(0), "jobtitle"));
+        assertEquals("jkl", projected_dataSet.getValue(projected_dataSet.getRecords().get(0), "col4"));
     }
 
     @Test
@@ -193,7 +248,11 @@ public class DataSetTest {
 
             CSVReadsCommaCorrectly();
             CSVReadsBackslashesCorrectly();
-            CSVReadsQuotesCorrectly();
+
+            CSVReadsFieldWithQuotesAndNoCommaCorrectly();
+            CSVReadsEntireFieldWithEscapedQuotesCorrectly();
+            CSVReadsFieldIncludingEscapedQuotesCorrectly();
+            CSVReadsUnescapedQuotesWhenNotFirstCharCorrectly();
         }
     }
 }
