@@ -49,7 +49,7 @@ public class DataSetTest {
     @Test
     public void CSVHasCorrectNumberOfRecords() throws IOException {
 
-        assertEquals(7, dataSet.getRecords().size());
+        assertEquals(9, dataSet.getRecords().size());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class DataSetTest {
             }
         });
 
-        assertEquals(3, filtered_dataSet.getRecords().size());
+        assertEquals(5, filtered_dataSet.getRecords().size());
     }
 
     @Test
@@ -202,7 +202,7 @@ public class DataSetTest {
             }
         });
 
-        assertEquals(7, projected_dataSet.getRecords().size());
+        assertEquals(9, projected_dataSet.getRecords().size());
         assertEquals(3, projected_dataSet.getRecords().get(0).size());
         assertEquals("jkl", projected_dataSet.getValue(projected_dataSet.getRecords().get(0), "col4"));
     }

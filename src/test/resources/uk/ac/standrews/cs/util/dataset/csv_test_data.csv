@@ -6,3 +6,5 @@ id,col2,col3,col4
 9,"""def""",ghi,zzz
 10,"""def"" ghi",ghi,zzz
 11, "def" x,ghi,jkl
+12, "def" x",ghi,jkl
+13, "the quick brown fox,ghi,jkl

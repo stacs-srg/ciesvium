@@ -19,20 +19,26 @@ package uk.ac.standrews.cs.util.dataset;
 import org.junit.*;
 
 import java.io.*;
-import java.nio.file.*;
-import java.util.*;
-
-import static org.junit.Assert.*;
 
 public class DataSetErrorTest {
 
-    private static final String DATA_FILE_NAME = "csv_error_test_data.csv";
+    private static final String DATA_FILE_NAME1 = "csv_error_test_data1.csv";
+    private static final String DATA_FILE_NAME2 = "csv_error_test_data2.csv";
     private static final char DELIMITER = ',';
 
     @Test(expected = RuntimeException.class)
     public void fieldStartingButNotEndingWithQuoteThrowsException() throws IOException {
 
-        try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(DATA_FILE_NAME))) {
+        try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(DATA_FILE_NAME1))) {
+
+            new DataSet(reader, DELIMITER);
+        }
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void quotedFieldContainingUnescapedQuotesThrowsException() throws IOException {
+
+        try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(DATA_FILE_NAME2))) {
 
             new DataSet(reader, DELIMITER);
         }
