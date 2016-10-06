@@ -40,7 +40,6 @@ public class FileManipulation {
     private static final String FILE_PREFIX = "file";
     private static final int LENGTH_OF_FILE_PREFIX = (FILE_PREFIX + ":").length();
 
-
     public static InputStreamReader getInputStreamReader(Path path) throws IOException {
 
         InputStream input_stream = Files.newInputStream(path);
@@ -59,7 +58,8 @@ public class FileManipulation {
         try {
             return Paths.get(resource.toURI());
 
-        } catch (URISyntaxException e) {
+        }
+        catch (URISyntaxException e) {
             throw new RuntimeException("invalid URI for resource path: " + e.getMessage());
         }
     }
@@ -143,7 +143,8 @@ public class FileManipulation {
             for (Path entry : stream) {
                 result.add(entry);
             }
-        } catch (DirectoryIteratorException e) {
+        }
+        catch (DirectoryIteratorException e) {
             throw e.getCause();
         }
         return result;
@@ -154,16 +155,16 @@ public class FileManipulation {
         try (BufferedReader reader = Files.newBufferedReader(path, FILE_CHARSET)) {
 
             int count = 0;
-            while (reader.readLine() != null) count++;
+            while (reader.readLine() != null) {
+                count++;
+            }
             return count;
         }
     }
 
     public static void assertThatFilesHaveSameContent(final Path path1, final Path path2) throws IOException {
 
-        try (
-                BufferedReader reader1 = Files.newBufferedReader(path1, FILE_CHARSET);
-                BufferedReader reader2 = Files.newBufferedReader(path2, FILE_CHARSET)) {
+        try (BufferedReader reader1 = Files.newBufferedReader(path1, FILE_CHARSET); BufferedReader reader2 = Files.newBufferedReader(path2, FILE_CHARSET)) {
 
             String line1;
 
@@ -179,11 +180,9 @@ public class FileManipulation {
      * Returns the top-level entries in the given resource directory.
      *
      * @param resource_directory_path the absolute path to a directory, with initial slash mapping to the root of the resource directory
-     * @param class_loader
+     * @param class_loader the class loader
      */
     public static List<String> getResourceDirectoryEntries(String resource_directory_path, ClassLoader class_loader) throws IOException {
-
-        System.out.println(">>>>>>>>>>>>>>> using up to date code");
 
         final String relative_path = getRelativePath(resource_directory_path);
         final URL path_url = class_loader.getResource(relative_path);
@@ -204,6 +203,12 @@ public class FileManipulation {
         throw new IOException("can't access resource directory: " + resource_directory_path);
     }
 
+    /**
+     * Returns the top-level entries in the given resource directory.
+     *
+     * @param resource_directory_path the absolute path to a directory, with initial slash mapping to the root of the resource directory
+     * @param class_loader the class loader
+     */
     public static List<String> getResourceDirectoryEntries(Path resource_directory_path, ClassLoader class_loader) throws IOException {
 
         return getResourceDirectoryEntries(resource_directory_path.toString(), class_loader);
@@ -213,7 +218,7 @@ public class FileManipulation {
      * Returns the top-level entries in the given resource directory.
      *
      * @param relative_directory_path the path to a directory relative to the root of the resource directory e.g. "directory/path/"
-     * @param resource_directory_url  the URL for the directory, in the form "file:/absolute/path/of/jar!/directory/path/"
+     * @param resource_directory_url the URL for the directory, in the form "file:/absolute/path/of/jar!/directory/path/"
      */
     private static List<String> getResourceDirectoryEntriesFromJar(final String relative_directory_path, final URL resource_directory_url) throws IOException {
 
@@ -258,11 +263,7 @@ public class FileManipulation {
 
         int i = path.indexOf("/");
 
-        if (i == -1) {
-            return path;
-        } else {
-            return path.substring(0, i);
-        }
+        return i == -1 ? path : path.substring(0, i);
     }
 
     /**
@@ -283,7 +284,9 @@ public class FileManipulation {
 
         try {
             final String[] directory_entries = new File(path_url.toURI()).list();
-            if (directory_entries == null) throw new NullPointerException();
+            if (directory_entries == null) {
+                throw new NullPointerException();
+            }
             return Arrays.asList(directory_entries);
         }
         catch (URISyntaxException | NullPointerException e) {
