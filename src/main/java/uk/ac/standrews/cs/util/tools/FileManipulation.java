@@ -183,6 +183,8 @@ public class FileManipulation {
      */
     public static List<String> getResourceDirectoryEntries(String resource_directory_path, ClassLoader class_loader) throws IOException {
 
+        System.out.println(">>>>>>>>>>>>>>> using up to date code");
+
         final String relative_path = getRelativePath(resource_directory_path);
         final URL path_url = class_loader.getResource(relative_path);
 
