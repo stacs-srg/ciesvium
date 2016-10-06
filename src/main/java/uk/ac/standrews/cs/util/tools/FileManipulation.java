@@ -34,6 +34,7 @@ import static org.junit.Assert.assertNull;
 public class FileManipulation {
 
     public static final Charset FILE_CHARSET = StandardCharsets.UTF_8;
+    private static final String URL_ENCODING = FILE_CHARSET.name();
 
     private static final String JAR_PREFIX = "jar";
     private static final String FILE_PREFIX = "file";
@@ -194,7 +195,7 @@ public class FileManipulation {
             }
 
             if (path_url_protocol.equals(JAR_PREFIX)) {
-                return getResourceDirectoryEntriesFromJar(relative_path, path_url);
+                return getResourceDirectoryEntriesFromJar(relative_path + "/", path_url);
             }
         }
 
@@ -242,7 +243,7 @@ public class FileManipulation {
     }
 
     /**
-     * @param entry_path              "a/b/c/d/e"
+     * @param entry_path e.g.              "a/b/c/d/e"
      * @param relative_directory_path e.g. "a/b/c"
      * @return the name of the element that is a child of the relative directory e.g. "d"
      */
@@ -273,15 +274,17 @@ public class FileManipulation {
         // Discard "file:" prefix and resource directory to give jar file path.
         final String absolute_path_of_jar_file = path.substring(LENGTH_OF_FILE_PREFIX, path.indexOf("!"));
 
-        return new JarFile(URLDecoder.decode(absolute_path_of_jar_file, "UTF-8"));
+        return new JarFile(URLDecoder.decode(absolute_path_of_jar_file, URL_ENCODING));
     }
 
     private static List<String> getResourceDirectoryEntriesFromFileSystem(URL path_url) throws IOException {
 
         try {
-            return Arrays.asList(new File(path_url.toURI()).list());
-
-        } catch (URISyntaxException e) {
+            final String[] directory_entries = new File(path_url.toURI()).list();
+            if (directory_entries == null) throw new NullPointerException();
+            return Arrays.asList(directory_entries);
+        }
+        catch (URISyntaxException | NullPointerException e) {
             throw new IOException("can't access resource URL: " + path_url);
         }
     }
