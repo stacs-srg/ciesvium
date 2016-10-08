@@ -17,9 +17,7 @@
 package uk.ac.standrews.cs.util.tools;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -285,12 +283,12 @@ public class FileManipulation {
         try {
             final String[] directory_entries = new File(path_url.toURI()).list();
             if (directory_entries == null) {
-                throw new NullPointerException();
+                return new ArrayList<>();
             }
             return Arrays.asList(directory_entries);
         }
-        catch (URISyntaxException | NullPointerException e) {
-            throw new IOException("can't access resource URL: " + path_url);
+        catch (URISyntaxException e) {
+            throw new IOException("can't access resource URL: " + path_url + " - " + e.getMessage());
         }
     }
 
