@@ -32,36 +32,50 @@ import static org.junit.Assert.assertTrue;
 
 public class DataSetTest {
 
-    private static final String DATA_FILE_NAME = "csv_test_data.csv";
+    private static final String NON_EMPTY_DATA_SET_FILE_NAME = "csv_test_data.csv";
+    private static final String EMPTY_DATA_SET_FILE_NAME = "csv_empty_test_data.csv";
     private static final char DELIMITER = ',';
 
-    private DataSet dataSet;
+    private DataSet non_empty_data_set;
+    private DataSet empty_data_set;
 
     @Before
     public void CSVCreatedWithoutError() throws IOException {
 
-        try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(DATA_FILE_NAME))) {
+        try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(NON_EMPTY_DATA_SET_FILE_NAME))) {
 
-            dataSet = new DataSet(reader, DELIMITER);
+            non_empty_data_set = new DataSet(reader, DELIMITER);
+        }
+
+
+        try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(EMPTY_DATA_SET_FILE_NAME))) {
+
+            empty_data_set = new DataSet(reader);
         }
     }
 
     @Test
     public void CSVHasCorrectNumberOfRecords() throws IOException {
 
-        assertEquals(9, dataSet.getRecords().size());
+        assertEquals(9, non_empty_data_set.getRecords().size());
+    }
+
+    @Test
+    public void CSVEmptyDataSetHasCorrectNumberOfRecords() throws IOException {
+
+        assertEquals(0, empty_data_set.getRecords().size());
     }
 
     @Test
     public void CSVRecordHasCorrectNumberOfFields() throws IOException {
 
-        assertEquals(4, dataSet.getRecords().get(0).size());
+        assertEquals(4, non_empty_data_set.getRecords().get(0).size());
     }
 
     @Test
     public void CSVHasExpectedLabels() throws IOException {
 
-        List<String> labels = dataSet.getColumnLabels();
+        List<String> labels = non_empty_data_set.getColumnLabels();
         assertEquals(4, labels.size());
         assertEquals("id", labels.get(0));
         assertTrue(labels.contains("col2"));
@@ -72,7 +86,7 @@ public class DataSetTest {
     @Test
     public void CSVFilteredGivesExpectedNumberOfResults() throws IOException {
 
-        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+        DataSet filtered_dataSet = new DataSet(non_empty_data_set, new Selector() {
 
             public boolean select(List<String> record, DataSet original_csv) {
 
@@ -87,7 +101,7 @@ public class DataSetTest {
     @Test
     public void CSVFilteredContainsExpectedData() throws IOException {
 
-        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+        DataSet filtered_dataSet = new DataSet(non_empty_data_set, new Selector() {
 
             public boolean select(List<String> record, DataSet original_csv) {
 
@@ -103,7 +117,7 @@ public class DataSetTest {
     @Test
     public void CSVReadsCommaCorrectly() throws IOException {
 
-        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+        DataSet filtered_dataSet = new DataSet(non_empty_data_set, new Selector() {
 
             public boolean select(List<String> record, DataSet original_csv) {
 
@@ -118,7 +132,7 @@ public class DataSetTest {
     @Test
     public void CSVReadsFieldWithQuotesAndNoCommaCorrectly() {
 
-        DataSet filtered_data_set = new DataSet(dataSet, new Selector() {
+        DataSet filtered_data_set = new DataSet(non_empty_data_set, new Selector() {
 
             public boolean select(List<String> record, DataSet original_csv) {
 
@@ -133,7 +147,7 @@ public class DataSetTest {
     @Test
     public void CSVReadsEntireFieldWithEscapedQuotesCorrectly() {
 
-        DataSet filtered_data_set = new DataSet(dataSet, new Selector() {
+        DataSet filtered_data_set = new DataSet(non_empty_data_set, new Selector() {
 
             public boolean select(List<String> record, DataSet original_csv) {
 
@@ -148,7 +162,7 @@ public class DataSetTest {
     @Test
     public void CSVReadsFieldIncludingEscapedQuotesCorrectly() {
 
-        DataSet filtered_data_set = new DataSet(dataSet, new Selector() {
+        DataSet filtered_data_set = new DataSet(non_empty_data_set, new Selector() {
 
             public boolean select(List<String> record, DataSet original_csv) {
 
@@ -163,7 +177,7 @@ public class DataSetTest {
     @Test
     public void CSVReadsUnescapedQuotesWhenNotFirstCharCorrectly() throws IOException {
 
-        DataSet filtered_data_set = new DataSet(dataSet, new Selector() {
+        DataSet filtered_data_set = new DataSet(non_empty_data_set, new Selector() {
 
             public boolean select(List<String> record, DataSet original_csv) {
 
@@ -178,7 +192,7 @@ public class DataSetTest {
     @Test
     public void CSVReadsBackslashesCorrectly() throws IOException {
 
-        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+        DataSet filtered_dataSet = new DataSet(non_empty_data_set, new Selector() {
 
             public boolean select(List<String> record, DataSet original_csv) {
 
@@ -193,7 +207,7 @@ public class DataSetTest {
     @Test
     public void CSVProjectedGivesExpectedResults() throws IOException {
 
-        DataSet projected_dataSet = new DataSet(dataSet, new Projector() {
+        DataSet projected_dataSet = new DataSet(non_empty_data_set, new Projector() {
 
             @Override
             public List<String> getProjectedColumnLabels() {
@@ -210,7 +224,7 @@ public class DataSetTest {
     @Test
     public void CSVFilteredAndProjectedGivesExpectedResults() throws IOException {
 
-        DataSet filtered_dataSet = new DataSet(dataSet, new Selector() {
+        DataSet filtered_dataSet = new DataSet(non_empty_data_set, new Selector() {
 
             public boolean select(List<String> record, DataSet original_csv) {
 
@@ -239,12 +253,12 @@ public class DataSetTest {
 
         try (OutputStreamWriter writer = new OutputStreamWriter(Files.newOutputStream(tempFile))) {
 
-            dataSet.print(writer);
+            non_empty_data_set.print(writer);
         }
 
         try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(tempFile))) {
 
-            dataSet = new DataSet(reader, DELIMITER);
+            non_empty_data_set = new DataSet(reader, DELIMITER);
 
             CSVReadsCommaCorrectly();
             CSVReadsBackslashesCorrectly();
