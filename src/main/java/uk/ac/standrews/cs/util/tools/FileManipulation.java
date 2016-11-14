@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Digitising Scotland project:
+ * Copyright 2016 Digitising Scotland project:
  * <http://digitisingscotland.cs.st-andrews.ac.uk/>
  *
  * This file is part of the module ciesvium.
@@ -40,14 +40,12 @@ public class FileManipulation {
 
     public static InputStreamReader getInputStreamReader(Path path) throws IOException {
 
-        InputStream input_stream = Files.newInputStream(path);
-        return new InputStreamReader(input_stream, FILE_CHARSET);
+        return new InputStreamReader(Files.newInputStream(path), FILE_CHARSET);
     }
 
     public static OutputStreamWriter getOutputStreamWriter(Path path) throws IOException {
 
-        OutputStream output_stream = Files.newOutputStream(path);
-        return new OutputStreamWriter(output_stream, FILE_CHARSET);
+        return new OutputStreamWriter(Files.newOutputStream(path), FILE_CHARSET);
     }
 
     public static Path getResourcePath(Class the_class, String resource_name) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Digitising Scotland project:
+ * Copyright 2016 Digitising Scotland project:
  * <http://digitisingscotland.cs.st-andrews.ac.uk/>
  *
  * This file is part of the module ciesvium.
@@ -32,42 +32,66 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Simple abstraction over a plain-text dataset. Data is represented as a list of rows, each of which is a list of strings, plus
+ * a list of string column labels.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public class DataSet {
 
+    /**
+     * The default CSV file format: <a href="https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html#RFC4180">RFC4180</a>.
+     */
     public static final CSVFormat DEFAULT_CSV_FORMAT = CSVFormat.RFC4180;
+
+    /**
+     * The default delimiter: comma.
+     */
+    public static final char DEFAULT_DELIMITER = ',';
 
     private final List<String> labels;
     private final List<List<String>> records;
 
     private CSVFormat output_format = DEFAULT_CSV_FORMAT;
-    private static final char DEFAULT_DELIMITER = ',';
 
-    private DataSet() {
-
-        this(new ArrayList<>(), new ArrayList<>());
-    }
-
+    /**
+     * Creates a new empty dataset with given column labels.
+     *
+     * @param labels the column labels
+     */
     public DataSet(List<String> labels) {
 
         this(labels, new ArrayList<>());
     }
 
-    private DataSet(List<String> labels, List<List<String>> records) {
-
-        this.labels = labels;
-        this.records = records;
-    }
-
+    /**
+     * Creates a new dataset with column labels and data read from the given Reader.
+     *
+     * @param reader the Reader to read column labels and data from
+     */
     public DataSet(Reader reader) {
 
         this(reader, DEFAULT_DELIMITER);
     }
 
+    /**
+     * Creates a new dataset with column labels and data read from the given Reader, using a specified delimiter.
+     *
+     * @param reader the Reader to read column labels and data from
+     * @param delimiter the delimiter for labels and values
+     */
     public DataSet(Reader reader, char delimiter) {
 
         this(reader, DEFAULT_CSV_FORMAT.withDelimiter(delimiter));
     }
 
+    /**
+     * Creates a new dataset with column labels and data read from the given Reader, using a specified input format.
+     *
+     * @param reader the Reader to read column labels and data from
+     * @param input_format the format
+     */
     public DataSet(Reader reader, CSVFormat input_format) {
 
         this();
@@ -86,70 +110,152 @@ public class DataSet {
                     records.add(items);
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Creates a new dataset with column labels and data read from a file with the given path.
+     *
+     * @param path the path of the file to read column labels and data from
+     */
     public DataSet(Path path) throws IOException {
 
         this(FileManipulation.getInputStreamReader(path));
     }
 
+    /**
+     * Creates a new dataset from a given dataset, with the same column labels and selected rows.
+     *
+     * @param existing_records an existing dataset
+     * @param selector a selector to determine which rows should be included
+     */
     public DataSet(DataSet existing_records, Selector selector) {
 
         this(existing_records.getColumnLabels(), existing_records.filterRecords(selector));
     }
 
+    /**
+     * Creates a new dataset from a given dataset, with selected columns.
+     *
+     * @param existing_records an existing dataset
+     * @param projector a projector to determine which columns should be included
+     */
     public DataSet(DataSet existing_records, Projector projector) {
 
         this(projector.getProjectedColumnLabels(), existing_records.projectRecords(projector));
     }
 
+    /**
+     * Creates a new dataset from a given dataset, with each row transformed in a specified way.
+     *
+     * @param existing_records an existing dataset
+     * @param mapper a mapper to transform each row into a new row in the output dataset
+     */
     public DataSet(DataSet existing_records, Mapper mapper) {
 
         this(existing_records.getColumnLabels(), existing_records.mapRecords(mapper));
     }
 
+    /**
+     * Creates a new dataset from a given dataset, with additional generated columns.
+     *
+     * @param existing_records an existing dataset
+     * @param extender an extender to generate additional column labels and values
+     */
     public DataSet(DataSet existing_records, Extender extender) {
 
         this(extender.getColumnLabels(), existing_records.extendRecords(extender));
     }
 
-    public void setOutputFormat(CSVFormat output_format) {
+    private DataSet() {
 
-        this.output_format = output_format;
+        this(new ArrayList<>(), new ArrayList<>());
     }
 
+    private DataSet(List<String> labels, List<List<String>> records) {
+
+        this.labels = labels;
+        this.records = records;
+    }
+
+    /**
+     * Adds a new record to the dataset, specified as a list of strings.
+     *
+     * @param record a new record
+     */
     public void addRow(List<String> record) {
 
         records.add(record);
     }
 
+    /**
+     * Adds a new record to the dataset, specified as a number of strings.
+     *
+     * @param values a new record
+     */
     public void addRow(String... values) {
 
         addRow(Arrays.asList(values));
     }
 
+    /**
+     * Gets the records of the dataset.
+     *
+     * @return the records
+     */
     public List<List<String>> getRecords() {
+
         return records;
     }
 
+    /**
+     * Gets the column labels of the dataset.
+     *
+     * @return the labels
+     */
     public List<String> getColumnLabels() {
+
         return labels;
     }
 
+    /**
+     * Gets the value for a specified column label, from a given record.
+     *
+     * @param record the record
+     * @param label the label of the required column
+     * @return the value of the column for the record
+     */
     public String getValue(List<String> record, String label) {
 
         return record.get(labels.indexOf(label));
     }
 
+    /**
+     * Sets the output format.
+     *
+     * @param output_format the output format
+     */
+    public void setOutputFormat(CSVFormat output_format) {
+
+        this.output_format = output_format;
+    }
+
+    /**
+     * Prints the dataset to the given output object.
+     *
+     * @param out the output object
+     * @throws IOException if the dataset cannot be printed to the given output object
+     */
     public void print(Appendable out) throws IOException {
 
         String[] header_array = labels.toArray(new String[labels.size()]);
         CSVPrinter printer = new CSVPrinter(out, output_format.withHeader(header_array));
 
         for (List<String> record : records) {
+
             printer.printRecord(record);
             printer.flush();
         }
