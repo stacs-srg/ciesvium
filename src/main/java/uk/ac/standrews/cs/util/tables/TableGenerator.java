@@ -22,6 +22,15 @@ import uk.ac.standrews.cs.util.tools.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Class to generate a table summarising a set of datasets, each of which is expected to have the same
+ * column headings and numerical data in the rows.
+ * The summary table contains the same column labels as the input datasets, and a row for each dataset.
+ * The value at each position gives the mean and confidence interval of the values in that column for
+ * the corresponding dataset.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public class TableGenerator {
 
     private final List<String> row_labels;
@@ -32,6 +41,16 @@ public class TableGenerator {
     private final List<Boolean> display_as_percentage;
     private final char output_separator;
 
+    /**
+     *
+     * @param row_labels
+     * @param data_sets
+     * @param writer
+     * @param table_caption
+     * @param first_column_heading
+     * @param display_as_percentage
+     * @param output_separator
+     */
     public TableGenerator(List<String> row_labels, List<DataSet> data_sets, PrintStream writer, String table_caption, String first_column_heading, List<Boolean> display_as_percentage, char output_separator) {
 
         this.row_labels = row_labels;
@@ -49,7 +68,7 @@ public class TableGenerator {
         getProcessedData().print(writer);
     }
 
-    public DataSet getProcessedData() throws IOException {
+    private DataSet getProcessedData() throws IOException {
 
         // Get the column labels from the data set for the first row - all rows should have the same labels.
         // Construct a new array list for column labels since DataSet#getColumnLabels() returns an unmodifiable list.
