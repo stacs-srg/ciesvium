@@ -47,7 +47,6 @@ public class DataSetTest {
             non_empty_data_set = new DataSet(reader, DELIMITER);
         }
 
-
         try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(EMPTY_DATA_SET_FILE_NAME))) {
 
             empty_data_set = new DataSet(reader);
@@ -86,59 +85,38 @@ public class DataSetTest {
     @Test
     public void CSVFilteredGivesExpectedNumberOfResults() throws IOException {
 
-        DataSet filtered_dataSet = new DataSet(non_empty_data_set, new Selector() {
+        DataSet filtered_data_set = non_empty_data_set.select((record, original_csv) -> {
 
-            public boolean select(List<String> record, DataSet original_csv) {
-
-                String job = original_csv.getValue(record, "col4");
-                return job.contains("jkl");
-            }
+            String job = original_csv.getValue(record, "col4");
+            return job.contains("jkl");
         });
 
-        assertEquals(5, filtered_dataSet.getRecords().size());
+        assertEquals(5, filtered_data_set.getRecords().size());
     }
 
     @Test
     public void CSVFilteredContainsExpectedData() throws IOException {
 
-        DataSet filtered_dataSet = new DataSet(non_empty_data_set, new Selector() {
+        DataSet filtered_data_set = non_empty_data_set.select((record, original_csv) -> original_csv.getValue(record, "id").equals("5"));
 
-            public boolean select(List<String> record, DataSet original_csv) {
-
-                return original_csv.getValue(record, "id").equals("5");
-            }
-        });
-
-        assertEquals(1, filtered_dataSet.getRecords().size());
-        assertEquals("def", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "col2"));
-        assertEquals("ghi", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "col3"));
+        assertEquals(1, filtered_data_set.getRecords().size());
+        assertEquals("def", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col2"));
+        assertEquals("ghi", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col3"));
     }
 
     @Test
     public void CSVReadsCommaCorrectly() throws IOException {
 
-        DataSet filtered_dataSet = new DataSet(non_empty_data_set, new Selector() {
+        DataSet filtered_data_set = non_empty_data_set.select((record, original_csv) -> original_csv.getValue(record, "id").equals("7"));
 
-            public boolean select(List<String> record, DataSet original_csv) {
-
-                return original_csv.getValue(record, "id").equals("7");
-            }
-        });
-
-        assertEquals(1, filtered_dataSet.getRecords().size());
-        assertEquals("def, xyz", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "col2"));
+        assertEquals(1, filtered_data_set.getRecords().size());
+        assertEquals("def, xyz", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col2"));
     }
 
     @Test
     public void CSVReadsFieldWithQuotesAndNoCommaCorrectly() {
 
-        DataSet filtered_data_set = new DataSet(non_empty_data_set, new Selector() {
-
-            public boolean select(List<String> record, DataSet original_csv) {
-
-                return original_csv.getValue(record, "id").equals("8");
-            }
-        });
+        DataSet filtered_data_set = non_empty_data_set.select((record, original_csv) -> original_csv.getValue(record, "id").equals("8"));
 
         assertEquals(1, filtered_data_set.getRecords().size());
         assertEquals("def", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col2"));
@@ -147,13 +125,7 @@ public class DataSetTest {
     @Test
     public void CSVReadsEntireFieldWithEscapedQuotesCorrectly() {
 
-        DataSet filtered_data_set = new DataSet(non_empty_data_set, new Selector() {
-
-            public boolean select(List<String> record, DataSet original_csv) {
-
-                return original_csv.getValue(record, "id").equals("9");
-            }
-        });
+        DataSet filtered_data_set = non_empty_data_set.select((record, original_csv) -> original_csv.getValue(record, "id").equals("9"));
 
         assertEquals(1, filtered_data_set.getRecords().size());
         assertEquals("\"def\"", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col2"));
@@ -162,13 +134,7 @@ public class DataSetTest {
     @Test
     public void CSVReadsFieldIncludingEscapedQuotesCorrectly() {
 
-        DataSet filtered_data_set = new DataSet(non_empty_data_set, new Selector() {
-
-            public boolean select(List<String> record, DataSet original_csv) {
-
-                return original_csv.getValue(record, "id").equals("10");
-            }
-        });
+        DataSet filtered_data_set = non_empty_data_set.select((record, original_csv) -> original_csv.getValue(record, "id").equals("10"));
 
         assertEquals(1, filtered_data_set.getRecords().size());
         assertEquals("\"def\" ghi", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col2"));
@@ -177,13 +143,7 @@ public class DataSetTest {
     @Test
     public void CSVReadsUnescapedQuotesWhenNotFirstCharCorrectly() throws IOException {
 
-        DataSet filtered_data_set = new DataSet(non_empty_data_set, new Selector() {
-
-            public boolean select(List<String> record, DataSet original_csv) {
-
-                return original_csv.getValue(record, "id").equals("11");
-            }
-        });
+        DataSet filtered_data_set = non_empty_data_set.select((record, original_csv) -> original_csv.getValue(record, "id").equals("11"));
 
         assertEquals(1, filtered_data_set.getRecords().size());
         assertEquals(" \"def\" x", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col2"));
@@ -192,71 +152,45 @@ public class DataSetTest {
     @Test
     public void CSVReadsBackslashesCorrectly() throws IOException {
 
-        DataSet filtered_dataSet = new DataSet(non_empty_data_set, new Selector() {
+        DataSet filtered_data_set = non_empty_data_set.select((record, original_csv) -> original_csv.getValue(record, "id").equals("6"));
 
-            public boolean select(List<String> record, DataSet original_csv) {
-
-                return original_csv.getValue(record, "id").equals("6");
-            }
-        });
-
-        assertEquals(1, filtered_dataSet.getRecords().size());
-        assertEquals("ghi \\ xyz", filtered_dataSet.getValue(filtered_dataSet.getRecords().get(0), "col3"));
+        assertEquals(1, filtered_data_set.getRecords().size());
+        assertEquals("ghi \\ xyz", filtered_data_set.getValue(filtered_data_set.getRecords().get(0), "col3"));
     }
 
     @Test
     public void CSVProjectedGivesExpectedResults() throws IOException {
 
-        DataSet projected_dataSet = new DataSet(non_empty_data_set, new Projector() {
+        DataSet projected_data_set = non_empty_data_set.project(() -> Arrays.asList("id", "col3", "col4"));
 
-            @Override
-            public List<String> getProjectedColumnLabels() {
-
-                return Arrays.asList("id", "col3", "col4");
-            }
-        });
-
-        assertEquals(9, projected_dataSet.getRecords().size());
-        assertEquals(3, projected_dataSet.getRecords().get(0).size());
-        assertEquals("jkl", projected_dataSet.getValue(projected_dataSet.getRecords().get(0), "col4"));
+        assertEquals(9, projected_data_set.getRecords().size());
+        assertEquals(3, projected_data_set.getRecords().get(0).size());
+        assertEquals("jkl", projected_data_set.getValue(projected_data_set.getRecords().get(0), "col4"));
     }
 
     @Test
     public void CSVFilteredAndProjectedGivesExpectedResults() throws IOException {
 
-        DataSet filtered_dataSet = new DataSet(non_empty_data_set, new Selector() {
+        DataSet filtered_data_set = non_empty_data_set.select((record, original_csv) -> original_csv.getValue(record, "id").equals("5"));
 
-            public boolean select(List<String> record, DataSet original_csv) {
+        DataSet projected_data_set = filtered_data_set.project(() -> Arrays.asList("id", "col3", "col4"));
 
-                return original_csv.getValue(record, "id").equals("5");
-            }
-        });
-
-        DataSet projected_dataSet = new DataSet(filtered_dataSet, new Projector() {
-
-            @Override
-            public List<String> getProjectedColumnLabels() {
-
-                return Arrays.asList("id", "col3", "col4");
-            }
-        });
-
-        assertEquals(1, projected_dataSet.getRecords().size());
-        assertEquals(3, projected_dataSet.getRecords().get(0).size());
-        assertEquals("jkl", projected_dataSet.getValue(projected_dataSet.getRecords().get(0), "col4"));
+        assertEquals(1, projected_data_set.getRecords().size());
+        assertEquals(3, projected_data_set.getRecords().get(0).size());
+        assertEquals("jkl", projected_data_set.getValue(projected_data_set.getRecords().get(0), "col4"));
     }
 
     @Test
     public void CSVRoundTripGivesExpectedResults() throws IOException {
 
-        Path tempFile = Files.createTempFile("cvs_test", ".csv");
+        Path temp_path = Files.createTempFile("cvs_test", ".csv");
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(Files.newOutputStream(tempFile))) {
+        try (OutputStreamWriter writer = new OutputStreamWriter(Files.newOutputStream(temp_path))) {
 
             non_empty_data_set.print(writer);
         }
 
-        try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(tempFile))) {
+        try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(temp_path))) {
 
             non_empty_data_set = new DataSet(reader, DELIMITER);
 

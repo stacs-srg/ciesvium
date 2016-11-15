@@ -46,12 +46,12 @@ public class DataSet {
     public static final CSVFormat DEFAULT_CSV_FORMAT = CSVFormat.RFC4180;
 
     /**
-     * The default delimiter: comma.
+     * The default delimiter.
      */
     public static final char DEFAULT_DELIMITER = ',';
 
-    private final List<String> labels;
-    private final List<List<String>> records;
+      List<String> labels;
+      List<List<String>> records;
 
     private CSVFormat output_format = DEFAULT_CSV_FORMAT;
 
@@ -66,11 +66,11 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset with column labels and data read from the given Reader.
+     * Creates a new dataset with column labels and data read from the given Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
      *
      * @param reader the Reader to read column labels and data from
      */
-    public DataSet(Reader reader) {
+    public DataSet(Reader reader) throws IOException {
 
         this(reader, DEFAULT_DELIMITER);
     }
@@ -81,7 +81,7 @@ public class DataSet {
      * @param reader the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
      */
-    public DataSet(Reader reader, char delimiter) {
+    public DataSet(Reader reader, char delimiter) throws IOException {
 
         this(reader, DEFAULT_CSV_FORMAT.withDelimiter(delimiter));
     }
@@ -92,7 +92,7 @@ public class DataSet {
      * @param reader the Reader to read column labels and data from
      * @param input_format the format
      */
-    public DataSet(Reader reader, CSVFormat input_format) {
+    public DataSet(Reader reader, CSVFormat input_format) throws IOException {
 
         this();
 
@@ -129,53 +129,64 @@ public class DataSet {
     /**
      * Creates a new dataset from a given dataset, with the same column labels and selected rows.
      *
-     * @param existing_records an existing dataset
      * @param selector a selector to determine which rows should be included
      */
-    public DataSet(DataSet existing_records, Selector selector) {
+    public DataSet select(Selector selector) {
 
-        this(existing_records.getColumnLabels(), existing_records.filterRecords(selector));
+        return new DataSet(labels, filterRecords(selector));
     }
 
     /**
      * Creates a new dataset from a given dataset, with selected columns.
      *
-     * @param existing_records an existing dataset
      * @param projector a projector to determine which columns should be included
      */
-    public DataSet(DataSet existing_records, Projector projector) {
+    public DataSet project(Projector projector) {
 
-        this(projector.getProjectedColumnLabels(), existing_records.projectRecords(projector));
+        return new DataSet(projector.getProjectedColumnLabels(), projectRecords(projector));
     }
 
     /**
      * Creates a new dataset from a given dataset, with each row transformed in a specified way.
      *
-     * @param existing_records an existing dataset
      * @param mapper a mapper to transform each row into a new row in the output dataset
      */
-    public DataSet(DataSet existing_records, Mapper mapper) {
+   public DataSet map(Mapper mapper) {
 
-        this(existing_records.getColumnLabels(), existing_records.mapRecords(mapper));
+        return new DataSet(labels, mapRecords(mapper));
     }
 
     /**
      * Creates a new dataset from a given dataset, with additional generated columns.
      *
-     * @param existing_records an existing dataset
      * @param extender an extender to generate additional column labels and values
      */
-    public DataSet(DataSet existing_records, Extender extender) {
+    public DataSet extend(Extender extender) {
 
-        this(extender.getColumnLabels(), existing_records.extendRecords(extender));
+        return new DataSet(extender.getColumnLabels(), extendRecords(extender));
     }
 
-    private DataSet() {
+    public DataSet(DataSet existing_records) {
+
+        this(existing_records.getColumnLabels(), existing_records.getRecords());
+    }
+
+    protected void init(DataSet existing_records) {
+
+        init(existing_records.getColumnLabels(), existing_records.getRecords());
+    }
+
+    protected DataSet() throws IOException {
 
         this(new ArrayList<>(), new ArrayList<>());
     }
 
     private DataSet(List<String> labels, List<List<String>> records) {
+
+        init(labels, records);
+    }
+
+    protected void init(List<String> labels, List<List<String>> records) {
 
         this.labels = labels;
         this.records = records;
