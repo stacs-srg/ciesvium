@@ -58,7 +58,7 @@ public abstract class DerivedDataSet extends DataSet {
         return new Extender() {
 
             @Override
-            public List<String> getAdditionalValues(List<String> record, DataSet dataSet) {
+            public List<String> getAdditionalValues(List<String> record, DataSet data_set) {
 
                 List<String> result = new ArrayList<>();
                 result.add(String.valueOf(record_count++));

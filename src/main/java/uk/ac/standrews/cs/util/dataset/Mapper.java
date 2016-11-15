@@ -18,7 +18,20 @@ package uk.ac.standrews.cs.util.dataset;
 
 import java.util.*;
 
+/**
+ * Interface for transforming records in a dataset.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public interface Mapper {
 
-    List<String> map(List<String> record, DataSet dataSet);
+    /**
+     * Creates a new record based on an existing record. The containing dataset is also
+     * made available in case the mapping logic needs access to the column labels.
+     *
+     * @param record the existing record
+     * @param data_set the dataset within which the record occurs
+     * @return a new record based on the existing record
+     */
+    List<String> map(List<String> record, DataSet data_set);
 }

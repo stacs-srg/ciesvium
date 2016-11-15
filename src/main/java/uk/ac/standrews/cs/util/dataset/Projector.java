@@ -18,7 +18,17 @@ package uk.ac.standrews.cs.util.dataset;
 
 import java.util.List;
 
+/**
+ * Interface for projecting columns from a dataset.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public interface Projector {
 
+    /**
+     * Gets the labels of the projected columns.
+     *
+     * @return the labels of the projected columns
+     */
     List<String> getProjectedColumnLabels();
 }
