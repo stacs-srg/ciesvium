@@ -59,22 +59,27 @@ public class TableGenerator {
      * Gets the summary table.
      *
      * For example, with input datasets:
+     *
      * {@code
      * macro-precision,macro-recall,macro-F1,micro-precision/recall
      * 1.00,0.34,0.42,0.38
      * 1.00,0.50,0.59,0.48
      * }
+     *
      * and
+     *
      * {@code
      * macro-precision,macro-recall,macro-F1,micro-precision/recall
      * 0.34,0.35,0.27,0.41
      * 0.50,0.51,0.44,0.51
      * }
+     *
      * row labels {@code classifier1} and {@code classifier1}
      * first column heading {@code classifier}
      * and display as percentage {@code true, true, true, true}
      *
      * the generated table is:
+     *
      * {@code
      * classifier,macro-precision,macro-recall,macro-F1,micro-precision/recall
      * classifier1,100.0 ± 0.0%,42.2 ± 103.6%,50.6 ± 104.4%,43.1 ± 66.6%
