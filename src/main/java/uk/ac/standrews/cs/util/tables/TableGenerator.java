@@ -23,8 +23,10 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Class to generate a table summarising a set of datasets, each of which is expected to have the same
- * column headings and numerical data in the rows.
+ * Class to generate a table summarising a set of datasets, intended for combining results from multiple runs
+ * of an experiment.
+ *
+ * Each dataset is expected to have the same column headings, and numerical data in the rows.
  * The summary table contains the same column labels as the input datasets, and a row for each dataset.
  * The value at each position gives the mean and confidence interval of the values in that column for
  * the corresponding dataset.
@@ -35,40 +37,45 @@ public class TableGenerator {
 
     private final List<String> row_labels;
     private final List<DataSet> data_sets;
-    private final PrintStream writer;
-    private final String table_caption;
     private final String first_column_heading;
     private final List<Boolean> display_as_percentage;
-    private final char output_separator;
 
     /**
-     *
+     *  @param data_sets
      * @param row_labels
-     * @param data_sets
-     * @param writer
-     * @param table_caption
      * @param first_column_heading
      * @param display_as_percentage
-     * @param output_separator
      */
-    public TableGenerator(List<String> row_labels, List<DataSet> data_sets, PrintStream writer, String table_caption, String first_column_heading, List<Boolean> display_as_percentage, char output_separator) {
+    public TableGenerator(List<DataSet> data_sets, List<String> row_labels, String first_column_heading, List<Boolean> display_as_percentage) {
 
         this.row_labels = row_labels;
         this.data_sets = data_sets;
-        this.writer = writer;
-        this.table_caption = table_caption;
         this.first_column_heading = first_column_heading;
         this.display_as_percentage = display_as_percentage;
-        this.output_separator = output_separator;
     }
 
-    public void printTable() throws IOException {
-
-        writer.println(table_caption);
-        getProcessedData().print(writer);
-    }
-
-    private DataSet getProcessedData() throws IOException {
+    /**
+     * For example, with input datasets:
+     * <pre>
+     * {@code
+     * macro-precision,macro-recall,macro-F1,micro-precision/recall
+     * 1.00,0.34,0.42,0.38
+     * 1.00,0.50,0.59,0.48
+     * }
+     * </pre>
+     * and
+     * <pre>
+     * {@code
+     * macro-precision,macro-recall,macro-F1,micro-precision/recall
+     * 0.34,0.35,0.27,0.41
+     * 0.50,0.51,0.44,0.51
+     * }
+     * </pre>
+     *
+     * @return
+     * @throws IOException
+     */
+    public DataSet getTable() throws IOException {
 
         // Get the column labels from the data set for the first row - all rows should have the same labels.
         // Construct a new array list for column labels since DataSet#getColumnLabels() returns an unmodifiable list.
@@ -76,7 +83,6 @@ public class TableGenerator {
         column_labels.add(0, first_column_heading);
 
         DataSet processed_data = new DataSet(column_labels);
-        processed_data.setOutputFormat(DataSet.DEFAULT_CSV_FORMAT.withDelimiter(output_separator));
 
         for (int row_number = 0; row_number < data_sets.size(); row_number++) {
 
