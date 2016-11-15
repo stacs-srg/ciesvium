@@ -21,23 +21,42 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 import java.util.List;
 
+/**
+ * Class to calculate confidence intervals for values within columns in a rectangular numerical table.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public class ConfidenceIntervals extends StatisticValues {
 
-    // The probability that the real mean lies within the confidence interval.
-    private static final double CONFIDENCE_LEVEL = 0.95;
+    /**
+     * The probability that the real mean lies within the confidence interval.
+     */
+    public static final double CONFIDENCE_LEVEL = 0.95;
+
     private static final double ONE_TAILED_CONFIDENCE_LEVEL = 1 - (1 - CONFIDENCE_LEVEL) / 2;
 
+    /**
+     * Creates a new calculation.
+     *
+     * @param data the numerical table
+     */
     public ConfidenceIntervals(List<List<Double>> data) {
 
         super(data);
     }
 
+    /**
+     * Calculates the confidence interval for a list of values.
+     *
+     * @param values the values
+     * @return the confidence interval of the values
+     */
     public static double calculateConfidenceInterval(List<Double> values) {
 
         return standardError(values) * criticalValue(sampleSize(values));
     }
 
-    protected double calculate(List<Double> values) {
+    protected double calculateColumnResult(List<Double> values) {
 
         return calculateConfidenceInterval(values);
     }

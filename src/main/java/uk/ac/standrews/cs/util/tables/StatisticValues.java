@@ -20,39 +20,36 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class StatisticValues {
+/**
+ * Abstract superclass for simple statistical calculations over a rectangular numerical table.
+ * A table is represented as a list of rows of numbers, with results calculated for each
+ * column.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
+abstract class StatisticValues {
 
     protected List<List<Double>> data;
     protected List<Double> results;
 
-    public StatisticValues(List<List<Double>> data) {
+    StatisticValues(List<List<Double>> data) {
 
         this.data = data;
-        results = new ArrayList<>();
-
-        int size = data.get(0).size();
-        for (int column_number = 0; column_number < size; column_number++) {
-            List<Double> column = getColumn(column_number);
-            results.add(calculate(column));
-        }
+        results = calculateResults(data);
     }
 
+    /**
+     * Gets the calculated results.
+     *
+     * @return the results
+     */
     public List<Double> getResults() {
         return results;
     }
 
-    private List<Double> getColumn(int column_number) {
+    protected abstract double calculateColumnResult(List<Double> column);
 
-        List<Double> column = new ArrayList<>();
-        for (List<Double> value : data) {
-            column.add(value.get(column_number));
-        }
-        return column;
-    }
-
-    protected abstract double calculate(List<Double> column);
-
-    public static List<List<Double>> parseStrings(List<List<String>> records) throws IOException {
+    static List<List<Double>> parseStrings(List<List<String>> records) throws IOException {
 
         List<List<Double>> data = new ArrayList<>();
 
@@ -65,5 +62,27 @@ public abstract class StatisticValues {
             data.add(row);
         }
         return data;
+    }
+
+    private List<Double> calculateResults(final List<List<Double>> data) {
+
+        List<Double> results = new ArrayList<>();
+
+        int size = data.get(0).size();
+        for (int column_number = 0; column_number < size; column_number++) {
+            List<Double> column = getColumn(column_number);
+            results.add(calculateColumnResult(column));
+        }
+
+        return results;
+    }
+
+    private List<Double> getColumn(int column_number) {
+
+        List<Double> column = new ArrayList<>();
+        for (List<Double> value : data) {
+            column.add(value.get(column_number));
+        }
+        return column;
     }
 }

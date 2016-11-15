@@ -37,7 +37,7 @@ public abstract class DerivedDataSet extends DataSet {
      * Gets the source dataset.
      *
      * @return the source dataset
-     * @throws IOException if the soource dataset cannot be obtained
+     * @throws IOException if the source dataset cannot be obtained
      */
     public abstract DataSet getSourceDataSet() throws IOException;
 

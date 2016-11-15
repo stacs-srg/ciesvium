@@ -18,18 +18,29 @@ package uk.ac.standrews.cs.util.tables;
 
 import java.util.List;
 
+/**
+ * Class to calculate means of columns in a rectangular numerical table.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public class Means extends StatisticValues {
 
+    /**
+     * Creates a new calculation.
+     *
+     * @param data the numerical table
+     */
     public Means(List<List<Double>> data) {
 
         super(data);
     }
 
-    protected double calculate(List<Double> values) {
-
-        return calculateMean(values);
-    }
-
+    /**
+     * Calculates the arithmetic mean of a list of values.
+     *
+     * @param values the values
+     * @return the mean of the values
+     */
     public static double calculateMean(List<Double> values) {
 
         double total = 0;
@@ -38,5 +49,10 @@ public class Means extends StatisticValues {
         }
 
         return total / values.size();
+    }
+
+    protected double calculateColumnResult(List<Double> values) {
+
+        return calculateMean(values);
     }
 }
