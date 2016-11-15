@@ -19,18 +19,35 @@ package uk.ac.standrews.cs.util.dataset;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Abstract superclass for datasets derived from existing datasets via a sequence of relational-style transformations.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public abstract class DerivedDataSet extends DataSet {
 
     protected static final String ID_COLUMN_LABEL = "ID";
 
     protected DerivedDataSet() throws IOException {
 
-        init(processDataSet(getSourceDataSet()));
+        init(getDerivedDataSet(getSourceDataSet()));
     }
 
-    protected abstract DataSet getSourceDataSet() throws IOException;
+    /**
+     * Gets the source dataset.
+     *
+     * @return the source dataset
+     * @throws IOException if the soource dataset cannot be obtained
+     */
+    public abstract DataSet getSourceDataSet() throws IOException;
 
-    protected abstract DataSet processDataSet(DataSet source_data_set);
+    /**
+     * Gets the derived dataset.
+     *
+     * @param source_data_set the source dataset
+     * @return the derived dataset
+     */
+    public abstract DataSet getDerivedDataSet(DataSet source_data_set);
 
     private int record_count;
 
