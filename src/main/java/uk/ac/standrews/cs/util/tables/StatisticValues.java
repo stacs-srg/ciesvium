@@ -19,6 +19,7 @@ package uk.ac.standrews.cs.util.tables;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.*;
 
 /**
  * Abstract superclass for simple statistical calculations over a rectangular numerical table.
@@ -49,16 +50,13 @@ abstract class StatisticValues {
 
     protected abstract double calculateColumnResult(List<Double> column);
 
-    static List<List<Double>> parseStrings(List<List<String>> records) throws IOException {
+    static List<List<Double>> parseStrings(List<List<String>> records) {
 
         List<List<Double>> data = new ArrayList<>();
 
         for (List<String> record : records) {
 
-            List<Double> row = new ArrayList<>();
-            for (String value : record) {
-                row.add(Double.parseDouble(value));
-            }
+            List<Double> row = record.stream().map(Double::parseDouble).collect(Collectors.toList());
             data.add(row);
         }
         return data;

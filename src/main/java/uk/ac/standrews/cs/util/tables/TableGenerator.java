@@ -19,7 +19,6 @@ package uk.ac.standrews.cs.util.tables;
 import uk.ac.standrews.cs.util.dataset.*;
 import uk.ac.standrews.cs.util.tools.*;
 
-import java.io.*;
 import java.util.*;
 
 /**
@@ -41,12 +40,14 @@ public class TableGenerator {
     private final List<Boolean> display_as_percentage;
 
     /**
-     *  @param data_sets
-     * @param row_labels
-     * @param first_column_heading
-     * @param display_as_percentage
+     * Creates a new table generator.
+     *
+     * @param data_sets the datasets to be summarised
+     * @param first_column_heading the heading for the first column of the resulting table
+     * @param row_labels the labels to be used in the remainder of the first column of the resulting table
+     * @param display_as_percentage a list of booleans, one per column in the input datasets, indicating whether the corresponding value should be displayed as a percentage
      */
-    public TableGenerator(List<DataSet> data_sets, List<String> row_labels, String first_column_heading, List<Boolean> display_as_percentage) {
+    public TableGenerator(List<DataSet> data_sets, String first_column_heading, List<String> row_labels, List<Boolean> display_as_percentage) {
 
         this.row_labels = row_labels;
         this.data_sets = data_sets;
@@ -55,27 +56,34 @@ public class TableGenerator {
     }
 
     /**
+     * Gets the summary table.
+     *
      * For example, with input datasets:
-     * <pre>
      * {@code
      * macro-precision,macro-recall,macro-F1,micro-precision/recall
      * 1.00,0.34,0.42,0.38
      * 1.00,0.50,0.59,0.48
      * }
-     * </pre>
      * and
-     * <pre>
      * {@code
      * macro-precision,macro-recall,macro-F1,micro-precision/recall
      * 0.34,0.35,0.27,0.41
      * 0.50,0.51,0.44,0.51
      * }
-     * </pre>
+     * row labels {@code classifier1} and {@code classifier1}
+     * first column heading {@code classifier}
+     * and display as percentage {@code true, true, true, true}
      *
-     * @return
-     * @throws IOException
+     * the generated table is:
+     * {@code
+     * classifier,macro-precision,macro-recall,macro-F1,micro-precision/recall
+     * classifier1,100.0 ± 0.0%,42.2 ± 103.6%,50.6 ± 104.4%,43.1 ± 66.6%
+     * classifier2,42.2 ± 101.1%,43.3 ± 101.2%,35.2 ± 107.6%,45.7 ± 62.1%
+     * }
+     *
+     * @return the table
      */
-    public DataSet getTable() throws IOException {
+    public DataSet getTable() {
 
         // Get the column labels from the data set for the first row - all rows should have the same labels.
         // Construct a new array list for column labels since DataSet#getColumnLabels() returns an unmodifiable list.
@@ -95,7 +103,7 @@ public class TableGenerator {
         return processed_data;
     }
 
-    private List<String> getProcessedRow(String row_label, DataSet dataSet) throws IOException {
+    private List<String> getProcessedRow(String row_label, DataSet dataSet) {
 
         List<List<Double>> numerical_values = StatisticValues.parseStrings(dataSet.getRecords());
 
@@ -119,7 +127,9 @@ public class TableGenerator {
         String formatted_interval = confidence_intervals != null ? (" ± " + format(confidence_intervals.getResults().get(column_number), percentage)) : "";
 
         String summary = formatted_mean + formatted_interval;
-        if (percentage) summary += "%";
+        if (percentage) {
+            summary += "%";
+        }
 
         return summary;
     }
