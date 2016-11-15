@@ -45,7 +45,7 @@ public class DataSet {
     /**
      * The default delimiter.
      */
-    public static final char DEFAULT_DELIMITER = ',';
+    public static final String DEFAULT_DELIMITER = ",";
 
     private List<String> labels;
     private List<List<String>> records;
@@ -63,17 +63,37 @@ public class DataSet {
     }
 
     /**
+     * Creates a new dataset containing a copy of the given dataset.
+     *
+     * @param existing_records the dataset to copy
+     */
+    public DataSet(DataSet existing_records) {
+
+        this(existing_records.getColumnLabels(), existing_records.getRecords());
+    }
+
+    /**
+     * Creates a new dataset with column labels and data read from a file with the given path.
+     *
+     * @param path the path of the file to read column labels and data from
+     */
+    public DataSet(Path path) throws IOException {
+
+        this(FileManipulation.getInputStreamReader(path));
+    }
+
+    /**
      * Creates a new dataset with column labels and data read from the given Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
      *
      * @param reader the Reader to read column labels and data from
      */
     public DataSet(Reader reader) throws IOException {
 
-        this(reader, DEFAULT_DELIMITER);
+        this(reader, DEFAULT_DELIMITER.charAt(0));
     }
 
     /**
-     * Creates a new dataset with column labels and data read from the given Reader, using a specified delimiter.
+     * Creates a new dataset with column labels and data read from the given Reader, using the default CSV input format and a specified delimiter.
      *
      * @param reader the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
@@ -114,17 +134,7 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset with column labels and data read from a file with the given path.
-     *
-     * @param path the path of the file to read column labels and data from
-     */
-    public DataSet(Path path) throws IOException {
-
-        this(FileManipulation.getInputStreamReader(path));
-    }
-
-    /**
-     * Creates a new dataset from a given dataset, with the same column labels and selected rows.
+     * Creates a new dataset from this dataset, with the same column labels and selected rows.
      *
      * @param selector a selector to determine which rows should be included
      */
@@ -134,7 +144,7 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset from a given dataset, with selected columns.
+     * Creates a new dataset from this dataset, with specified columns.
      *
      * @param projector a projector to determine which columns should be included
      */
@@ -144,7 +154,7 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset from a given dataset, with each row transformed in a specified way.
+     * Creates a new dataset from this dataset, with each row transformed in a specified way.
      *
      * @param mapper a mapper to transform each row into a new row in the output dataset
      */
@@ -154,7 +164,7 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset from a given dataset, with additional generated columns.
+     * Creates a new dataset from this dataset, with additional generated columns.
      *
      * @param extender an extender to generate additional column labels and values
      */
@@ -163,34 +173,8 @@ public class DataSet {
         return new DataSet(extendLabels(extender), extendRecords(extender));
     }
 
-    public DataSet(DataSet existing_records) {
-
-        this(existing_records.getColumnLabels(), existing_records.getRecords());
-    }
-
-    protected void init(DataSet existing_records) {
-
-        init(existing_records.getColumnLabels(), existing_records.getRecords());
-    }
-
-    protected DataSet() throws IOException {
-
-        this(new ArrayList<>(), new ArrayList<>());
-    }
-
-    private DataSet(List<String> labels, List<List<String>> records) {
-
-        init(labels, records);
-    }
-
-    protected void init(List<String> labels, List<List<String>> records) {
-
-        this.labels = labels;
-        this.records = records;
-    }
-
     /**
-     * Adds a new record to the dataset, specified as a list of strings.
+     * Adds a new record to this dataset, specified as a list of strings.
      *
      * @param record a new record
      */
@@ -200,7 +184,7 @@ public class DataSet {
     }
 
     /**
-     * Adds a new record to the dataset, specified as a number of strings.
+     * Adds a new record to this dataset, specified as a number of strings.
      *
      * @param values a new record
      */
@@ -210,7 +194,7 @@ public class DataSet {
     }
 
     /**
-     * Gets the records of the dataset.
+     * Gets the records of this dataset.
      *
      * @return the records
      */
@@ -220,7 +204,7 @@ public class DataSet {
     }
 
     /**
-     * Gets the column labels of the dataset.
+     * Gets the column labels of this dataset.
      *
      * @return the labels
      */
@@ -242,7 +226,7 @@ public class DataSet {
     }
 
     /**
-     * Sets the output format.
+     * Sets the output format used by {@link #print(Appendable)}.
      *
      * @param output_format the output format
      */
@@ -252,10 +236,10 @@ public class DataSet {
     }
 
     /**
-     * Prints the dataset to the given output object.
+     * Prints this dataset to the given output object.
      *
      * @param out the output object
-     * @throws IOException if the dataset cannot be printed to the given output object
+     * @throws IOException if this dataset cannot be printed to the given output object
      */
     public void print(Appendable out) throws IOException {
 
@@ -267,6 +251,27 @@ public class DataSet {
             printer.printRecord(record);
             printer.flush();
         }
+    }
+
+    protected DataSet() throws IOException {
+
+        this(new ArrayList<>(), new ArrayList<>());
+    }
+
+    private DataSet(List<String> labels, List<List<String>> records) {
+
+        init(labels, records);
+    }
+
+    protected void init(List<String> labels, List<List<String>> records) {
+
+        this.labels = labels;
+        this.records = records;
+    }
+
+    protected void init(DataSet existing_records) {
+
+        init(existing_records.getColumnLabels(), existing_records.getRecords());
     }
 
     private List<List<String>> filterRecords(Selector selector) {
