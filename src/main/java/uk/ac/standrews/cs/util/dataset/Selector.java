@@ -18,7 +18,20 @@ package uk.ac.standrews.cs.util.dataset;
 
 import java.util.List;
 
+/**
+ * Interface for selecting records from a dataset.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public interface Selector {
 
-    boolean select(List<String> record, DataSet dataSet);
+    /**
+     * Determines whether a given record should be selected. The containing dataset is also
+     * made available in case the selection logic needs access to the column labels.
+     *
+     * @param record the record to be considered
+     * @param data_set the dataset within which the record occurs
+     * @return true if the record should be selected
+     */
+    boolean select(List<String> record, DataSet data_set);
 }
