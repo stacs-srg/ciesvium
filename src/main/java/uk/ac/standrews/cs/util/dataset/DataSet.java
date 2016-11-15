@@ -25,10 +25,7 @@ import uk.ac.standrews.cs.util.tools.FileManipulation;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -50,8 +47,8 @@ public class DataSet {
      */
     public static final char DEFAULT_DELIMITER = ',';
 
-      List<String> labels;
-      List<List<String>> records;
+    private List<String> labels;
+    private List<List<String>> records;
 
     private CSVFormat output_format = DEFAULT_CSV_FORMAT;
 
@@ -151,7 +148,7 @@ public class DataSet {
      *
      * @param mapper a mapper to transform each row into a new row in the output dataset
      */
-   public DataSet map(Mapper mapper) {
+    public DataSet map(Mapper mapper) {
 
         return new DataSet(labels, mapRecords(mapper));
     }
@@ -163,7 +160,7 @@ public class DataSet {
      */
     public DataSet extend(Extender extender) {
 
-        return new DataSet(extender.getColumnLabels(), extendRecords(extender));
+        return new DataSet(extendLabels(extender), extendRecords(extender));
     }
 
     public DataSet(DataSet existing_records) {
@@ -288,14 +285,21 @@ public class DataSet {
         return records.stream().map(listListFunction).collect(Collectors.toList());
     }
 
+    private List<String> extendLabels(final Extender extender) {
+
+        List<String> extended_labels = new ArrayList<>(labels);
+        extended_labels.addAll(extender.getColumnLabels());
+        return extended_labels;
+    }
+
     private List<List<String>> extendRecords(Extender extender) {
 
         List<List<String>> result = new ArrayList<>();
 
         for (List<String> record : records) {
 
-            List<String> new_record = extender.getAdditionalValues(record, this);
-            new_record.addAll(record);
+            List<String> new_record = new ArrayList<>(record);
+            new_record.addAll(extender.getAdditionalValues(record, this));
             result.add(new_record);
         }
 
@@ -324,14 +328,21 @@ public class DataSet {
 
     private List<String> project(List<String> record, List<String> projected_columns) {
 
+        if (containsDuplicates(projected_columns)) {
+            throw new RuntimeException("duplicate column labels in projection");
+        }
+
         List<String> values = new ArrayList<>();
 
-        for (int i = 0; i < record.size(); i++) {
-            if (projected_columns.contains(labels.get(i))) {
-                values.add(record.get(i));
-            }
+        for (String projected_column_label : projected_columns) {
+            values.add(getValue(record, projected_column_label));
         }
 
         return values;
+    }
+
+    private boolean containsDuplicates(final List<String> strings) {
+
+        return new HashSet<>(strings).size() < strings.size();
     }
 }
