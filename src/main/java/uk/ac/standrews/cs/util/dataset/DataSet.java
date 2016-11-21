@@ -20,6 +20,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import uk.ac.standrews.cs.util.dataset.derived.*;
 import uk.ac.standrews.cs.util.tools.FileManipulation;
 
 import java.io.IOException;
@@ -51,6 +52,33 @@ public class DataSet {
     private List<List<String>> records;
 
     private CSVFormat output_format = DEFAULT_CSV_FORMAT;
+
+    @Override
+    public boolean equals(final Object o) {
+
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final DataSet dataSet = (DataSet) o;
+
+        if (!labels.equals(dataSet.labels)) {
+            return false;
+        }
+        return records.equals(dataSet.records);
+
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = labels.hashCode();
+        result = 31 * result + records.hashCode();
+        return result;
+    }
 
     /**
      * Creates a new empty dataset with given column labels.

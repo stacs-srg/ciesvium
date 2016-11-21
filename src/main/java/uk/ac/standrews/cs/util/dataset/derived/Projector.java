@@ -14,31 +14,21 @@
  * You should have received a copy of the GNU General Public License along with ciesvium. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package uk.ac.standrews.cs.util.dataset;
+package uk.ac.standrews.cs.util.dataset.derived;
 
 import java.util.List;
 
 /**
- * Interface for creating new columns for a dataset.
+ * Interface for projecting columns from a dataset.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
-public interface Extender {
+public interface Projector {
 
     /**
-     * Gets the additional values to be appended to a given record. The containing dataset is also
-     * made available in case the extender logic needs access to the column labels.
+     * Gets the labels of the projected columns.
      *
-     * @param record the existing record
-     * @param data_set the dataset within which the record occurs
-     * @return a list of new values to be appended to the record in the extended dataset
+     * @return the labels of the projected columns
      */
-    List<String> getAdditionalValues(List<String> record, DataSet data_set);
-
-    /**
-     * Gets the labels for the new columns.
-     *
-     * @return the labels for the new columns
-     */
-    List<String> getColumnLabels();
+    List<String> getProjectedColumnLabels();
 }

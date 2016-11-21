@@ -14,21 +14,32 @@
  * You should have received a copy of the GNU General Public License along with ciesvium. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package uk.ac.standrews.cs.util.dataset;
+package uk.ac.standrews.cs.util.dataset.encrypted.util;
 
-import java.util.List;
+import uk.ac.standrews.cs.util.dataset.encrypted.*;
 
-/**
- * Interface for projecting columns from a dataset.
- *
- * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
- */
-public interface Projector {
+import java.io.*;
+import java.nio.file.*;
 
-    /**
-     * Gets the labels of the projected columns.
-     *
-     * @return the labels of the projected columns
-     */
-    List<String> getProjectedColumnLabels();
+public class EncryptFileWithAES {
+
+    public static void main(String[] args) throws CryptoException, IOException {
+
+        if (args.length < 3) {
+            usage();
+        }
+        else {
+
+            String key = args[0];
+            String plain_text_path = args[1];
+            String cipher_text_path = args[2];
+
+            SymmetricEncryption.encrypt(key, Paths.get(plain_text_path), Paths.get(cipher_text_path));
+        }
+    }
+
+    private static void usage() {
+
+        System.out.println("usage: EncryptFile <key> <plain text path> <cipher text path>");
+    }
 }

@@ -14,24 +14,14 @@
  * You should have received a copy of the GNU General Public License along with ciesvium. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package uk.ac.standrews.cs.util.dataset;
+package uk.ac.standrews.cs.util.dataset.encrypted.util;
 
-import java.util.*;
+import uk.ac.standrews.cs.util.dataset.encrypted.*;
 
-/**
- * Interface for transforming records in a dataset.
- *
- * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
- */
-public interface Mapper {
+public class GenerateAESKey {
 
-    /**
-     * Creates a new record based on an existing record. The containing dataset is also
-     * made available in case the mapping logic needs access to the column labels.
-     *
-     * @param record the existing record
-     * @param data_set the dataset within which the record occurs
-     * @return a new record based on the existing record
-     */
-    List<String> map(List<String> record, DataSet data_set);
+    public static void main(String[] args) {
+
+        System.out.println(SymmetricEncryption.generateRandomKey());
+    }
 }

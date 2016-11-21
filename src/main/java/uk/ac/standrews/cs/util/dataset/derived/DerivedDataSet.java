@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License along with ciesvium. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package uk.ac.standrews.cs.util.dataset;
+package uk.ac.standrews.cs.util.dataset.derived;
+
+import uk.ac.standrews.cs.util.dataset.*;
 
 import java.io.*;
 import java.util.*;

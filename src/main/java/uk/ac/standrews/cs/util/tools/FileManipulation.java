@@ -53,7 +53,6 @@ public class FileManipulation {
         URL resource = getResource(the_class, resource_name);
         try {
             return Paths.get(resource.toURI());
-
         }
         catch (URISyntaxException e) {
             throw new RuntimeException("invalid URI for resource path: " + e.getMessage());

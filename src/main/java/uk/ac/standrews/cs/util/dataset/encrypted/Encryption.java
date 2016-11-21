@@ -14,24 +14,23 @@
  * You should have received a copy of the GNU General Public License along with ciesvium. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package uk.ac.standrews.cs.util.dataset;
+package uk.ac.standrews.cs.util.dataset.encrypted;
 
-import java.util.List;
+import java.io.*;
 
-/**
- * Interface for selecting records from a dataset.
- *
- * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
- */
-public interface Selector {
+public abstract class Encryption {
 
-    /**
-     * Determines whether a given record should be selected. The containing dataset is also
-     * made available in case the selection logic needs access to the column labels.
-     *
-     * @param record the record to be considered
-     * @param data_set the dataset within which the record occurs
-     * @return true if the record should be selected
-     */
-    boolean select(List<String> record, DataSet data_set);
+    private static final int INPUT_BUFFER_SIZE_IN_BYTES = 512;
+
+    static byte[] readAllBytes(final InputStream inputStream) throws IOException {
+
+        ByteArrayOutputStream temporary_byte_array_stream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[INPUT_BUFFER_SIZE_IN_BYTES];
+
+        int i;
+        while ((i = inputStream.read(buffer)) != -1) {
+            temporary_byte_array_stream.write(buffer, 0, i);
+        }
+        return temporary_byte_array_stream.toByteArray();
+    }
 }
