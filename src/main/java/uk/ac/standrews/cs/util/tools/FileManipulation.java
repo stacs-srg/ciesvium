@@ -176,6 +176,8 @@ public class FileManipulation {
      *
      * @param resource_directory_path the absolute path to a directory, with initial slash mapping to the root of the resource directory
      * @param class_loader the class loader
+     * @return a list of entries
+     * @throws IOException if the directory cannot be read
      */
     public static List<String> getResourceDirectoryEntries(String resource_directory_path, ClassLoader class_loader) throws IOException {
 
@@ -203,6 +205,8 @@ public class FileManipulation {
      *
      * @param resource_directory_path the absolute path to a directory, with initial slash mapping to the root of the resource directory
      * @param class_loader the class loader
+     * @return a list of entries
+     * @throws IOException if the directory cannot be read
      */
     public static List<String> getResourceDirectoryEntries(Path resource_directory_path, ClassLoader class_loader) throws IOException {
 
@@ -214,6 +218,8 @@ public class FileManipulation {
      *
      * @param relative_directory_path the path to a directory relative to the root of the resource directory e.g. "directory/path/"
      * @param resource_directory_url the URL for the directory, in the form "file:/absolute/path/of/jar!/directory/path/"
+     * @return a list of entries
+     * @throws IOException if the directory cannot be read
      */
     private static List<String> getResourceDirectoryEntriesFromJar(final String relative_directory_path, final URL resource_directory_url) throws IOException {
 

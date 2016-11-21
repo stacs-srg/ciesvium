@@ -104,6 +104,7 @@ public class DataSet {
      * Creates a new dataset with column labels and data read from a file with the given path.
      *
      * @param path the path of the file to read column labels and data from
+     * @throws IOException if the file cannot be read
      */
     public DataSet(Path path) throws IOException {
 
@@ -114,6 +115,7 @@ public class DataSet {
      * Creates a new dataset with column labels and data read from the given Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
      *
      * @param reader the Reader to read column labels and data from
+     * @throws IOException if the file cannot be read
      */
     public DataSet(Reader reader) throws IOException {
 
@@ -125,6 +127,7 @@ public class DataSet {
      *
      * @param reader the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
+     * @throws IOException if the file cannot be read
      */
     public DataSet(Reader reader, char delimiter) throws IOException {
 
@@ -136,6 +139,7 @@ public class DataSet {
      *
      * @param reader the Reader to read column labels and data from
      * @param input_format the format
+     * @throws IOException if the file cannot be read
      */
     public DataSet(Reader reader, CSVFormat input_format) throws IOException {
 
@@ -165,6 +169,7 @@ public class DataSet {
      * Creates a new dataset from this dataset, with the same column labels and selected rows.
      *
      * @param selector a selector to determine which rows should be included
+     * @return the new dataset
      */
     public DataSet select(Selector selector) {
 
@@ -175,6 +180,7 @@ public class DataSet {
      * Creates a new dataset from this dataset, with specified columns.
      *
      * @param projector a projector to determine which columns should be included
+     * @return the new dataset
      */
     public DataSet project(Projector projector) {
 
@@ -185,6 +191,7 @@ public class DataSet {
      * Creates a new dataset from this dataset, with each row transformed in a specified way.
      *
      * @param mapper a mapper to transform each row into a new row in the output dataset
+     * @return the new dataset
      */
     public DataSet map(Mapper mapper) {
 
@@ -195,6 +202,7 @@ public class DataSet {
      * Creates a new dataset from this dataset, with additional generated columns.
      *
      * @param extender an extender to generate additional column labels and values
+     * @return the new dataset
      */
     public DataSet extend(Extender extender) {
 

@@ -36,7 +36,7 @@ import java.util.*;
  * <code>
  * openssl genrsa -out private_key.pem 2048
  * chmod 600 private_key.pem
- * openssl rsa -in private_key.pem -pubout > public_key.pem
+ * openssl rsa -in private_key.pem -pubout &gt; public_key.pem
  * </code>
  *
  * Code derived from articles:
