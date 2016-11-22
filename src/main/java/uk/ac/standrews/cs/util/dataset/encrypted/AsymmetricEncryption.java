@@ -206,9 +206,14 @@ public class AsymmetricEncryption extends Encryption {
         return key_in_pem_format.replace(PUBLIC_KEY_HEADER + "\n", "").replace(PUBLIC_KEY_FOOTER, "");
     }
 
-    private static String getKey(Path key_path) throws IOException {
+    private static String getKey(Path key_path) throws CryptoException {
 
-        return new String(Files.readAllBytes(key_path));
+        try {
+            return new String(Files.readAllBytes(key_path));
+        }
+        catch (IOException e) {
+            throw new CryptoException("can't access key file: " + key_path);
+        }
     }
 
     public static List<String> loadPublicKeys(final Path path) throws IOException {
