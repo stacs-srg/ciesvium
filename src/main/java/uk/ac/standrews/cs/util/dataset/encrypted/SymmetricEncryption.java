@@ -29,6 +29,12 @@ import java.util.*;
  *
  * Originally based on an article published at: http://www.codejava.net/coding/file-encryption-and-decryption-simple-example
  *
+ * It's also possible to create an encrypted zip file from the Unix command line using:
+ *
+ * {@code
+ *     zip -r archive.zip directory -e
+ * }
+ *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
 public class SymmetricEncryption extends Encryption {
