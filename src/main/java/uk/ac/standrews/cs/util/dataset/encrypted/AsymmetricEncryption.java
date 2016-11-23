@@ -28,16 +28,18 @@ import java.security.spec.*;
 import java.util.*;
 
 /**
- * <p>A utility class that encrypts or decrypts a string using RSA public key encryption.
+ * <p>A utility class that encrypts or decrypts data using RSA public key encryption.
  * The encrypted data is also Base64 MIME-encoded.</p>
  *
  * <p>This code works with keys in PEM format, generated as follows:</p>
  *
+ * <pre>
  * {@code
  * openssl genrsa -out private_key.pem 2048
  * chmod 600 private_key.pem
- * openssl rsa -in private_key.pem -pubout &gt; public_key.pem
+ * openssl rsa -in private_key.pem -pubout > public_key.pem
  * }
+ * </pre>
  *
  * <p>Code derived from articles linked below.</p>
  *
@@ -77,8 +79,12 @@ public class AsymmetricEncryption extends Encryption {
         }
     }
 
+    private AsymmetricEncryption() {
+
+    }
+
     /**
-     * Encrypts the given plain text using the given public key, and encodes the result using Base64 MIME-encoding.
+     * Encrypts the given plain text using the given public key, and MIME-encodes the result.
      *
      * @param public_key the public key
      * @param plain_text the plain text
@@ -95,6 +101,14 @@ public class AsymmetricEncryption extends Encryption {
         return new String(output_stream.toByteArray());
     }
 
+    /**
+     * Decrypts the given encrypted and MIME-encoded text using the given private key.
+     *
+     * @param private_key the private key
+     * @param cipher_text the encrypted and MIME-encoded text
+     * @return the plain text
+     * @throws CryptoException if the decryption cannot be completed
+     */
     public static String decrypt(PrivateKey private_key, String cipher_text) throws CryptoException {
 
         final InputStream input_stream = new ByteArrayInputStream(cipher_text.getBytes());
