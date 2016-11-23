@@ -28,23 +28,22 @@ import java.security.spec.*;
 import java.util.*;
 
 /**
- * A utility class that encrypts or decrypts a string using RSA public key encryption.
- * The encrypted data is also Base64 MIME-encoded.
+ * <p>A utility class that encrypts or decrypts a string using RSA public key encryption.
+ * The encrypted data is also Base64 MIME-encoded.</p>
  *
- * This code works with keys in PEM format, generated as follows:
+ * <p>This code works with keys in PEM format, generated as follows:</p>
  *
- * <code>
+ * {@code
  * openssl genrsa -out private_key.pem 2048
  * chmod 600 private_key.pem
  * openssl rsa -in private_key.pem -pubout &gt; public_key.pem
- * </code>
+ * }
  *
- * Code derived from articles:
- *
- * http://www.codejava.net/coding/file-encryption-and-decryption-simple-example
- * http://stackoverflow.com/questions/11787571/how-to-read-pem-file-to-get-private-and-public-key#19166352
+ * <p>Code derived from articles linked below.</p>
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ * @see <a href="http://www.codejava.net/coding/file-encryption-and-decryption-simple-example">http://www.codejava.net/coding/file-encryption-and-decryption-simple-example</a>
+ * @see <a href="http://stackoverflow.com/questions/11787571/how-to-read-pem-file-to-get-private-and-public-key#19166352">http://stackoverflow.com/questions/11787571/how-to-read-pem-file-to-get-private-and-public-key#19166352</a>
  */
 public class AsymmetricEncryption extends Encryption {
 
@@ -78,7 +77,15 @@ public class AsymmetricEncryption extends Encryption {
         }
     }
 
-    public static String encrypt(PublicKey public_key, String plain_text) throws IOException, CryptoException {
+    /**
+     * Encrypts the given plain text using the given public key, and encodes the result using Base64 MIME-encoding.
+     *
+     * @param public_key the public key
+     * @param plain_text the plain text
+     * @return the encrypted and MIME-encoded text
+     * @throws CryptoException if the encryption cannot be completed
+     */
+    public static String encrypt(PublicKey public_key, String plain_text) throws CryptoException {
 
         final InputStream input_stream = new ByteArrayInputStream(plain_text.getBytes());
         final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
@@ -88,7 +95,7 @@ public class AsymmetricEncryption extends Encryption {
         return new String(output_stream.toByteArray());
     }
 
-    public static String decrypt(PrivateKey private_key, String cipher_text) throws IOException, CryptoException {
+    public static String decrypt(PrivateKey private_key, String cipher_text) throws CryptoException {
 
         final InputStream input_stream = new ByteArrayInputStream(cipher_text.getBytes());
         final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
