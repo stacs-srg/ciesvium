@@ -20,7 +20,6 @@ import org.bouncycastle.jce.provider.*;
 import uk.ac.standrews.cs.util.tools.*;
 
 import javax.crypto.*;
-import javax.crypto.spec.*;
 import java.io.*;
 import java.nio.file.*;
 import java.security.*;
@@ -57,9 +56,12 @@ public class AsymmetricEncryption extends Encryption {
 
     private static final String USER_HOME = System.getProperty("user.home");
     private static final Path USER_HOME_PATH = Paths.get(USER_HOME);
-    private static final Path DEFAULT_KEY_DIRECTORY = USER_HOME_PATH.resolve(Paths.get(".ssh"));
-    private static final Path DEFAULT_PRIVATE_KEY_PATH = DEFAULT_KEY_DIRECTORY.resolve(Paths.get("private_key.pem"));
-    private static final Path DEFAULT_PUBLIC_KEY_PATH = DEFAULT_KEY_DIRECTORY.resolve(Paths.get("public_key.pem"));
+    private static final String DEFAULT_KEY_DIR = ".ssh";
+    private static final Path DEFAULT_KEY_PATH = USER_HOME_PATH.resolve(Paths.get(DEFAULT_KEY_DIR));
+    private static final String DEFAULT_PRIVATE_KEY_FILE = "private_key.pem";
+    private static final String DEFAULT_PUBLIC_KEY_FILE = "public_key.pem";
+    private static final Path DEFAULT_PRIVATE_KEY_PATH = DEFAULT_KEY_PATH.resolve(Paths.get(DEFAULT_PRIVATE_KEY_FILE));
+    private static final Path DEFAULT_PUBLIC_KEY_PATH = DEFAULT_KEY_PATH.resolve(Paths.get(DEFAULT_PUBLIC_KEY_FILE));
 
     private static final String PRIVATE_KEY_HEADER = "-----BEGIN RSA PRIVATE KEY-----";
     private static final String PRIVATE_KEY_FOOTER = "-----END RSA PRIVATE KEY-----";
@@ -84,7 +86,7 @@ public class AsymmetricEncryption extends Encryption {
     }
 
     /**
-     * Encrypts the given plain text using the given public key, and MIME-encodes the result.
+     * Encrypts the given plain text string using the given public key, and MIME-encodes the result.
      *
      * @param public_key the public key
      * @param plain_text the plain text
@@ -102,7 +104,7 @@ public class AsymmetricEncryption extends Encryption {
     }
 
     /**
-     * Decrypts the given encrypted and MIME-encoded text using the given private key.
+     * Decrypts the given encrypted and MIME-encoded text string using the given private key.
      *
      * @param private_key the private key
      * @param cipher_text the encrypted and MIME-encoded text
@@ -119,26 +121,70 @@ public class AsymmetricEncryption extends Encryption {
         return new String(output_stream.toByteArray());
     }
 
+    /**
+     * Encrypts the given plain text file to another file, using the given public key, and MIME-encodes the result.
+     *
+     * @param public_key the public key
+     * @param plain_text_path the path of the plain text file
+     * @param cipher_text_path the path of the resulting encrypted file
+     * @throws CryptoException if the encryption cannot be completed
+     * @throws IOException if a file cannot be accessed
+     */
     public static void encrypt(PublicKey public_key, final Path plain_text_path, final Path cipher_text_path) throws CryptoException, IOException {
 
         encrypt(public_key, Files.newInputStream(plain_text_path), Files.newOutputStream(cipher_text_path));
     }
 
+    /**
+     * Decrypts the given encrypted and MIME-encoded text file to another file, using the given private key.
+     *
+     * @param private_key the private key
+     * @param cipher_text_path the path of the encrypted file
+     * @param plain_text_path the path of the resulting plain text file
+     * @throws CryptoException if the encryption cannot be completed
+     * @throws IOException if a file cannot be accessed
+     */
     public static void decrypt(PrivateKey private_key, final Path cipher_text_path, final Path plain_text_path) throws CryptoException, IOException {
 
         decrypt(private_key, Files.newInputStream(cipher_text_path), Files.newOutputStream(plain_text_path));
     }
 
+    /**
+     * Encrypts the given plain text file, using the given public key, MIME-encodes the result, and outputs it to the given stream.
+     *
+     * @param public_key the public key
+     * @param plain_text_path the path of the plain text file
+     * @param output_stream the output stream for the resulting encrypted data
+     * @throws CryptoException if the encryption cannot be completed
+     * @throws IOException if the plain text file cannot be accessed
+     */
     public static void encrypt(PublicKey public_key, final Path plain_text_path, final OutputStream output_stream) throws CryptoException, IOException {
 
         encrypt(public_key, Files.newInputStream(plain_text_path), output_stream);
     }
 
+    /**
+     * Decrypts the given encrypted and MIME-encoded text file, using the given private key, and outputs it to the given stream.
+     *
+     * @param private_key the private key
+     * @param cipher_text_path the path of the encrypted file
+     * @param output_stream the output stream for the resulting data
+     * @throws CryptoException if the encryption cannot be completed
+     * @throws IOException if the encrypted file cannot be accessed
+     */
     public static void decrypt(PrivateKey private_key, final Path cipher_text_path, final OutputStream output_stream) throws CryptoException, IOException {
 
         decrypt(private_key, Files.newInputStream(cipher_text_path), output_stream);
     }
 
+    /**
+     * Encrypts the plain text read from the given stream, using the given public key, MIME-encodes the result, and outputs it to another given stream.
+     *
+     * @param public_key the public key
+     * @param input_stream the input stream for the plain text
+     * @param output_stream the output stream for the resulting encrypted data
+     * @throws CryptoException if the encryption cannot be completed
+     */
     public static void encrypt(PublicKey public_key, InputStream input_stream, OutputStream output_stream) throws CryptoException {
 
         try {
@@ -155,6 +201,14 @@ public class AsymmetricEncryption extends Encryption {
         }
     }
 
+    /**
+     * Decrypts the encrypted and MIME-encoded data read from the given stream, using the given private key, and outputs it to another given stream.
+     *
+     * @param private_key the private key
+     * @param input_stream the input stream for the encrypted file
+     * @param output_stream the output stream for the resulting data
+     * @throws CryptoException if the encryption cannot be completed
+     */
     public static void decrypt(PrivateKey private_key, InputStream input_stream, OutputStream output_stream) throws CryptoException {
 
         try {
@@ -171,27 +225,65 @@ public class AsymmetricEncryption extends Encryption {
         }
     }
 
-    public static PrivateKey getPrivateKey() throws IOException, CryptoException {
+    /**
+     * Gets this user's private key.
+     * The key is assumed to be stored in the file {@value #DEFAULT_PRIVATE_KEY_FILE} in the directory {@value #DEFAULT_KEY_DIR} in
+     * this user's home directory.
+     *
+     * @return this user's private key
+     * @throws CryptoException if the private key cannot be accessed
+     */
+    public static PrivateKey getPrivateKey() throws CryptoException {
 
         return getPrivateKey(DEFAULT_PRIVATE_KEY_PATH);
     }
 
-    public static PublicKey getPublicKey() throws IOException, CryptoException {
+    /**
+     * Gets this user's public key.
+     * The key is assumed to be stored in the file {@value #DEFAULT_PUBLIC_KEY_FILE} in the directory {@value #DEFAULT_KEY_DIR} in
+     * this user's home directory.
+     *
+     * @return this user's public key
+     * @throws CryptoException if the public key cannot be accessed
+     */
+    public static PublicKey getPublicKey() throws CryptoException {
 
         return getPublicKey(DEFAULT_PUBLIC_KEY_PATH);
     }
 
-    public static PrivateKey getPrivateKey(Path key_path) throws IOException, CryptoException {
+    /**
+     * Gets a private key from a given file.
+     *
+     * @param key_path the path of the private key file
+     * @return the private key
+     * @throws CryptoException if the private key cannot be accessed
+     */
+    public static PrivateKey getPrivateKey(Path key_path) throws CryptoException {
 
         return getPrivateKeyFromString(getKey(key_path));
     }
 
-    public static PublicKey getPublicKey(Path key_path) throws IOException, CryptoException {
+    /**
+     * Gets a public key from a given file.
+     *
+     * @param key_path the path of the public key file
+     * @return the public key
+     * @throws CryptoException if the public key cannot be accessed
+     */
+    public static PublicKey getPublicKey(Path key_path) throws CryptoException {
 
         return getPublicKeyFromString(getKey(key_path));
     }
 
-    public static PrivateKey getPrivateKeyFromString(final String key_in_pem_format) throws IOException, CryptoException {
+    /**
+     * Gets a private key from a string. The string is assumed to be in PEM format, with delimiters {@value #PRIVATE_KEY_HEADER} and
+     * {@value #PRIVATE_KEY_FOOTER}.
+     *
+     * @param key_in_pem_format the private key in PEM format
+     * @return the private key
+     * @throws CryptoException if the private key cannot be extracted
+     */
+    public static PrivateKey getPrivateKeyFromString(final String key_in_pem_format) throws CryptoException {
 
         try {
             final String base64_encoded_private_key = stripPrivateKeyDelimiters(key_in_pem_format);
@@ -204,7 +296,15 @@ public class AsymmetricEncryption extends Encryption {
         }
     }
 
-    public static PublicKey getPublicKeyFromString(final String key_in_pem_format) throws IOException, CryptoException {
+    /**
+     * Gets a public key from a string. The string is assumed to be in PEM format, with delimiters {@value #PUBLIC_KEY_HEADER} and
+     * {@value #PUBLIC_KEY_FOOTER}.
+     *
+     * @param key_in_pem_format the public key in PEM format
+     * @return the public key
+     * @throws CryptoException if the public key cannot be extracted
+     */
+    public static PublicKey getPublicKeyFromString(final String key_in_pem_format) throws CryptoException {
 
         try {
             final String base64_encoded_public_key = stripPublicKeyDelimiters(key_in_pem_format);
@@ -217,26 +317,13 @@ public class AsymmetricEncryption extends Encryption {
         }
     }
 
-    private static String stripPrivateKeyDelimiters(final String key_in_pem_format) {
-
-        return key_in_pem_format.replace(PRIVATE_KEY_HEADER + "\n", "").replace(PRIVATE_KEY_FOOTER, "");
-    }
-
-    private static String stripPublicKeyDelimiters(final String key_in_pem_format) {
-
-        return key_in_pem_format.replace(PUBLIC_KEY_HEADER + "\n", "").replace(PUBLIC_KEY_FOOTER, "");
-    }
-
-    private static String getKey(Path key_path) throws CryptoException {
-
-        try {
-            return new String(Files.readAllBytes(key_path));
-        }
-        catch (IOException e) {
-            throw new CryptoException("can't access key file: " + key_path);
-        }
-    }
-
+    /**
+     * Loads a list of public keys in PEM format from the given file.
+     *
+     * @param path the file containing public keys
+     * @return a list of keys in PEM format
+     * @throws IOException if the file cannot be accessed
+     */
     public static List<String> loadPublicKeys(final Path path) throws IOException {
 
         final BufferedReader reader = new BufferedReader(FileManipulation.getInputStreamReader(path));
@@ -273,5 +360,25 @@ public class AsymmetricEncryption extends Encryption {
         }
 
         return key_list;
+    }
+
+    private static String stripPrivateKeyDelimiters(final String key_in_pem_format) {
+
+        return key_in_pem_format.replace(PRIVATE_KEY_HEADER + "\n", "").replace(PRIVATE_KEY_FOOTER, "");
+    }
+
+    private static String stripPublicKeyDelimiters(final String key_in_pem_format) {
+
+        return key_in_pem_format.replace(PUBLIC_KEY_HEADER + "\n", "").replace(PUBLIC_KEY_FOOTER, "");
+    }
+
+    private static String getKey(Path key_path) throws CryptoException {
+
+        try {
+            return new String(Files.readAllBytes(key_path));
+        }
+        catch (IOException e) {
+            throw new CryptoException("can't access key file: " + key_path);
+        }
     }
 }
