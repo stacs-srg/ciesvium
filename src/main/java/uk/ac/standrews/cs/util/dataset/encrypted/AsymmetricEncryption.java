@@ -48,6 +48,41 @@ import java.util.*;
  */
 public class AsymmetricEncryption extends Encryption {
 
+    /**
+     * The name of the directory in this user's home directory in which private and public keys are stored.
+     */
+    public static final String DEFAULT_KEY_DIR = ".ssh";
+
+    /**
+     * The name of the private key file.
+     */
+    public static final String DEFAULT_PRIVATE_KEY_FILE = "private_key.pem";
+
+    /**
+     * The name of the public key file.
+     */
+    public static final String DEFAULT_PUBLIC_KEY_FILE = "public_key.pem";
+
+    /**
+     * The delimiting header in the private key file.
+     */
+    public static final String PRIVATE_KEY_HEADER = "-----BEGIN RSA PRIVATE KEY-----";
+
+    /**
+     * The delimiting footer in the private key file.
+     */
+    public static final String PRIVATE_KEY_FOOTER = "-----END RSA PRIVATE KEY-----";
+
+    /**
+     * The delimiting header in the public key file.
+     */
+    public static final String PUBLIC_KEY_HEADER = "-----BEGIN PUBLIC KEY-----";
+
+    /**
+     * The delimiting footer in the public key file.
+     */
+    public static final String PUBLIC_KEY_FOOTER = "-----END PUBLIC KEY-----";
+
     private static final String TRANSFORMATION = "RSA";
     private static final String ALGORITHM = "RSA";
 
@@ -55,18 +90,12 @@ public class AsymmetricEncryption extends Encryption {
     private static final KeyFactory KEY_FACTORY;
 
     private static final String USER_HOME = System.getProperty("user.home");
+
     private static final Path USER_HOME_PATH = Paths.get(USER_HOME);
-    private static final String DEFAULT_KEY_DIR = ".ssh";
     private static final Path DEFAULT_KEY_PATH = USER_HOME_PATH.resolve(Paths.get(DEFAULT_KEY_DIR));
-    private static final String DEFAULT_PRIVATE_KEY_FILE = "private_key.pem";
-    private static final String DEFAULT_PUBLIC_KEY_FILE = "public_key.pem";
     private static final Path DEFAULT_PRIVATE_KEY_PATH = DEFAULT_KEY_PATH.resolve(Paths.get(DEFAULT_PRIVATE_KEY_FILE));
     private static final Path DEFAULT_PUBLIC_KEY_PATH = DEFAULT_KEY_PATH.resolve(Paths.get(DEFAULT_PUBLIC_KEY_FILE));
 
-    private static final String PRIVATE_KEY_HEADER = "-----BEGIN RSA PRIVATE KEY-----";
-    private static final String PRIVATE_KEY_FOOTER = "-----END RSA PRIVATE KEY-----";
-    private static final String PUBLIC_KEY_HEADER = "-----BEGIN PUBLIC KEY-----";
-    private static final String PUBLIC_KEY_FOOTER = "-----END PUBLIC KEY-----";
 
     static {
         try {
