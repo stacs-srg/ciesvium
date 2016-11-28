@@ -34,7 +34,7 @@ public class EncryptFileWithAES {
             String plain_text_path = args[1];
             String cipher_text_path = args[2];
 
-            SymmetricEncryption.encrypt(key, Paths.get(plain_text_path), Paths.get(cipher_text_path));
+            SymmetricEncryption.encrypt(SymmetricEncryption.getKey(key), Paths.get(plain_text_path), Paths.get(cipher_text_path));
         }
     }
 

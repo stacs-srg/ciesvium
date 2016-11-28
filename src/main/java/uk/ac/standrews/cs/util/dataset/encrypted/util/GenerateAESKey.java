@@ -20,7 +20,7 @@ import uk.ac.standrews.cs.util.dataset.encrypted.*;
 
 public class GenerateAESKey {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CryptoException {
 
         System.out.println(SymmetricEncryption.generateRandomKey());
     }

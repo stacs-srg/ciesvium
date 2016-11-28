@@ -18,56 +18,111 @@ package uk.ac.standrews.cs.util.dataset.encrypted;
 
 import uk.ac.standrews.cs.util.dataset.*;
 
+import javax.crypto.*;
 import java.io.*;
-import java.nio.file.*;
 import java.security.*;
 
+/**
+ * Version of dataset that allows the persistent form to be encrypted. A dataset can be instantiated from encrypted
+ * data, or output in encrypted form.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public class EncryptedDataSet extends DataSet {
 
     private static final String ENCRYPTED_KEY_END_DELIMITER = "==";
 
-    protected EncryptedDataSet(String key, InputStream source_data) throws IOException, CryptoException {
-
-        init(decrypt(key, source_data));
-    }
-
-    protected EncryptedDataSet(InputStream encrypted_keys, InputStream source_data) throws IOException, CryptoException {
-
-        PrivateKey private_key = AsymmetricEncryption.getPrivateKey();
-
-        String AES_key = getAESKey(encrypted_keys, private_key);
+    /**
+     * Creates a new dataset from an encrypted input stream.
+     *
+     * @param AES_key the AES key to decrypt the input stream
+     * @param source_data the encrypted data input stream
+     * @throws CryptoException if data cannot be read from the input stream, or the data cannot be decrypted with the given key
+     */
+    public EncryptedDataSet(SecretKey AES_key, InputStream source_data) throws CryptoException {
 
         init(decrypt(AES_key, source_data));
     }
 
-    protected EncryptedDataSet(InputStream source_data) throws IOException {
+    /**
+     * Creates a new dataset from an encrypted input stream. This constructor attempts to extract the MIME-encoded AES key
+     * from the given input stream, which contains versions of the AES key encrypted with various users' RSA public
+     * keys.
+     *
+     * @param encrypted_keys an input stream containing versions of the MIME-encoded AES key encrypted with various users' public keys
+     * @param source_data the encrypted data input stream
+     * @throws CryptoException if data cannot be read from the input stream, or the AES key cannot be extracted with this user's private key
+     */
+    public EncryptedDataSet(InputStream encrypted_keys, InputStream source_data) throws IOException, CryptoException {
 
-        init(new DataSet(new InputStreamReader(source_data)));
+        PrivateKey private_key = AsymmetricEncryption.getPrivateKey();
+
+        SecretKey AES_key = getAESKey(encrypted_keys, private_key);
+
+        init(decrypt(AES_key, source_data));
     }
 
-    protected EncryptedDataSet(DataSet existing_records) throws IOException {
+    public EncryptedDataSet(DataSet existing_records) throws IOException {
 
-        init(existing_records);
+        super(existing_records);
     }
 
-    protected DataSet decrypt(String key, final InputStream source_data) throws IOException, CryptoException {
-
-        ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
-        SymmetricEncryption.decrypt(key, source_data, output_stream);
-
-        return new DataSet(new StringReader(new String(output_stream.toByteArray())));
-    }
-
-    public void printEncrypted(String AES_key, OutputStream out) throws IOException, CryptoException {
+    /**
+     * Prints this dataset, in encrypted form, to the given output object.
+     *
+     * @param AES_key the AES key to encrypt the dataset
+     * @param out the output object
+     * @throws IOException if this dataset cannot be printed to the given output object
+     * @throws CryptoException if the data cannot be encrypted
+     */
+    public void print(SecretKey AES_key, Appendable out) throws IOException, CryptoException {
 
         StringBuilder builder = new StringBuilder();
 
         print(builder);
 
-        SymmetricEncryption.encrypt(AES_key, new ByteArrayInputStream(builder.toString().getBytes()), out);
+        SymmetricEncryption.encrypt(AES_key, new ByteArrayInputStream(builder.toString().getBytes()), makeOutputStream(out));
     }
 
-    private String getAESKey(InputStream encrypted_keys, PrivateKey private_key) throws IOException, CryptoException {
+    private static OutputStream makeOutputStream(final Appendable out) {
+
+        return new OutputStream() {
+
+            @Override
+            public void write(final int b) throws IOException {
+
+                out.append((char) b);
+            }
+        };
+    }
+
+    private static DataSet decrypt(SecretKey AES_key, final InputStream source_data) throws CryptoException {
+
+        ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
+        SymmetricEncryption.decrypt(AES_key, source_data, output_stream);
+
+        try {
+            return new DataSet(new StringReader(new String(output_stream.toByteArray())));
+        }
+        catch (IOException e) {
+            throw new CryptoException("unexpected IO exception reading from a string", e);
+        }
+    }
+
+    /**
+     * Each line in the input stream is assumed to contain a MIME-encoded AES key, encrypted with a particular user's
+     * RSA public key. This method attempts to decrypt each one with this user's RSA private key, and returns the first
+     * one to be successfully decrypted.
+     *
+     * @param encrypted_keys the input stream containing encrypted keys
+     * @param private_key this user's private key
+     * @return the decrypted AES key
+     * @throws IOException if the input stream cannot be read
+     * @throws CryptoException if no key can be successfully decrypted
+     */
+    private static SecretKey getAESKey(InputStream encrypted_keys, PrivateKey private_key) throws IOException, CryptoException {
+
+        // Each line in the input stream is assumed to contain
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(encrypted_keys))) {
 
@@ -81,7 +136,7 @@ public class EncryptedDataSet extends DataSet {
                 if (line.endsWith(ENCRYPTED_KEY_END_DELIMITER)) {
 
                     try {
-                        return AsymmetricEncryption.decrypt(private_key, builder.toString());
+                        return SymmetricEncryption.getKey(AsymmetricEncryption.decrypt(private_key, builder.toString()));
                     }
                     catch (CryptoException e) {
 

@@ -46,7 +46,7 @@ import java.util.*;
  * @see <a href="http://www.codejava.net/coding/file-encryption-and-decryption-simple-example">http://www.codejava.net/coding/file-encryption-and-decryption-simple-example</a>
  * @see <a href="http://stackoverflow.com/questions/11787571/how-to-read-pem-file-to-get-private-and-public-key#19166352">http://stackoverflow.com/questions/11787571/how-to-read-pem-file-to-get-private-and-public-key#19166352</a>
  */
-public class AsymmetricEncryption extends Encryption {
+public class AsymmetricEncryption {
 
     /**
      * The name of the directory in this user's home directory in which private and public keys are stored.
@@ -120,7 +120,7 @@ public class AsymmetricEncryption extends Encryption {
      * @param public_key the public key
      * @param plain_text the plain text
      * @return the encrypted and MIME-encoded text
-     * @throws CryptoException if the encryption cannot be completed
+     * @throws CryptoException if the text cannot be encrypted
      */
     public static String encrypt(PublicKey public_key, String plain_text) throws CryptoException {
 
@@ -219,7 +219,7 @@ public class AsymmetricEncryption extends Encryption {
         try {
             CIPHER.init(Cipher.ENCRYPT_MODE, public_key);
 
-            final byte[] plain_text = readAllBytes(input_stream);
+            final byte[] plain_text = FileManipulation.readAllBytes(input_stream);
             final byte[] encrypted = CIPHER.doFinal(plain_text);
             final byte[] mime_encoded = Base64.getMimeEncoder().encode(encrypted);
 
@@ -243,7 +243,7 @@ public class AsymmetricEncryption extends Encryption {
         try {
             CIPHER.init(Cipher.DECRYPT_MODE, private_key);
 
-            final byte[] mime_encoded = readAllBytes(input_stream);
+            final byte[] mime_encoded = FileManipulation.readAllBytes(input_stream);
             final byte[] encrypted = Base64.getMimeDecoder().decode(mime_encoded);
             final byte[] plain_text = CIPHER.doFinal(encrypted);
 

@@ -16,6 +16,11 @@
  */
 package uk.ac.standrews.cs.util.dataset.encrypted;
 
+/**
+ * Cryptographic exception.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public class CryptoException extends Throwable {
 
     public CryptoException(final String message) {
@@ -26,5 +31,10 @@ public class CryptoException extends Throwable {
     public CryptoException(final Throwable cause) {
 
         super(cause);
+    }
+
+    public CryptoException(final String message, final Throwable cause) {
+
+        super(message, cause);
     }
 }

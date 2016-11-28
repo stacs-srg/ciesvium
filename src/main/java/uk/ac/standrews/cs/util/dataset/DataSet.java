@@ -53,33 +53,6 @@ public class DataSet {
 
     private CSVFormat output_format = DEFAULT_CSV_FORMAT;
 
-    @Override
-    public boolean equals(final Object o) {
-
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        final DataSet dataSet = (DataSet) o;
-
-        if (!labels.equals(dataSet.labels)) {
-            return false;
-        }
-        return records.equals(dataSet.records);
-
-    }
-
-    @Override
-    public int hashCode() {
-
-        int result = labels.hashCode();
-        result = 31 * result + records.hashCode();
-        return result;
-    }
-
     /**
      * Creates a new empty dataset with given column labels.
      *
@@ -97,7 +70,7 @@ public class DataSet {
      */
     public DataSet(DataSet existing_records) {
 
-        this(existing_records.getColumnLabels(), existing_records.getRecords());
+        init(existing_records);
     }
 
     /**
@@ -115,7 +88,7 @@ public class DataSet {
      * Creates a new dataset with column labels and data read from the given Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
      *
      * @param reader the Reader to read column labels and data from
-     * @throws IOException if the file cannot be read
+     * @throws IOException if the data cannot be read
      */
     public DataSet(Reader reader) throws IOException {
 
@@ -127,7 +100,7 @@ public class DataSet {
      *
      * @param reader the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
-     * @throws IOException if the file cannot be read
+     * @throws IOException if the data cannot be read
      */
     public DataSet(Reader reader, char delimiter) throws IOException {
 
@@ -139,7 +112,7 @@ public class DataSet {
      *
      * @param reader the Reader to read column labels and data from
      * @param input_format the format
-     * @throws IOException if the file cannot be read
+     * @throws IOException if the data cannot be read
      */
     public DataSet(Reader reader, CSVFormat input_format) throws IOException {
 
@@ -289,7 +262,34 @@ public class DataSet {
         }
     }
 
-    protected DataSet() throws IOException {
+    @Override
+    public boolean equals(final Object o) {
+
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final DataSet dataSet = (DataSet) o;
+
+        if (!labels.equals(dataSet.labels)) {
+            return false;
+        }
+        return records.equals(dataSet.records);
+
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = labels.hashCode();
+        result = 31 * result + records.hashCode();
+        return result;
+    }
+
+    protected DataSet() {
 
         this(new ArrayList<>(), new ArrayList<>());
     }

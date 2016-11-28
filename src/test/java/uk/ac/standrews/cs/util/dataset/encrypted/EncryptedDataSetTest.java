@@ -19,9 +19,8 @@ package uk.ac.standrews.cs.util.dataset.encrypted;
 import org.junit.*;
 import uk.ac.standrews.cs.util.dataset.*;
 
+import javax.crypto.*;
 import java.io.*;
-import java.nio.file.*;
-import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -29,7 +28,6 @@ public class EncryptedDataSetTest {
 
     private static final String NON_EMPTY_DATA_SET_FILE_NAME = "csv_test_data.csv";
     private static final char DELIMITER = ',';
-    private static final String KEY = SymmetricEncryption.generateRandomKey();
 
     private DataSet data_set;
 
@@ -45,14 +43,14 @@ public class EncryptedDataSetTest {
     @Test
     public void encryptedDataSetCanBeDecrypted() throws IOException, CryptoException {
 
-        final EncryptedDataSet encryptedDataSet = new EncryptedDataSet(data_set);
+        final SecretKey key = SymmetricEncryption.generateRandomKey();
 
-        final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
+        final EncryptedDataSet encrypted_data_set = new EncryptedDataSet(data_set);
 
-        encryptedDataSet.printEncrypted(KEY, output_stream);
+        final StringBuilder encrypted_form = new StringBuilder();
 
-        final ByteArrayInputStream input_stream = new ByteArrayInputStream(output_stream.toByteArray());
+        encrypted_data_set.print(key, encrypted_form);
 
-        assertEquals(encryptedDataSet, new EncryptedDataSet(KEY, input_stream));
+        assertEquals(encrypted_data_set, new EncryptedDataSet(key, new ByteArrayInputStream(encrypted_form.toString().getBytes())));
     }
 }

@@ -38,6 +38,8 @@ public class FileManipulation {
     private static final String FILE_PREFIX = "file";
     private static final int LENGTH_OF_FILE_PREFIX = (FILE_PREFIX + ":").length();
 
+    private static final int INPUT_BUFFER_SIZE_IN_BYTES = 512;
+
     public static InputStreamReader getInputStreamReader(Path path) throws IOException {
 
         return new InputStreamReader(Files.newInputStream(path), FILE_CHARSET);
@@ -211,6 +213,18 @@ public class FileManipulation {
     public static List<String> getResourceDirectoryEntries(Path resource_directory_path, ClassLoader class_loader) throws IOException {
 
         return getResourceDirectoryEntries(resource_directory_path.toString(), class_loader);
+    }
+
+    public static byte[] readAllBytes(final InputStream inputStream) throws IOException {
+
+        ByteArrayOutputStream temporary_byte_array_stream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[INPUT_BUFFER_SIZE_IN_BYTES];
+
+        int i;
+        while ((i = inputStream.read(buffer)) != -1) {
+            temporary_byte_array_stream.write(buffer, 0, i);
+        }
+        return temporary_byte_array_stream.toByteArray();
     }
 
     /**

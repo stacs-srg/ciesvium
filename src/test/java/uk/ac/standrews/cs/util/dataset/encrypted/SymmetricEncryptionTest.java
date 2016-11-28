@@ -17,9 +17,9 @@
 package uk.ac.standrews.cs.util.dataset.encrypted;
 
 import org.junit.*;
-import uk.ac.standrews.cs.util.dataset.*;
 import uk.ac.standrews.cs.util.tools.*;
 
+import javax.crypto.*;
 import java.io.*;
 import java.nio.file.*;
 
@@ -27,11 +27,19 @@ import static org.junit.Assert.*;
 
 public class SymmetricEncryptionTest {
 
-    private static final String SHORT_KEY = "too short";
-    private static final String VALID_KEY = SymmetricEncryption.generateRandomKey();
+
+    private  SecretKey valid_key;
+
+    @Before
+    public void setup() throws CryptoException {
+
+        valid_key = SymmetricEncryption.generateRandomKey();
+    }
 
     @Test(expected = CryptoException.class)
     public void encryptionWithShortKeyThrowsException() throws CryptoException {
+
+         final SecretKey SHORT_KEY = SymmetricEncryption.getKey("too short".getBytes());
 
         SymmetricEncryption.encrypt(SHORT_KEY, "plain text");
     }
@@ -41,16 +49,23 @@ public class SymmetricEncryptionTest {
 
         String plain_text = "the quick brown fox jumps over the lazy dog";
 
-        assertEquals(plain_text, SymmetricEncryption.decrypt(VALID_KEY, SymmetricEncryption.encrypt(VALID_KEY, plain_text)));
+        assertEquals(plain_text, SymmetricEncryption.decrypt(valid_key, SymmetricEncryption.encrypt(valid_key, plain_text)));
     }
 
     @Test(expected = CryptoException.class)
     public void decryptionWithWrongKeyThrowsException() throws CryptoException {
 
         String plain_text = "the quick brown fox jumps over the lazy dog";
-        String corrupted_key = "x" + VALID_KEY;
+        SecretKey corrupted_key = corruptKey(valid_key);
 
-        SymmetricEncryption.decrypt(corrupted_key, SymmetricEncryption.encrypt(VALID_KEY, plain_text));
+        SymmetricEncryption.decrypt(corrupted_key, SymmetricEncryption.encrypt(valid_key, plain_text));
+    }
+
+    private SecretKey corruptKey(SecretKey valid_key) throws CryptoException {
+
+        final byte[] encoded = valid_key.getEncoded();
+        encoded[0] = 37;
+        return SymmetricEncryption.getKey(encoded);
     }
 
     @Test
@@ -65,8 +80,8 @@ public class SymmetricEncryptionTest {
             writer.println("the quick brown fox jumps over the lazy dog");
         }
 
-        SymmetricEncryption.encrypt(VALID_KEY, plain_text_file_path, encrypted_text_file_path);
-        SymmetricEncryption.decrypt(VALID_KEY, encrypted_text_file_path, decrypted_text_file_path);
+        SymmetricEncryption.encrypt(valid_key, plain_text_file_path, encrypted_text_file_path);
+        SymmetricEncryption.decrypt(valid_key, encrypted_text_file_path, decrypted_text_file_path);
 
         FileManipulation.assertThatFilesHaveSameContent(plain_text_file_path, decrypted_text_file_path);
     }
