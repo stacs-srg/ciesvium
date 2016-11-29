@@ -16,9 +16,6 @@
  */
 package uk.ac.standrews.cs.util.tools;
 
-import uk.ac.standrews.cs.digitising_scotland.util.PercentageProgressIndicator;
-import uk.ac.standrews.cs.digitising_scotland.util.ProgressIndicator;
-
 public class Logging {
 
     private static final int NUMBER_OF_PROGRESS_UPDATES = 20;

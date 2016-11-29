@@ -1,158 +1,217 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>uk.ac.standrews.cs</groupId>
-		<artifactId>common-pom</artifactId>
-		<version>2.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>uk.ac.standrews.cs</groupId>
+        <artifactId>common-pom</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>ciesvium</artifactId>
-	<version>1.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<name>ciesvium</name>
-	<url>https://builds.cs.st-andrews.ac.uk/job/ciesvium</url>
+    <artifactId>ciesvium</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>ciesvium</name>
+    <url>https://builds.cs.st-andrews.ac.uk/job/ciesvium</url>
 
-	<build>
-		<plugins>
+    <build>
+        <plugins>
 
-			<plugin>
-				<!-- This plugin checks that the required licence (currently GPL3, specified in the licence
+            <plugin>
+                <!-- This plugin checks that the required licence (currently GPL3, specified in the licence
                      template file, is applied to all source files. The build will fail if any such files
                      do not contain the licence. -->
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<header>src/main/resources/license-template.txt</header>
-					<headerDefinitions>
-						<!-- This custom style is used to override the default formatting for Java files,
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.11</version>
+                <configuration>
+                    <header>src/main/resources/license-template.txt</header>
+                    <headerDefinitions>
+                        <!-- This custom style is used to override the default formatting for Java files,
                              which uses Javadoc format, therefore causing confusion with the actual class-level
                              Javadoc. -->
-						<headerDefinition>src/main/resources/license-custom-style.xml</headerDefinition>
-					</headerDefinitions>
-					<mapping>
-						<java>JAVA_STYLE</java>
-					</mapping>
-					<includes>
-						<include>src/**</include>
-					</includes>
-					<excludes>
-						<exclude>src/test/resources/**</exclude>
-						<exclude>src/main/resources/**</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+                        <headerDefinition>src/main/resources/license-custom-style.xml</headerDefinition>
+                    </headerDefinitions>
+                    <mapping>
+                        <java>JAVA_STYLE</java>
+                    </mapping>
+                    <includes>
+                        <include>src/**</include>
+                    </includes>
+                    <excludes>
+                        <exclude>src/test/resources/**</exclude>
+                        <exclude>src/main/resources/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
-				<configuration>
-					<detectLinks>true</detectLinks>
-					<links>
-						<link>http://www.json.org/javadoc</link>
-						<link>http://junit.org/javadoc/4.11/</link>
-					</links>
-					<aggregate>true</aggregate>
-					<show>public</show>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-							<goal>javadoc</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <configuration>
+                    <detectLinks>true</detectLinks>
+                    <links>
+                        <link>http://www.json.org/javadoc</link>
+                        <link>http://junit.org/javadoc/4.11/</link>
+                    </links>
+                    <aggregate>true</aggregate>
+                    <show>public</show>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.4</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>lt.velykis.maven.skins</groupId>
+                        <artifactId>reflow-velocity-tools</artifactId>
+                        <version>1.1.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.velocity</groupId>
+                        <artifactId>velocity</artifactId>
+                        <version>1.7</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <generateReports>true</generateReports>
+                    <inputEncoding>UTF-8</inputEncoding>
+                    <outputEncoding>UTF-8</outputEncoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.9</version>
+                <!--<reportSets>-->
+                    <!--<reportSet>-->
+                        <!--<reports>-->
+                            <!--<report>modules</report>-->
+                            <!--<report>license</report>-->
+                            <!--<report>project-team</report>-->
+                            <!--<report>scm</report>-->
+                            <!--<report>cim</report>-->
+                            <!--<report>dependency-management</report>-->
+                        <!--</reports>-->
+                    <!--</reportSet>-->
+                <!--</reportSets>-->
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <reportSets>
+                <reportSet>
+                    <reports><!-- select non-aggregate reports -->
+                        <report>javadoc</report>
+                    </reports>
+                </reportSet>
+                </reportSets>
+                <configuration>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </reporting>
 
 
-		</plugins>
-	</build>
-
-	<properties>
-		<repository.type>hg</repository.type>
-		<repository.location>http://quicksilver.hg.cs.st-andrews.ac.uk/ciesvium</repository.location>
+    <properties>
+        <repository.type>hg</repository.type>
+        <repository.location>http://quicksilver.hg.cs.st-andrews.ac.uk/ciesvium</repository.location>
         <jdk.version>1.8</jdk.version>
         <maven.compiler.source>${jdk.version}</maven.compiler.source>
         <maven.compiler.target>${jdk.version}</maven.compiler.target>
     </properties>
 
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>https://builds.cs.st-andrews.ac.uk/job/ciesvium</url>
-	</ciManagement>
+    <ciManagement>
+        <system>TeamCity</system>
+        <url>https://beast.cs.st-andrews.ac.uk/teamcity/project.html?projectId=Ciesvium&amp;tab=projectOverview</url>
+    </ciManagement>
 
-	<scm>
-		<connection>scm:${repository.type}:${repository.location}</connection>
-		<developerConnection>scm:${repository.type}:${repository.location}</developerConnection>
-		<url>${repository.location}</url>
-	</scm>
+    <scm>
+        <connection>scm:${repository.type}:${repository.location}</connection>
+        <developerConnection>scm:${repository.type}:${repository.location}</developerConnection>
+        <url>${repository.location}</url>
+    </scm>
 
-	<repositories>
-		<repository>
-			<id>uk.ac.standrews.cs.maven.repository</id>
-			<name>School of Computer Science Maven Repository</name>
-			<url>http://maven.cs.st-andrews.ac.uk/</url>
-		</repository>
-	</repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>uk.ac.standrews.cs.maven.repository</id>-->
+            <!--<name>School of Computer Science Maven Repository</name>-->
+            <!--<url>http://maven.cs.st-andrews.ac.uk/</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-			<groupId>uk.ac.standrews.cs.digitising_scotland</groupId>
-			<artifactId>util</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.4</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-csv</artifactId>
-			<version>1.4</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.4.1</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-			<version>3.4.1</version>
-		</dependency>
+        <dependency>
+            <!-- Manipulation of MS Access files -->
+            <groupId>com.healthmarketscience.jackcess</groupId>
+            <artifactId>jackcess</artifactId>
+            <version>2.1.2</version>
+        </dependency>
 
-		<dependency>
-			<!-- Manipulation of MS Access files -->
-			<groupId>com.healthmarketscience.jackcess</groupId>
-			<artifactId>jackcess</artifactId>
-			<version>2.1.2</version>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.55</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.github.fommil</groupId>
-			<artifactId>openssh</artifactId>
-			<version>1.0</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk15on</artifactId>
-			<version>1.55</version>
-		</dependency>
-
-	</dependencies>
+    </dependencies>
 
 </project>
