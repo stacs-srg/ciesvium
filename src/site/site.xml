@@ -29,6 +29,7 @@
         <reflowSkin>
             <!--Do not display the creator of skin-->
             <skinAttribution>false</skinAttribution>
+            <protocolRelativeURLs>true</protocolRelativeURLs>
             <brand>
                 <name>Ciesvium</name>
                 <href>index.html</href>
