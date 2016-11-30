@@ -13,6 +13,10 @@
     <packaging>jar</packaging>
     <name>ciesvium</name>
 
+    <description>Description of Ciesvium project</description>
+    <url>https://ciesvium.cs.st-andrews.ac.uk/</url>
+    <inceptionYear>2015</inceptionYear>
+
     <properties>
         <repository.type>hg</repository.type>
         <repository.location>http://quicksilver.hg.cs.st-andrews.ac.uk/ciesvium</repository.location>
