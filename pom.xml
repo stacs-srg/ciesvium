@@ -173,7 +173,7 @@
     <distributionManagement>
         <site>
             <id>digitisingscotland.cs</id>
-            <url>scpexe://quicksilver@quicksilver.host.cs.st-andrews.ac.uk/cs/home/quicksilver/public_html/</url>
+            <url>scpexe://quicksilver@quicksilver.host.cs.st-andrews.ac.uk/cs/home/quicksilver/public_html/ciesvium/</url>
         </site>
     </distributionManagement>
 
