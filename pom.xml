@@ -105,15 +105,15 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-jar-plugin</artifactId>-->
+            <!--</plugin>-->
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-assembly-plugin</artifactId>-->
+            <!--</plugin>-->
 
         </plugins>
 
@@ -135,7 +135,6 @@
                 <reportSets>
                     <reportSet>
                         <reports>
-                            <report>index</report>
                             <report>summary</report>
                             <report>dependency-info</report>
                             <report>cim</report>
@@ -145,7 +144,6 @@
                             <report>license</report>
                             <report>project-team</report>
                             <report>dependency-management</report>
-
                         </reports>
                     </reportSet>
                 </reportSets>
@@ -163,6 +161,13 @@
                 </reportSet>
                 </reportSets>
                 <configuration>
+                    <detectLinks>true</detectLinks>
+                    <links>
+                        <link>http://www.json.org/javadoc</link>
+                        <link>http://junit.org/javadoc/4.11/</link>
+                    </links>
+                    <aggregate>true</aggregate>
+                    <show>public</show>
                     <additionalparam>-Xdoclint:none</additionalparam>
                 </configuration>
             </plugin>

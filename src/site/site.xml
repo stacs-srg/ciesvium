@@ -41,12 +41,12 @@
     </custom>
 
     <!-- Workaround for bug in skin that generates spurious closing header tag. -->
-    <bannerRight>
-        <name></name>
-    </bannerRight>
-    <bannerLeft>
-        <name></name>
-    </bannerLeft>
+    <!--<bannerRight>-->
+        <!--<name></name>-->
+    <!--</bannerRight>-->
+    <!--<bannerLeft>-->
+        <!--<name></name>-->
+    <!--</bannerLeft>-->
 
     <body>
 

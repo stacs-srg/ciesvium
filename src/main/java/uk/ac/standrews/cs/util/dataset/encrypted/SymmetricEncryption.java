@@ -29,15 +29,18 @@ import java.util.*;
  * A utility class that encrypts or decrypts a finite-length stream using AES.
  * The encrypted data is also Base64 MIME-encoded.
  *
- * Originally based on an article published at: http://www.codejava.net/coding/file-encryption-and-decryption-simple-example
+ * <p>Code derived from articles linked below.</p>
  *
- * It's also possible to create an encrypted zip file from the Unix command line using:
+ * <p>Note: it's also possible to create an encrypted zip file from the Unix command line using:</p>
  *
+ * <pre>
  * {@code
  * zip -r archive.zip directory -e
  * }
+ * </pre>
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ * @see <a href="http://www.codejava.net/coding/file-encryption-and-decryption-simple-example">http://www.codejava.net/coding/file-encryption-and-decryption-simple-example</a>
  */
 public class SymmetricEncryption {
 
@@ -58,6 +61,10 @@ public class SymmetricEncryption {
         catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new RuntimeException("error loading cipher " + TRANSFORMATION);
         }
+    }
+
+    private SymmetricEncryption() {
+
     }
 
     /**
