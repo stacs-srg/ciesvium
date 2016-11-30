@@ -4,4 +4,4 @@ This is the Ciesvium project.
 
 Build status:
 
-<script type="text/javascript" src="https://beast.cs.st-andrews.ac.uk/teamcity/externalStatus.html?buildTypeId=Ciesvium_Base&js=1&withCss=true"></script>
+Status of the last build: <img src="https://beast.cs.st-andrews.ac.uk/teamcity/app/rest/builds/buildType:(id:Ciesvium_Base)/statusIcon"/>
