@@ -40,19 +40,12 @@
         </reflowSkin>
     </custom>
 
-    <!-- Workaround for bug in skin that generates spurious closing header tag. -->
-    <!--<bannerRight>-->
-        <!--<name></name>-->
-    <!--</bannerRight>-->
-    <!--<bannerLeft>-->
-        <!--<name></name>-->
-    <!--</bannerLeft>-->
-
     <body>
 
         <links>
             <item name="Home" href="index.html"/>
-            <item name="Software" href="project-info.html"/>
+            <item name="Project Info" href="project-info.html"/>
+            <item name="Software" href="install/"/>
             <item name="API" href="project-reports.html"/>
         </links>
     </body>
