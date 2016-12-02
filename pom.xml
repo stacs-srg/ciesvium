@@ -188,7 +188,7 @@
     </distributionManagement>
 
     <ciManagement>
-        <system>TeamCity</system>
+        <system>teamcity</system>
         <url>https://beast.cs.st-andrews.ac.uk/teamcity/project.html?projectId=Ciesvium&amp;tab=projectOverview</url>
     </ciManagement>
 
