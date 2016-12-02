@@ -17,17 +17,12 @@
 package uk.ac.standrews.cs.util.tools;
 
 import com.healthmarketscience.jackcess.*;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.net.*;
+import java.nio.file.*;
 
-@Ignore
 public class AccessDatabaseExporterTest {
 
     private static final String DATABASE_NAME = "testDatabase";
@@ -35,10 +30,10 @@ public class AccessDatabaseExporterTest {
     private static final String EXPECTED_TABLE_FILE_NAME = "expected_database_contents";
     private static final String ACCESS_SUFFIX = "mdb";
 
-    Path test_directory_path;
-    Path database_file_path;
-    Path table_file_path;
-    Path expected_table_file_path;
+    private Path test_directory_path;
+    private Path database_file_path;
+    private Path table_file_path;
+    private Path expected_table_file_path;
 
     @Before
     public void setUp() throws IOException, URISyntaxException {
