@@ -51,6 +51,7 @@ public class EncryptedDataSet extends DataSet {
      *
      * @param encrypted_keys an input stream containing versions of the MIME-encoded AES key encrypted with various users' public keys
      * @param source_data the encrypted data input stream
+     * @throws IOException if the key input stream cannot be read
      * @throws CryptoException if data cannot be read from the input stream, or the AES key cannot be extracted with this user's private key
      */
     public EncryptedDataSet(InputStream encrypted_keys, InputStream source_data) throws IOException, CryptoException {
