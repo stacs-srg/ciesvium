@@ -30,6 +30,8 @@ public abstract class DerivedDataSet extends DataSet {
 
     protected static final String ID_COLUMN_LABEL = "ID";
 
+    private int record_count;
+
     protected DerivedDataSet() throws IOException {
 
         init(getDerivedDataSet(getSourceDataSet()));
@@ -50,8 +52,6 @@ public abstract class DerivedDataSet extends DataSet {
      * @return the derived dataset
      */
     public abstract DataSet getDerivedDataSet(DataSet source_data_set);
-
-    private int record_count;
 
     protected Extender addIdColumn() {
 

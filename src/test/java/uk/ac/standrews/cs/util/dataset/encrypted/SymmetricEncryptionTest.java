@@ -27,8 +27,7 @@ import static org.junit.Assert.*;
 
 public class SymmetricEncryptionTest {
 
-
-    private  SecretKey valid_key;
+    private SecretKey valid_key;
 
     @Before
     public void setup() throws CryptoException {
@@ -39,7 +38,7 @@ public class SymmetricEncryptionTest {
     @Test(expected = CryptoException.class)
     public void encryptionWithShortKeyThrowsException() throws CryptoException {
 
-         final SecretKey SHORT_KEY = SymmetricEncryption.getKey("too short".getBytes());
+        final SecretKey SHORT_KEY = SymmetricEncryption.getKey("too short".getBytes());
 
         SymmetricEncryption.encrypt(SHORT_KEY, "plain text");
     }
@@ -61,13 +60,6 @@ public class SymmetricEncryptionTest {
         SymmetricEncryption.decrypt(corrupted_key, SymmetricEncryption.encrypt(valid_key, plain_text));
     }
 
-    private SecretKey corruptKey(SecretKey valid_key) throws CryptoException {
-
-        final byte[] encoded = valid_key.getEncoded();
-        encoded[0] = 37;
-        return SymmetricEncryption.getKey(encoded);
-    }
-
     @Test
     public void encryptedFileCanBeDecrypted() throws CryptoException, IOException {
 
@@ -84,5 +76,20 @@ public class SymmetricEncryptionTest {
         SymmetricEncryption.decrypt(valid_key, encrypted_text_file_path, decrypted_text_file_path);
 
         FileManipulation.assertThatFilesHaveSameContent(plain_text_file_path, decrypted_text_file_path);
+    }
+    
+    @Test
+    public void keyConversionToStringCanBeReversed() throws CryptoException {
+
+        final SecretKey key = SymmetricEncryption.generateRandomKey();
+
+        assertEquals(key, SymmetricEncryption.getKey(SymmetricEncryption.keyToString(key)));
+    }
+
+    private SecretKey corruptKey(SecretKey valid_key) throws CryptoException {
+
+        final byte[] encoded = valid_key.getEncoded();
+        encoded[0] = 37;
+        return SymmetricEncryption.getKey(encoded);
     }
 }

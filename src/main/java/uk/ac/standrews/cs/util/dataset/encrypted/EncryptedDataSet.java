@@ -63,6 +63,9 @@ public class EncryptedDataSet extends DataSet {
         init(decrypt(AES_key, source_data));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public EncryptedDataSet(DataSet existing_records) throws IOException {
 
         super(existing_records);

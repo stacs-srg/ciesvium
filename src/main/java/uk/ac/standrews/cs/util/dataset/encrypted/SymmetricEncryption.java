@@ -31,14 +31,6 @@ import java.util.*;
  *
  * <p>Code derived from articles linked below.</p>
  *
- * <p>Note: it's also possible to create an encrypted zip file from the Unix command line using:</p>
- *
- * <pre>
- * {@code
- * zip -r archive.zip directory -e
- * }
- * </pre>
- *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  * @see <a href="http://www.codejava.net/coding/file-encryption-and-decryption-simple-example">http://www.codejava.net/coding/file-encryption-and-decryption-simple-example</a>
  */
@@ -175,7 +167,7 @@ public class SymmetricEncryption {
             final byte[] plain_text = FileManipulation.readAllBytes(input_stream);
             final byte[] plain_text_with_header = prependHeader(plain_text);
             final byte[] encrypted = CIPHER.doFinal(plain_text_with_header);
-            final byte[] mime_encoded = Base64.getMimeEncoder().encode(encrypted);
+            final byte[] mime_encoded = MIMEEncodeKey(encrypted);
 
             output_stream.write(mime_encoded);
             output_stream.flush();
@@ -199,7 +191,7 @@ public class SymmetricEncryption {
             CIPHER.init(Cipher.DECRYPT_MODE, key);
 
             final byte[] mime_encoded = FileManipulation.readAllBytes(input_stream);
-            final byte[] encrypted = Base64.getMimeDecoder().decode(mime_encoded);
+            final byte[] encrypted = MIMEDecodeKey(mime_encoded);
             final byte[] plain_text_with_header = CIPHER.doFinal(encrypted);
 
             checkForValidHeader(plain_text_with_header);
@@ -231,6 +223,11 @@ public class SymmetricEncryption {
         return getKey(key_bytes);
     }
 
+    public static String keyToString(final SecretKey AES_key) {
+
+        return new String(MIMEEncodeKey(AES_key.getEncoded()));
+    }
+
     /**
      * Generates a random AES key.
      *
@@ -254,6 +251,11 @@ public class SymmetricEncryption {
         catch (IllegalArgumentException e) {
             throw new CryptoException(e);
         }
+    }
+
+    private static byte[] MIMEEncodeKey(final byte[] key) {
+
+        return Base64.getMimeEncoder().encode(key);
     }
 
     private static byte[] MIMEDecodeKey(final byte[] mime_encoded_key) {

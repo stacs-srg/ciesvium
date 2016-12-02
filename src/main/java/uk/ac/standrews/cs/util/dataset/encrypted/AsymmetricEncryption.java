@@ -32,13 +32,11 @@ import java.util.*;
  *
  * <p>This code works with keys in PEM format, generated as follows:</p>
  *
- * <pre>
- * {@code
+ * <pre>{@code
  * openssl genrsa -out private_key.pem 2048
  * chmod 600 private_key.pem
  * openssl rsa -in private_key.pem -pubout > public_key.pem
- * }
- * </pre>
+ * }</pre>
  *
  * <p>Code derived from articles linked below.</p>
  *

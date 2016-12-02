@@ -22,10 +22,21 @@ import uk.ac.standrews.cs.util.tools.*;
 import java.io.*;
 import java.nio.file.*;
 import java.security.*;
-import java.util.*;
 
+/**
+ * Encrypts a symmetric key with a number of public keys.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public class EncryptKey {
 
+    /**
+     * Encrypts a MIME-encoded key with each of a number of public keys read from a given file.
+     *
+     * @param args MIME-encoded AES key, path of file containing public keys, path of new file containing encrypted keys
+     * @throws CryptoException if the encryption cannot be completed
+     * @throws IOException if a file cannot be accessed
+     */
     public static void main(String[] args) throws CryptoException, IOException {
 
         if (args.length < 3) {

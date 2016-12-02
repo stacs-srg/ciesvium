@@ -21,8 +21,20 @@ import uk.ac.standrews.cs.util.dataset.encrypted.*;
 import java.io.*;
 import java.nio.file.*;
 
+/**
+ * Encrypts a file using AES.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public class EncryptFileWithAES {
 
+    /**
+     * Encrypts a file with a given AES key.
+     *
+     * @param args MIME-encoded AES key, path of plain-text file, path of new encrypted file
+     * @throws CryptoException if the encryption cannot be completed
+     * @throws IOException if a file cannot be accessed
+     */
     public static void main(String[] args) throws CryptoException, IOException {
 
         if (args.length < 3) {

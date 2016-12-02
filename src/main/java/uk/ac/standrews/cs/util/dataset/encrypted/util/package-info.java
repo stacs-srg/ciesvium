@@ -14,24 +14,8 @@
  * You should have received a copy of the GNU General Public License along with ciesvium. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package uk.ac.standrews.cs.util.dataset.encrypted.util;
-
-import uk.ac.standrews.cs.util.dataset.encrypted.*;
 
 /**
- * Generates a new symmetric key.
- *
- * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ * Utility encryption classes.
  */
-public class GenerateAESKey {
-
-    /**
-     * Generates a new AES key and prints it in MIME-encoded form.
-     *
-     * @throws CryptoException if the key cannot be generated
-     */
-    public static void main(String[] args) throws CryptoException {
-
-        System.out.println(SymmetricEncryption.keyToString(SymmetricEncryption.generateRandomKey()));
-    }
-}
+package uk.ac.standrews.cs.util.dataset.encrypted.util;
