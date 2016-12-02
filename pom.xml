@@ -184,6 +184,7 @@
             <id>digitisingscotland.cs</id>
             <url>scpexe://quicksilver@quicksilver.host.cs.st-andrews.ac.uk/cs/home/quicksilver/public_html/ciesvium/</url>
         </site>
+        <downloadUrl>http://maven.cs.st-andrews.ac.uk/</downloadUrl>
     </distributionManagement>
 
     <ciManagement>
