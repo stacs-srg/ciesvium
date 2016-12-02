@@ -1,4 +1,4 @@
-# Home
+## Home
 
 This is the Ciesvium project.
 
