@@ -26,6 +26,8 @@ import java.nio.file.Paths;
 
 /**
  * Allows a MS Access database to be dumped to plain text files.
+ *
+ * @see <a href="http://jackcess.sourceforge.net">http://jackcess.sourceforge.net</a>
  */
 public class AccessDatabaseExporter {
 
@@ -36,9 +38,9 @@ public class AccessDatabaseExporter {
     private File export_directory;
 
     /**
-     * The main method.
+     * Dumps all the tables in the given Access database to plain text files.
      *
-     * @param args the path to the database, followed by the path to the output directory.
+     * @param args the path to the database file, followed by the path to the output directory.
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static void main(final String[] args) throws IOException {

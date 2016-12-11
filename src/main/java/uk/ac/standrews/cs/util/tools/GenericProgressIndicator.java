@@ -19,18 +19,31 @@ package uk.ac.standrews.cs.util.tools;
 import java.util.function.*;
 
 /**
- * @author masih
+ * Progress indicator that passes on progress step information to a given consumer.
+ *
+ * @author Masih Hajiarab Derkani (m@derkani.org)
  */
 public class GenericProgressIndicator extends ProgressIndicator {
 
     private Consumer<Double> progress_consumer;
 
+    /**
+     * Creates a progress indicator with a given progress consumer.
+     *
+     * @param number_of_updates the number of progress updates to be indicated
+     * @param progress_consumer the progress consumer
+     */
     public GenericProgressIndicator(final int number_of_updates, Consumer<Double> progress_consumer) {
 
         super(number_of_updates);
         this.progress_consumer = progress_consumer;
     }
 
+    /**
+     * Indicates progress to a given proportion of completion.
+     *
+     * @param proportion_complete the proportion complete
+     */
     @Override
     public void indicateProgress(final double proportion_complete) {
 

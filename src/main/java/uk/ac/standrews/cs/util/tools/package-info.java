@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License along with ciesvium. If not, see
  * <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * Miscellaneous utilities.
+ */
 package uk.ac.standrews.cs.util.tools;
-
-public enum InfoLevel {
-
-    NONE, SHORT_SUMMARY, LONG_SUMMARY, VERBOSE
-}

@@ -20,28 +20,66 @@ package uk.ac.standrews.cs.util.tools;
 import java.text.NumberFormat;
 import java.time.Duration;
 
+/**
+ * Various simple formatting methods.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public class Formatting {
 
-    public static void printMetric(InfoLevel info_level, String label, double value) {
+    /**
+     * Prints the given value if the current logging level is at or higher than the given threshold.
+     *
+     * @param info_level the logging threshold level for outputting the metric
+     * @param label a label for the value
+     * @param value the value
+     */
+    public static void printMetric(LoggingLevel info_level, String label, double value) {
 
         Logging.output(info_level, label + ": " + format(value, 2));
     }
 
-    public static void printMetric(InfoLevel info_level, String label, int value) {
+    /**
+     * Prints the given value if the current logging level is at or higher than the given threshold.
+     *
+     * @param info_level the logging threshold level for outputting the metric
+     * @param label a label for the value
+     * @param value the value
+     */
+    public static void printMetric(LoggingLevel info_level, String label, int value) {
 
         Logging.output(info_level, label + ": " + format(value));
     }
 
+    /**
+     * Returns the given value formatted with the given number of decimal places.
+     *
+     * @param value the value
+     * @param decimal_places the number of decimal places
+     * @return the formatted value
+     */
     public static String format(double value, int decimal_places) {
 
         return String.format("%." + decimal_places + "f", value);
     }
 
+    /**
+     * Returns the given value formatted with the local number formatting rules.
+     *
+     * @param value the value
+     * @return the formatted value
+     */
     public static String format(int value) {
 
         return NumberFormat.getNumberInstance().format(value);
     }
 
+    /**
+     * Returns the given duration formatted as minutes and seconds.
+     *
+     * @param duration the value
+     * @return the formatted value
+     */
     public static String format(Duration duration) {
 
         long seconds = duration.getSeconds();

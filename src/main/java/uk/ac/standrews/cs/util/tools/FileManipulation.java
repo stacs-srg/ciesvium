@@ -18,17 +18,20 @@ package uk.ac.standrews.cs.util.tools;
 
 import java.io.*;
 import java.net.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.*;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.*;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.jar.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+/**
+ * Various file manipulation methods.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
+ */
 public class FileManipulation {
 
     public static final Charset FILE_CHARSET = StandardCharsets.UTF_8;
@@ -40,16 +43,37 @@ public class FileManipulation {
 
     private static final int INPUT_BUFFER_SIZE_IN_BYTES = 512;
 
+    /**
+     * Creates an input stream reader for a given path.
+     *
+     * @param path the path
+     * @return the input stream reader
+     * @throws IOException if the file cannot be read
+     */
     public static InputStreamReader getInputStreamReader(Path path) throws IOException {
 
         return new InputStreamReader(Files.newInputStream(path), FILE_CHARSET);
     }
 
+    /**
+     * Creates an output stream reader for a given path.
+     *
+     * @param path the path
+     * @return the output stream reader
+     * @throws IOException if the file cannot be read
+     */
     public static OutputStreamWriter getOutputStreamWriter(Path path) throws IOException {
 
         return new OutputStreamWriter(Files.newOutputStream(path), FILE_CHARSET);
     }
 
+    /**
+     * Gets the path of a given resource loaded via the given class.
+     *
+     * @param the_class the class
+     * @param resource_name the name of the resource
+     * @return the path of the resource
+     */
     public static Path getResourcePath(Class the_class, String resource_name) {
 
         URL resource = getResource(the_class, resource_name);
@@ -61,29 +85,50 @@ public class FileManipulation {
         }
     }
 
+    /**
+     * Gets an input stream reader for a given resource loaded via the given class.
+     *
+     * @param the_class the class
+     * @param resource_name the name of the resource
+     * @return the input stream reader
+     */
     public static InputStreamReader getInputStreamReaderForResource(Class the_class, String resource_name) {
 
         return new InputStreamReader(getResourceAsStream(the_class, resource_name));
     }
 
+    /**
+     * Gets an input stream for a given resource loaded via the given class.
+     *
+     * @param the_class the class
+     * @param resource_name the name of the resource
+     * @return the input stream
+     */
     public static InputStream getResourceAsStream(Class the_class, String resource_name) {
 
         return the_class.getResourceAsStream(getResourceNamePrefixedWithClass(the_class, resource_name));
     }
 
-    private static String getResourceNamePrefixedWithClass(Class the_class, String resource_name) {
-
-        return the_class.getSimpleName() + "/" + resource_name;
-    }
-
+    /**
+     * Deletes a directory and all its contents.
+     *
+     * @param directory_path the path of the directory
+     * @throws IOException if the directory cannot be deleted
+     */
     public static void deleteDirectory(final String directory_path) throws IOException {
 
         deleteDirectory(Paths.get(directory_path));
     }
 
-    public static void deleteDirectory(final Path directory) throws IOException {
+    /**
+     * Deletes a directory and all its contents.
+     *
+     * @param directory_path the path of the directory
+     * @throws IOException if the directory cannot be deleted
+     */
+    public static void deleteDirectory(final Path directory_path) throws IOException {
 
-        Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
+        Files.walkFileTree(directory_path, new SimpleFileVisitor<Path>() {
 
             @Override
             public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
@@ -101,6 +146,12 @@ public class FileManipulation {
         });
     }
 
+    /**
+     * Creates a file at the given path if it does not already exist.
+     *
+     * @param path the path of the file
+     * @throws IOException if the file cannot be created
+     */
     public static void createFileIfDoesNotExist(final Path path) throws IOException {
 
         if (!Files.exists(path)) {
@@ -110,29 +161,28 @@ public class FileManipulation {
         }
     }
 
-    public static void createDirectoryIfDoesNotExist(final String directory_path) throws IOException {
-
-        createDirectoryIfDoesNotExist(new File(directory_path));
-    }
-
-    public static void createDirectoryIfDoesNotExist(final File directory) throws IOException {
-
-        createDirectoryIfDoesNotExist(Paths.get(directory.getAbsolutePath()));
-    }
-
-    public static void createDirectoryIfDoesNotExist(final Path path) throws IOException {
-
-        Files.createDirectories(path);
-    }
-
+    /**
+     * Creates the parent directory for the file at the given path if the parent does not already exist.
+     *
+     * @param path the path of the file
+     * @throws IOException if the parent directory cannot be created
+     */
     public static void createParentDirectoryIfDoesNotExist(final Path path) throws IOException {
 
         Path parent_dir = path.getParent();
         if (parent_dir != null) {
-            createDirectoryIfDoesNotExist(parent_dir);
+
+            Files.createDirectories(parent_dir);
         }
     }
 
+    /**
+     * Gets the paths of the entries in the given directory.
+     *
+     * @param directory the path of the directory
+     * @return a list of entry paths
+     * @throws IOException if the directory cannot be accessed
+     */
     public static List<Path> getDirectoryEntries(final Path directory) throws IOException {
 
         List<Path> result = new ArrayList<>();
@@ -147,6 +197,13 @@ public class FileManipulation {
         return result;
     }
 
+    /**
+     * Gets the number of lines in a given file.
+     *
+     * @param path the path of the file
+     * @return the number of lines
+     * @throws IOException if the file cannot be read
+     */
     public static int countLinesInFile(final Path path) throws IOException {
 
         try (BufferedReader reader = Files.newBufferedReader(path, FILE_CHARSET)) {
@@ -159,6 +216,13 @@ public class FileManipulation {
         }
     }
 
+    /**
+     * For use in JUnit tests: asserts that two files have the same content.
+     *
+     * @param path1 the path of the first file
+     * @param path2 the path of the second file
+     * @throws IOException if one of the files cannot be read
+     */
     public static void assertThatFilesHaveSameContent(final Path path1, final Path path2) throws IOException {
 
         try (BufferedReader reader1 = Files.newBufferedReader(path1, FILE_CHARSET); BufferedReader reader2 = Files.newBufferedReader(path2, FILE_CHARSET)) {
@@ -166,8 +230,7 @@ public class FileManipulation {
             String line1;
 
             while ((line1 = reader1.readLine()) != null) {
-                final String line2 = reader2.readLine();
-                assertEquals(line1, line2);
+                assertEquals(line1, reader2.readLine());
             }
             assertNull(reader2.readLine());
         }
@@ -215,6 +278,13 @@ public class FileManipulation {
         return getResourceDirectoryEntries(resource_directory_path.toString(), class_loader);
     }
 
+    /**
+     * Gets all the bytes available from a given input stream
+     *
+     * @param inputStream the input stream
+     * @return an array containing all the available bytes
+     * @throws IOException if the stream cannot be read
+     */
     public static byte[] readAllBytes(final InputStream inputStream) throws IOException {
 
         ByteArrayOutputStream temporary_byte_array_stream = new ByteArrayOutputStream();
@@ -322,5 +392,10 @@ public class FileManipulation {
     private static URL getResource(Class the_class, String resource_name) {
 
         return the_class.getResource(getResourceNamePrefixedWithClass(the_class, resource_name));
+    }
+
+    private static String getResourceNamePrefixedWithClass(Class the_class, String resource_name) {
+
+        return the_class.getSimpleName() + "/" + resource_name;
     }
 }

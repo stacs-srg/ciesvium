@@ -16,23 +16,16 @@
  */
 package uk.ac.standrews.cs.util.tools;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Random;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by graham on 02/05/2014.
- */
 public class FileManipulationTest {
 
     private static final int DIRECTORY_COUNT = 10;
@@ -116,14 +109,14 @@ public class FileManipulationTest {
         if (new File(directory_path).exists()) fail();
     }
 
-    private void assertExists(File sub_directory) {
+    private void assertExists(File directory) {
 
-        if (!sub_directory.exists()) fail();
+        if (!directory.exists()) fail();
     }
 
     private void createRoot() throws IOException {
 
-        FileManipulation.createDirectoryIfDoesNotExist(temp_file_tree_root);
+        Files.createDirectories(Paths.get(temp_file_tree_root));
         assertExists(temp_file_tree_root);
     }
 }

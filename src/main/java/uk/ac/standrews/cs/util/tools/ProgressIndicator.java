@@ -19,11 +19,13 @@ package uk.ac.standrews.cs.util.tools;
 import java.util.concurrent.atomic.*;
 
 /**
- * Created by graham on 14/05/2014.
+ * Abstract progress indicator class. Subclasses define how an amount of progress is displayed.
+ *
+ * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
 public abstract class ProgressIndicator {
 
-    private final AtomicInteger number_of_updates;
+    private final AtomicInteger number_of_updates = new AtomicInteger();
     private final AtomicInteger number_of_steps_since_last_update = new AtomicInteger();
     private final AtomicInteger total_steps = new AtomicInteger();
     private final AtomicInteger number_of_steps_completed = new AtomicInteger();
@@ -31,18 +33,31 @@ public abstract class ProgressIndicator {
 
     private double proportion_complete;
 
+    /**
+     * Creates a progress indicator.
+     *
+     * @param number_of_updates the number of progress updates to be indicated
+     */
     public ProgressIndicator(final int number_of_updates) {
 
-        this.number_of_updates = new AtomicInteger(number_of_updates);
+        this.number_of_updates.set(number_of_updates);
         number_of_steps_since_last_update.set(0);
     }
 
+    /**
+     * Sets the total number of steps that represent completion.
+     *
+     * @param total_steps the total number of steps
+     */
     public void setTotalSteps(final int total_steps) {
 
         this.total_steps.set(total_steps);
         number_of_steps_per_update.set(total_steps / number_of_updates.get());
     }
 
+    /**
+     * Records another progress step.
+     */
     public void progressStep() {
 
         number_of_steps_completed.getAndIncrement();
@@ -57,10 +72,20 @@ public abstract class ProgressIndicator {
         }
     }
 
+    /**
+     * Gets the current proportion of completion.
+     *
+     * @return the proportion of completion, between 0 and 1
+     */
     public double getProportionComplete() {
 
         return proportion_complete;
     }
 
+    /**
+     * Indicates the current proportion of completion.
+     *
+     * @param proportion_complete the current proportion of completion
+     */
     public abstract void indicateProgress(final double proportion_complete);
 }

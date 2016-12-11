@@ -14,24 +14,14 @@
  * You should have received a copy of the GNU General Public License along with ciesvium. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package uk.ac.standrews.cs.util.dataset.encrypted.util;
-
-import uk.ac.standrews.cs.util.dataset.encrypted.*;
+package uk.ac.standrews.cs.util.tools;
 
 /**
- * Generates a new random symmetric key.
+ * Logging levels for simple logging class.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
-public class GenerateAESKey {
+public enum LoggingLevel {
 
-    /**
-     * Generates a new AES key and prints it in MIME-encoded form.
-     *
-     * @throws CryptoException if the key cannot be generated
-     */
-    public static void main(String[] args) throws CryptoException {
-
-        System.out.println(SymmetricEncryption.keyToString(SymmetricEncryption.generateRandomKey()));
-    }
+    NONE, SHORT_SUMMARY, LONG_SUMMARY, VERBOSE
 }
