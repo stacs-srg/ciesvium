@@ -17,23 +17,23 @@
 package uk.ac.standrews.cs.util.dataset.encrypted.util;
 
 import uk.ac.standrews.cs.util.dataset.encrypted.*;
-import uk.ac.standrews.cs.util.tools.*;
 
+import javax.crypto.*;
 import java.io.*;
 import java.nio.file.*;
-import java.security.*;
 
 /**
- * Encrypts a symmetric key with a number of public keys.
+ * Encrypts a file using a public-key-encrypted AES key.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
-public class EncryptKey {
+public class EncryptFileWithEncryptedAESKey {
 
     /**
-     * Encrypts a MIME-encoded key with each of a number of public keys read from a given file.
+     * Encrypts a file with an AES key extracted from a file containing the key encrypted separately with the public key
+     * of each authorized user.
      *
-     * @param args MIME-encoded AES key, path of file containing public keys, path of new file containing encrypted keys
+     * @param args path of file containing encrypted key, path of plain-text file, path of new encrypted file
      * @throws CryptoException if the encryption cannot be completed
      * @throws IOException if a file cannot be accessed
      */
@@ -43,28 +43,23 @@ public class EncryptKey {
             usage();
         }
         else {
+            final String encrypted_key_path = args[0];
+            final String plain_text_path = args[1];
+            final String cipher_text_path = args[2];
 
-            String key = args[0];
-            String authorized_keys_path = args[1];
-            String destination_path = args[2];
-
-            try (OutputStreamWriter writer = FileManipulation.getOutputStreamWriter(Paths.get(destination_path))) {
-
-                for (String authorized_key : AsymmetricEncryption.loadPublicKeys(Paths.get(authorized_keys_path))) {
-
-                    final PublicKey public_key = AsymmetricEncryption.getPublicKeyFromString(authorized_key);
-                    final String encrypted_symmetric_key = AsymmetricEncryption.encrypt(public_key, key);
-                    writer.append(encrypted_symmetric_key);
-                    writer.append("\n");
-                }
-
-                writer.flush();
-            }
+            encryptFileWithEncryptedAESKey(encrypted_key_path, plain_text_path, cipher_text_path);
         }
+    }
+
+    private static void encryptFileWithEncryptedAESKey(final String encrypted_key_path, final String plain_text_path, final String cipher_text_path) throws IOException, CryptoException {
+
+        SecretKey AES_key = AsymmetricEncryption.getAESKey(Paths.get(encrypted_key_path));
+
+        SymmetricEncryption.encrypt(AES_key, Paths.get(plain_text_path), Paths.get(cipher_text_path));
     }
 
     private static void usage() {
 
-        System.out.println("usage: EncryptKey <key> <authorized keys path> <destination path>");
+        System.out.println("usage: EncryptFileWithEncryptedAESKey <encrypted key path> <plain text path> <cipher text path>");
     }
 }

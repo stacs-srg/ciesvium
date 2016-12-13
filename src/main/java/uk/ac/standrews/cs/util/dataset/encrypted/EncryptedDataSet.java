@@ -20,7 +20,6 @@ import uk.ac.standrews.cs.util.dataset.*;
 
 import javax.crypto.*;
 import java.io.*;
-import java.security.*;
 
 /**
  * Version of dataset that allows the persistent form to be encrypted. A dataset can be instantiated from encrypted
@@ -29,8 +28,6 @@ import java.security.*;
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
 public class EncryptedDataSet extends DataSet {
-
-    private static final String ENCRYPTED_KEY_END_DELIMITER = "==";
 
     /**
      * Creates a new dataset from an encrypted input stream.
@@ -49,16 +46,14 @@ public class EncryptedDataSet extends DataSet {
      * from the given input stream, which contains versions of the AES key encrypted with various users' RSA public
      * keys.
      *
-     * @param encrypted_keys an input stream containing versions of the MIME-encoded AES key encrypted with various users' public keys
+     * @param encrypted_key_stream an input stream containing versions of the MIME-encoded AES key encrypted with various users' public keys
      * @param source_data the encrypted data input stream
      * @throws IOException if the key input stream cannot be read
      * @throws CryptoException if data cannot be read from the input stream, or the AES key cannot be extracted with this user's private key
      */
-    public EncryptedDataSet(InputStream encrypted_keys, InputStream source_data) throws IOException, CryptoException {
+    public EncryptedDataSet(InputStream encrypted_key_stream, InputStream source_data) throws IOException, CryptoException {
 
-        PrivateKey private_key = AsymmetricEncryption.getPrivateKey();
-
-        SecretKey AES_key = getAESKey(encrypted_keys, private_key);
+        SecretKey AES_key = AsymmetricEncryption.getAESKey(encrypted_key_stream);
 
         init(decrypt(AES_key, source_data));
     }
@@ -113,43 +108,4 @@ public class EncryptedDataSet extends DataSet {
         }
     }
 
-    /**
-     * Each line in the input stream is assumed to contain a MIME-encoded AES key, encrypted with a particular user's
-     * RSA public key. This method attempts to decrypt each one with this user's RSA private key, and returns the first
-     * one to be successfully decrypted.
-     *
-     * @param encrypted_keys the input stream containing encrypted keys
-     * @param private_key this user's private key
-     * @return the decrypted AES key
-     * @throws IOException if the input stream cannot be read
-     * @throws CryptoException if no key can be successfully decrypted
-     */
-    private static SecretKey getAESKey(InputStream encrypted_keys, PrivateKey private_key) throws IOException, CryptoException {
-
-        // Each line in the input stream is assumed to contain
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(encrypted_keys))) {
-
-            StringBuilder builder = new StringBuilder();
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-
-                builder.append(line);
-
-                if (line.endsWith(ENCRYPTED_KEY_END_DELIMITER)) {
-
-                    try {
-                        return SymmetricEncryption.getKey(AsymmetricEncryption.decrypt(private_key, builder.toString()));
-                    }
-                    catch (CryptoException e) {
-
-                        builder = new StringBuilder();
-                    }
-                }
-            }
-
-            throw new CryptoException("no valid encrypted key");
-        }
-    }
 }

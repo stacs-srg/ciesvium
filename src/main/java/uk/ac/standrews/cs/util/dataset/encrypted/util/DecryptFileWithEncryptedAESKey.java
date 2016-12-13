@@ -18,20 +18,22 @@ package uk.ac.standrews.cs.util.dataset.encrypted.util;
 
 import uk.ac.standrews.cs.util.dataset.encrypted.*;
 
+import javax.crypto.*;
 import java.io.*;
 import java.nio.file.*;
 
 /**
- * Encrypts a file using AES.
+ * Decrypts a file using a public-key-encrypted AES key.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
-public class EncryptFileWithAES {
+public class DecryptFileWithEncryptedAESKey {
 
     /**
-     * Encrypts a file with a given AES key.
+     * Decrypts a file with an AES key extracted from a file containing the key encrypted separately with the public key
+     * of each authorized user.
      *
-     * @param args MIME-encoded AES key, path of plain-text file, path of new encrypted file
+     * @param args path of file containing encrypted key, path of encrypted file, path of new plain-text file
      * @throws CryptoException if the encryption cannot be completed
      * @throws IOException if a file cannot be accessed
      */
@@ -41,17 +43,23 @@ public class EncryptFileWithAES {
             usage();
         }
         else {
+            final String encrypted_key_path = args[0];
+            final String cipher_text_path = args[1];
+            final String plain_text_path = args[2];
 
-            String key = args[0];
-            String plain_text_path = args[1];
-            String cipher_text_path = args[2];
-
-            SymmetricEncryption.encrypt(SymmetricEncryption.getKey(key), Paths.get(plain_text_path), Paths.get(cipher_text_path));
+            decryptFileWithEncryptedAESKey(encrypted_key_path, cipher_text_path, plain_text_path);
         }
+    }
+
+    private static void decryptFileWithEncryptedAESKey(final String encrypted_key_path, final String cipher_text_path, final String plain_text_path) throws IOException, CryptoException {
+
+        SecretKey AES_key = AsymmetricEncryption.getAESKey(Paths.get(encrypted_key_path));
+
+        SymmetricEncryption.decrypt(AES_key, Paths.get(cipher_text_path), Paths.get(plain_text_path));
     }
 
     private static void usage() {
 
-        System.out.println("usage: EncryptFile <key> <plain text path> <cipher text path>");
+        System.out.println("usage: DecryptFileWithEncryptedAESKey <encrypted key path> <cipher text path> <plain text path>");
     }
 }

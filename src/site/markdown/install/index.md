@@ -15,5 +15,3 @@ Artifacts are published to the Maven repository:
     </repository>
 
 See also: [Maven dependency details](dependency-info.html).
-
-Current build status: <img src="https://beast.cs.st-andrews.ac.uk/teamcity/app/rest/builds/buildType:(id:Ciesvium_Base)/statusIcon"/>

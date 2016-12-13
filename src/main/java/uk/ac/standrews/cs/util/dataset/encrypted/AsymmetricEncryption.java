@@ -81,6 +81,8 @@ public class AsymmetricEncryption {
      */
     public static final String PUBLIC_KEY_FOOTER = "-----END PUBLIC KEY-----";
 
+    private static final String ENCRYPTED_KEY_END_DELIMITER = "==";
+
     private static final String TRANSFORMATION = "RSA";
     private static final String ALGORITHM = "RSA";
 
@@ -93,7 +95,6 @@ public class AsymmetricEncryption {
     private static final Path DEFAULT_KEY_PATH = USER_HOME_PATH.resolve(Paths.get(DEFAULT_KEY_DIR));
     private static final Path DEFAULT_PRIVATE_KEY_PATH = DEFAULT_KEY_PATH.resolve(Paths.get(DEFAULT_PRIVATE_KEY_FILE));
     private static final Path DEFAULT_PUBLIC_KEY_PATH = DEFAULT_KEY_PATH.resolve(Paths.get(DEFAULT_PUBLIC_KEY_FILE));
-
 
     static {
         try {
@@ -266,6 +267,18 @@ public class AsymmetricEncryption {
     }
 
     /**
+     * Gets a private key from a given file.
+     *
+     * @param key_path the path of the private key file
+     * @return the private key
+     * @throws CryptoException if the private key cannot be accessed
+     */
+    public static PrivateKey getPrivateKey(Path key_path) throws CryptoException {
+
+        return getPrivateKeyFromString(getKey(key_path));
+    }
+
+    /**
      * Gets this user's public key.
      * The key is assumed to be stored in the file {@value #DEFAULT_PUBLIC_KEY_FILE} in the directory {@value #DEFAULT_KEY_DIR} in
      * this user's home directory.
@@ -276,18 +289,6 @@ public class AsymmetricEncryption {
     public static PublicKey getPublicKey() throws CryptoException {
 
         return getPublicKey(DEFAULT_PUBLIC_KEY_PATH);
-    }
-
-    /**
-     * Gets a private key from a given file.
-     *
-     * @param key_path the path of the private key file
-     * @return the private key
-     * @throws CryptoException if the private key cannot be accessed
-     */
-    public static PrivateKey getPrivateKey(Path key_path) throws CryptoException {
-
-        return getPrivateKeyFromString(getKey(key_path));
     }
 
     /**
@@ -345,48 +346,107 @@ public class AsymmetricEncryption {
     }
 
     /**
-     * Loads a list of public keys in PEM format from the given file.
+     * Loads a list of public keys from the given file containing keys in PEM format.
      *
      * @param path the file containing public keys
      * @return a list of keys in PEM format
      * @throws IOException if the file cannot be accessed
      */
-    public static List<String> loadPublicKeys(final Path path) throws IOException {
+    public static List<PublicKey> loadPublicKeys(final Path path) throws IOException, CryptoException {
 
-        final BufferedReader reader = new BufferedReader(FileManipulation.getInputStreamReader(path));
+        final List<PublicKey> key_list = new ArrayList<>();
 
-        List<String> key_list = new ArrayList<>();
+        try (final BufferedReader reader = new BufferedReader(FileManipulation.getInputStreamReader(path))) {
 
-        StringBuilder builder = null;
+            StringBuilder builder = null;
 
-        String line;
-        while ((line = reader.readLine()) != null) {
+            String line;
+            while ((line = reader.readLine()) != null) {
 
-            if (line.equals(PUBLIC_KEY_HEADER)) {
+                if (line.equals(PUBLIC_KEY_HEADER)) {
 
-                builder = new StringBuilder();
-                builder.append(line);
-                builder.append("\n");
-            }
-            else {
-                if (line.equals(PUBLIC_KEY_FOOTER)) {
-
-                    if (builder != null) {
-                        builder.append(line);
-                        key_list.add(builder.toString());
-                        builder = null;
-                    }
+                    builder = new StringBuilder();
+                    builder.append(line);
+                    builder.append("\n");
                 }
                 else {
-                    if (builder != null) {
-                        builder.append(line);
-                        builder.append("\n");
+                    if (line.equals(PUBLIC_KEY_FOOTER)) {
+
+                        if (builder != null) {
+                            builder.append(line);
+                            key_list.add(getPublicKeyFromString(builder.toString()));
+                            builder = null;
+                        }
+                    }
+                    else {
+                        if (builder != null) {
+                            builder.append(line);
+                            builder.append("\n");
+                        }
                     }
                 }
             }
         }
 
         return key_list;
+    }
+
+    /**
+     * Attempts to extract an AES key from a file, in which
+     * each line in the input stream is assumed to contain a MIME-encoded AES key, encrypted with a particular user's
+     * RSA public key. This method attempts to decrypt each one with this user's RSA private key, and returns the first
+     * one to be successfully decrypted.
+     *
+     * @param encrypted_keys the file containing encrypted keys
+     * @return the decrypted AES key
+     * @throws IOException if the input stream cannot be read
+     * @throws CryptoException if no key can be successfully decrypted
+     */
+    public static SecretKey getAESKey(Path encrypted_keys) throws IOException, CryptoException {
+
+        return getAESKey(Files.newInputStream(encrypted_keys));
+    }
+
+    /**
+     * Attempts to extract an AES key from an input stream, in which
+     * each line in the input stream is assumed to contain a MIME-encoded AES key, encrypted with a particular user's
+     * RSA public key. This method attempts to decrypt each one with this user's RSA private key, and returns the first
+     * one to be successfully decrypted.
+     *
+     * @param encrypted_key_stream the input stream containing encrypted keys
+     * @return the decrypted AES key
+     * @throws IOException if the input stream cannot be read
+     * @throws CryptoException if no key can be successfully decrypted
+     */
+    public static SecretKey getAESKey(InputStream encrypted_key_stream) throws IOException, CryptoException {
+
+        // SecretKey represents a symmetric key, whereas PrivateKey represents a private asymmetric key.
+
+        PrivateKey private_key = getPrivateKey();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(encrypted_key_stream))) {
+
+            StringBuilder builder = new StringBuilder();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+
+                builder.append(line);
+
+                if (line.endsWith(ENCRYPTED_KEY_END_DELIMITER)) {
+
+                    try {
+                        return SymmetricEncryption.getKey(decrypt(private_key, builder.toString()));
+                    }
+                    catch (CryptoException e) {
+
+                        builder = new StringBuilder();
+                    }
+                }
+            }
+
+            throw new CryptoException("no valid encrypted key");
+        }
     }
 
     private static String stripPrivateKeyDelimiters(final String key_in_pem_format) {

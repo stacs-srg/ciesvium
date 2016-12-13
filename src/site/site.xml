@@ -46,6 +46,7 @@
             <item name="Home" href="index.html"/>
             <item name="Project Info" href="project-info.html"/>
             <item name="Install" href="install/"/>
+            <item name="Usage" href="usage/"/>
             <item name="API" href="apidocs/"/>
         </links>
     </body>
