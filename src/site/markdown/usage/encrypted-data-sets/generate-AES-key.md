@@ -10,6 +10,4 @@ This generates a new random MIME-encoded AES key.
 
     src/main/scripts/generate-aes-key.sh
 
-**Parameters**: none
-
-**Output**: new key
+**Result**: new key printed to standard out

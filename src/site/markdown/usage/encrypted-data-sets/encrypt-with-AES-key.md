@@ -8,12 +8,6 @@ This encrypts a plain-text file with a given AES key.
  
 **Bash script**:
  
-    src/main/scripts/encrypt-file-with-aes-key.sh
+    src/main/scripts/encrypt-file-with-aes-key.sh <mime-encoded AES key> <path of plain-text file> <path of new encrypted file>
  
-**Parameters**:
- 
-1. MIME-encoded AES key
-1. path of plain-text file
-1. path of new encrypted file
-
-**Output**: encrypted file is written to specified path
+**Result**: encrypted file is written to specified path
