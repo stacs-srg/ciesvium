@@ -1,6 +1,6 @@
 ## Use Case: Encrypt File With AES Key
 
-This encrypts a plain-text file with a given AES key.
+This encrypts a plain-text file using a given MIME-encoded AES key.
 
 **Java class**:
  

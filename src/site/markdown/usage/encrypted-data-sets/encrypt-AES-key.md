@@ -1,6 +1,8 @@
 ## Use Case: Encrypt AES Key
 
-This encrypts an AES key separately with each of a given set of public keys.
+This encrypts a MIME-encoded AES key using public-key encryption. A number of authorized public keys are read from
+a specified file, and the AES key encrypted separately with each public key. The resulting encrypted
+AES keys are written to a given file.
 
 **Java class**:
  
@@ -8,12 +10,6 @@ This encrypts an AES key separately with each of a given set of public keys.
  
 **Bash script**:
  
-    src/main/scripts/encrypt-aes-key.sh
- 
-**Parameters**:
- 
-1. MIME-encoded AES key
-1. path of file containing public keys
-1. path of new file containing encrypted keys
+    src/main/scripts/encrypt-aes-key.sh <mime-encoded AES key> <path of public keys file> <path of new encrypted file>
 
-**Output**: file containing encrypted keys is written to specified path
+**Result**: file containing encrypted keys is written to specified path
