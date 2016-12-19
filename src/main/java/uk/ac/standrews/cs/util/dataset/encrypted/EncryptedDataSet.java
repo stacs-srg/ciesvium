@@ -20,6 +20,7 @@ import uk.ac.standrews.cs.util.dataset.*;
 
 import javax.crypto.*;
 import java.io.*;
+import java.nio.file.*;
 
 /**
  * Version of dataset that allows the persistent form to be encrypted. A dataset can be instantiated from encrypted
@@ -41,6 +42,13 @@ public class EncryptedDataSet extends DataSet {
         init(decrypt(AES_key, source_data));
     }
 
+    public EncryptedDataSet(SecretKey AES_key, Path source_data) throws CryptoException, IOException {
+
+        try (InputStream input_stream = Files.newInputStream(source_data)) {
+            init(decrypt(AES_key, input_stream));
+        }
+    }
+
     /**
      * Creates a new dataset from an encrypted input stream. This constructor attempts to extract the MIME-encoded AES key
      * from the given input stream, which contains versions of the AES key encrypted with various users' RSA public
@@ -59,11 +67,18 @@ public class EncryptedDataSet extends DataSet {
     }
 
     /**
-     * {@inheritDoc}
+     * Creates a new dataset containing a copy of the given dataset.
+     *
+     * @param existing_records the dataset to copy
      */
     public EncryptedDataSet(DataSet existing_records) throws IOException {
 
         super(existing_records);
+    }
+
+    public EncryptedDataSet(Path source_data) throws IOException {
+
+        super(source_data);
     }
 
     /**
@@ -76,11 +91,18 @@ public class EncryptedDataSet extends DataSet {
      */
     public void print(SecretKey AES_key, Appendable out) throws IOException, CryptoException {
 
-        StringBuilder builder = new StringBuilder();
-
+        final StringBuilder builder = new StringBuilder();
         print(builder);
 
-        SymmetricEncryption.encrypt(AES_key, new ByteArrayInputStream(builder.toString().getBytes()), makeOutputStream(out));
+        final InputStream input_stream = new ByteArrayInputStream(builder.toString().getBytes());
+        SymmetricEncryption.encrypt(AES_key, input_stream, makeOutputStream(out));
+    }
+
+    public void print(SecretKey AES_key, Path path) throws IOException, CryptoException {
+
+        try (Writer writer = Files.newBufferedWriter(path)) {
+            print(AES_key, writer);
+        }
     }
 
     private static OutputStream makeOutputStream(final Appendable out) {
@@ -107,5 +129,4 @@ public class EncryptedDataSet extends DataSet {
             throw new CryptoException("unexpected IO exception reading from a string", e);
         }
     }
-
 }

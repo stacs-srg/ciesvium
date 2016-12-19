@@ -200,7 +200,10 @@ public class SymmetricEncryption {
 
             output_stream.write(plain_text);
         }
-        catch (BadPaddingException | InvalidKeyException | IllegalBlockSizeException | IOException e) {
+        catch (BadPaddingException e) {
+            throw new CryptoException("Incorrect key");
+        }
+        catch (InvalidKeyException | IllegalBlockSizeException | IOException e) {
             throw new CryptoException(e);
         }
     }
@@ -214,13 +217,17 @@ public class SymmetricEncryption {
      */
     public static SecretKey getKey(final String mime_encoded_AES_key) throws CryptoException {
 
-        final byte[] key_bytes = MIMEDecodeKey(mime_encoded_AES_key.getBytes());
+        try {
+            final byte[] key_bytes = MIMEDecodeKey(mime_encoded_AES_key.getBytes());
 
-        if (key_bytes.length != KEY_LENGTH_IN_BYTES) {
-            throw new CryptoException("key length must be " + KEY_LENGTH_IN_BYTES);
+            if (key_bytes.length != KEY_LENGTH_IN_BYTES) {
+                throw new CryptoException("Key length must be " + KEY_LENGTH_IN_BYTES);
+            }
+            return getKey(key_bytes);
         }
-
-        return getKey(key_bytes);
+        catch (IllegalArgumentException e) {
+            throw new CryptoException("Invalid MIME-encoded key: " + mime_encoded_AES_key);
+        }
     }
 
     public static String keyToString(final SecretKey AES_key) {

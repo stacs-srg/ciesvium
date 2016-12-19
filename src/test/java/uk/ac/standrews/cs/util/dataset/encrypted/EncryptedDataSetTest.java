@@ -18,9 +18,11 @@ package uk.ac.standrews.cs.util.dataset.encrypted;
 
 import org.junit.*;
 import uk.ac.standrews.cs.util.dataset.*;
+import uk.ac.standrews.cs.util.tools.*;
 
 import javax.crypto.*;
 import java.io.*;
+import java.nio.file.*;
 
 import static org.junit.Assert.*;
 
@@ -41,16 +43,55 @@ public class EncryptedDataSetTest {
     }
 
     @Test
-    public void encryptedDataSetCanBeDecrypted() throws IOException, CryptoException {
+    public void encryptedDataSetCreatedFromExistingDataSetCanBeDecrypted() throws IOException, CryptoException {
 
         final SecretKey key = SymmetricEncryption.generateRandomKey();
 
-        final EncryptedDataSet encrypted_data_set = new EncryptedDataSet(data_set);
+        final EncryptedDataSet new_data_set = new EncryptedDataSet(data_set);
 
         final StringBuilder encrypted_form = new StringBuilder();
+        new_data_set.print(key, encrypted_form);
 
-        encrypted_data_set.print(key, encrypted_form);
+        final EncryptedDataSet existing_data_set = new EncryptedDataSet(key, new ByteArrayInputStream(encrypted_form.toString().getBytes()));
+        assertEquals(new_data_set, existing_data_set);
+    }
 
-        assertEquals(encrypted_data_set, new EncryptedDataSet(key, new ByteArrayInputStream(encrypted_form.toString().getBytes())));
+    @Test
+    public void encryptedDataSetUsingFilesCanBeDecrypted() throws CryptoException, IOException {
+
+        final SecretKey key = SymmetricEncryption.generateRandomKey();
+
+        EncryptedDataSet[] data_sets = createAndReadDataSet(key, key);
+        assertEquals(data_sets[0], data_sets[1]);
+    }
+
+    @Test(expected = CryptoException.class)
+    public void encryptedDataSetDecryptedWithWrongKeyThrowsException() throws CryptoException, IOException {
+
+        final SecretKey key1 = SymmetricEncryption.generateRandomKey();
+        final SecretKey key2 = SymmetricEncryption.generateRandomKey();
+
+        createAndReadDataSet(key1, key2);
+    }
+
+    private EncryptedDataSet[] createAndReadDataSet(SecretKey key1, SecretKey key2) throws IOException, CryptoException {
+
+        final Path plain_text_path = Files.createTempFile("test", ".csv");
+        final Path cipher_text_path = Files.createTempFile("test", ".txt");
+
+        try (final OutputStreamWriter writer = FileManipulation.getOutputStreamWriter(plain_text_path)) {
+            writer.append("the quick brown fox\njumps over the lazy dog");
+        }
+
+        // Creation.
+
+        final EncryptedDataSet new_data_set = new EncryptedDataSet(plain_text_path);
+        new_data_set.print(key1, cipher_text_path);
+
+        // Use.
+
+        EncryptedDataSet existing_data_set = new EncryptedDataSet(key2, cipher_text_path);
+
+        return new EncryptedDataSet[]{new_data_set, existing_data_set};
     }
 }

@@ -24,8 +24,7 @@ import java.nio.file.attribute.*;
 import java.util.*;
 import java.util.jar.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Various file manipulation methods.
@@ -56,11 +55,11 @@ public class FileManipulation {
     }
 
     /**
-     * Creates an output stream reader for a given path.
+     * Creates an output stream writer for a given path.
      *
      * @param path the path
-     * @return the output stream reader
-     * @throws IOException if the file cannot be read
+     * @return the output stream writer
+     * @throws IOException if the file cannot be written
      */
     public static OutputStreamWriter getOutputStreamWriter(Path path) throws IOException {
 

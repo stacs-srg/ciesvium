@@ -16,19 +16,15 @@
  */
 package uk.ac.standrews.cs.util.dataset;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.*;
 import uk.ac.standrews.cs.util.dataset.derived.*;
-import uk.ac.standrews.cs.util.tools.FileManipulation;
+import uk.ac.standrews.cs.util.tools.*;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Path;
+import java.io.*;
+import java.nio.file.*;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Simple abstraction over a plain-text dataset. Data is represented as a list of rows, each of which is a list of strings, plus
@@ -259,6 +255,13 @@ public class DataSet {
 
             printer.printRecord(record);
             printer.flush();
+        }
+    }
+
+    public void print(Path path) throws IOException {
+
+        try (Writer writer = Files.newBufferedWriter(path)) {
+            print(writer);
         }
     }
 
