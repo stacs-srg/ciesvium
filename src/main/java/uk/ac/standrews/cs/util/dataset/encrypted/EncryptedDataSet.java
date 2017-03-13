@@ -16,11 +16,13 @@
  */
 package uk.ac.standrews.cs.util.dataset.encrypted;
 
-import uk.ac.standrews.cs.util.dataset.*;
+import uk.ac.standrews.cs.util.dataset.DataSet;
 
-import javax.crypto.*;
+import javax.crypto.SecretKey;
 import java.io.*;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Version of dataset that allows the persistent form to be encrypted. A dataset can be instantiated from encrypted
@@ -30,22 +32,27 @@ import java.nio.file.*;
  */
 public class EncryptedDataSet extends DataSet {
 
+    public EncryptedDataSet(List<String> labels) {
+
+        super(labels);
+    }
+
     /**
      * Creates a new dataset from an encrypted input stream.
      *
-     * @param AES_key the AES key to decrypt the input stream
      * @param source_data the encrypted data input stream
+     * @param AES_key the AES key to decrypt the input stream
      * @throws CryptoException if data cannot be read from the input stream, or the data cannot be decrypted with the given key
      */
-    public EncryptedDataSet(SecretKey AES_key, InputStream source_data) throws CryptoException {
+    public EncryptedDataSet(InputStream source_data, SecretKey AES_key) throws CryptoException {
 
-        init(decrypt(AES_key, source_data));
+        init(decrypt(source_data, AES_key));
     }
 
-    public EncryptedDataSet(SecretKey AES_key, Path source_data) throws CryptoException, IOException {
+    public EncryptedDataSet(Path source_data, SecretKey AES_key) throws CryptoException, IOException {
 
         try (InputStream input_stream = Files.newInputStream(source_data)) {
-            init(decrypt(AES_key, input_stream));
+            init(decrypt(input_stream, AES_key));
         }
     }
 
@@ -63,7 +70,7 @@ public class EncryptedDataSet extends DataSet {
 
         SecretKey AES_key = AsymmetricEncryption.getAESKey(encrypted_key_stream);
 
-        init(decrypt(AES_key, source_data));
+        init(decrypt(source_data, AES_key));
     }
 
     /**
@@ -71,7 +78,7 @@ public class EncryptedDataSet extends DataSet {
      *
      * @param existing_records the dataset to copy
      */
-    public EncryptedDataSet(DataSet existing_records) throws IOException {
+    public EncryptedDataSet(DataSet existing_records) {
 
         super(existing_records);
     }
@@ -84,12 +91,12 @@ public class EncryptedDataSet extends DataSet {
     /**
      * Prints this dataset, in encrypted form, to the given output object.
      *
-     * @param AES_key the AES key to encrypt the dataset
      * @param out the output object
+     * @param AES_key the AES key to encrypt the dataset
      * @throws IOException if this dataset cannot be printed to the given output object
      * @throws CryptoException if the data cannot be encrypted
      */
-    public void print(SecretKey AES_key, Appendable out) throws IOException, CryptoException {
+    public void print(Appendable out, SecretKey AES_key) throws IOException, CryptoException {
 
         final StringBuilder builder = new StringBuilder();
         print(builder);
@@ -98,10 +105,10 @@ public class EncryptedDataSet extends DataSet {
         SymmetricEncryption.encrypt(AES_key, input_stream, makeOutputStream(out));
     }
 
-    public void print(SecretKey AES_key, Path path) throws IOException, CryptoException {
+    public void print(Path path, SecretKey AES_key) throws IOException, CryptoException {
 
         try (Writer writer = Files.newBufferedWriter(path)) {
-            print(AES_key, writer);
+            print(writer, AES_key);
         }
     }
 
@@ -117,7 +124,7 @@ public class EncryptedDataSet extends DataSet {
         };
     }
 
-    private static DataSet decrypt(SecretKey AES_key, final InputStream source_data) throws CryptoException {
+    private static DataSet decrypt(final InputStream source_data, SecretKey AES_key) throws CryptoException {
 
         ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
         SymmetricEncryption.decrypt(AES_key, source_data, output_stream);

@@ -16,14 +16,19 @@
  */
 package uk.ac.standrews.cs.util.dataset.encrypted;
 
-import uk.ac.standrews.cs.util.tools.*;
+import uk.ac.standrews.cs.util.tools.FileManipulation;
 
 import javax.crypto.*;
-import javax.crypto.spec.*;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.nio.file.*;
-import java.security.*;
-import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Random;
 
 /**
  * A utility class that encrypts or decrypts a finite-length stream using AES.
@@ -167,7 +172,7 @@ public class SymmetricEncryption {
             final byte[] plain_text = FileManipulation.readAllBytes(input_stream);
             final byte[] plain_text_with_header = prependHeader(plain_text);
             final byte[] encrypted = CIPHER.doFinal(plain_text_with_header);
-            final byte[] mime_encoded = MIMEEncodeKey(encrypted);
+            final byte[] mime_encoded = MIMEEncode(encrypted);
 
             output_stream.write(mime_encoded);
             output_stream.flush();
@@ -191,7 +196,7 @@ public class SymmetricEncryption {
             CIPHER.init(Cipher.DECRYPT_MODE, key);
 
             final byte[] mime_encoded = FileManipulation.readAllBytes(input_stream);
-            final byte[] encrypted = MIMEDecodeKey(mime_encoded);
+            final byte[] encrypted = MIMEDecode(mime_encoded);
             final byte[] plain_text_with_header = CIPHER.doFinal(encrypted);
 
             checkForValidHeader(plain_text_with_header);
@@ -218,7 +223,7 @@ public class SymmetricEncryption {
     public static SecretKey getKey(final String mime_encoded_AES_key) throws CryptoException {
 
         try {
-            final byte[] key_bytes = MIMEDecodeKey(mime_encoded_AES_key.getBytes());
+            final byte[] key_bytes = MIMEDecode(mime_encoded_AES_key.getBytes());
 
             if (key_bytes.length != KEY_LENGTH_IN_BYTES) {
                 throw new CryptoException("Key length must be " + KEY_LENGTH_IN_BYTES);
@@ -232,7 +237,7 @@ public class SymmetricEncryption {
 
     public static String keyToString(final SecretKey AES_key) {
 
-        return new String(MIMEEncodeKey(AES_key.getEncoded()));
+        return new String(MIMEEncode(AES_key.getEncoded()));
     }
 
     /**
@@ -260,14 +265,14 @@ public class SymmetricEncryption {
         }
     }
 
-    private static byte[] MIMEEncodeKey(final byte[] key) {
+    private static byte[] MIMEEncode(final byte[] bytes) {
 
-        return Base64.getMimeEncoder().encode(key);
+        return Base64.getMimeEncoder().encode(bytes);
     }
 
-    private static byte[] MIMEDecodeKey(final byte[] mime_encoded_key) {
+    private static byte[] MIMEDecode(final byte[] bytes) {
 
-        return Base64.getMimeDecoder().decode(mime_encoded_key);
+        return Base64.getMimeDecoder().decode(bytes);
     }
 
     private static byte[] stripHeader(final byte[] input_bytes_with_header) {

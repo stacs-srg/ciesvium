@@ -16,15 +16,21 @@
  */
 package uk.ac.standrews.cs.util.dataset.encrypted;
 
-import org.bouncycastle.jce.provider.*;
-import uk.ac.standrews.cs.util.tools.*;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import uk.ac.standrews.cs.util.tools.FileManipulation;
 
 import javax.crypto.*;
 import java.io.*;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.*;
-import java.security.spec.*;
-import java.util.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 /**
  * <p>A utility class that encrypts or decrypts data using RSA public key encryption.
@@ -447,6 +453,26 @@ public class AsymmetricEncryption {
 
             throw new CryptoException("no valid encrypted key");
         }
+    }
+
+    public static void encryptAESKey(final SecretKey AES_key, final Path authorized_keys_path, final Path destination_path) throws IOException, CryptoException {
+
+        try (OutputStreamWriter writer = FileManipulation.getOutputStreamWriter(destination_path)) {
+
+            final List<PublicKey> public_keys = AsymmetricEncryption.loadPublicKeys(authorized_keys_path);
+
+            for (PublicKey public_key : public_keys) {
+                writeEncryptedAESKey(public_key, AES_key, writer);
+            }
+
+            writer.flush();
+        }
+    }
+
+    private static void writeEncryptedAESKey(final PublicKey public_key, final SecretKey AES_key, final OutputStreamWriter writer) throws IOException, CryptoException {
+
+        writer.append(AsymmetricEncryption.encrypt(public_key, SymmetricEncryption.keyToString(AES_key)));
+        writer.append("\n");
     }
 
     private static String stripPrivateKeyDelimiters(final String key_in_pem_format) {

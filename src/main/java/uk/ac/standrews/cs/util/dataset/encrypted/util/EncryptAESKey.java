@@ -16,13 +16,12 @@
  */
 package uk.ac.standrews.cs.util.dataset.encrypted.util;
 
-import uk.ac.standrews.cs.util.dataset.encrypted.*;
-import uk.ac.standrews.cs.util.tools.*;
+import uk.ac.standrews.cs.util.dataset.encrypted.AsymmetricEncryption;
+import uk.ac.standrews.cs.util.dataset.encrypted.CryptoException;
+import uk.ac.standrews.cs.util.dataset.encrypted.SymmetricEncryption;
 
-import java.io.*;
-import java.nio.file.*;
-import java.security.*;
-import java.util.*;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * Encrypts a symmetric key with a number of public keys.
@@ -49,28 +48,8 @@ public class EncryptAESKey {
             final String authorized_keys_path = args[1];
             final String destination_path = args[2];
 
-            encryptAESKey(mime_encoded_AES_key, authorized_keys_path, destination_path);
+            AsymmetricEncryption.encryptAESKey(SymmetricEncryption.getKey(mime_encoded_AES_key), Paths.get(authorized_keys_path), Paths.get(destination_path));
         }
-    }
-
-    private static void encryptAESKey(final String mime_encoded_AES_key, final String authorized_keys_path, final String destination_path) throws IOException, CryptoException {
-
-        try (OutputStreamWriter writer = FileManipulation.getOutputStreamWriter(Paths.get(destination_path))) {
-
-            final List<PublicKey> public_keys = AsymmetricEncryption.loadPublicKeys(Paths.get(authorized_keys_path));
-
-            for (PublicKey public_key : public_keys) {
-                writeEncryptedAESKey(public_key, mime_encoded_AES_key, writer);
-            }
-
-            writer.flush();
-        }
-    }
-
-    private static void writeEncryptedAESKey(final PublicKey public_key, final String mime_encoded_AES_key, final OutputStreamWriter writer) throws IOException, CryptoException {
-
-        writer.append(AsymmetricEncryption.encrypt(public_key, mime_encoded_AES_key));
-        writer.append("\n");
     }
 
     private static void usage() {

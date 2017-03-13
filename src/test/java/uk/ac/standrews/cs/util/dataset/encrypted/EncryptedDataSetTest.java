@@ -16,15 +16,20 @@
  */
 package uk.ac.standrews.cs.util.dataset.encrypted;
 
-import org.junit.*;
-import uk.ac.standrews.cs.util.dataset.*;
-import uk.ac.standrews.cs.util.tools.*;
+import org.junit.Before;
+import org.junit.Test;
+import uk.ac.standrews.cs.util.dataset.DataSet;
+import uk.ac.standrews.cs.util.tools.FileManipulation;
 
-import javax.crypto.*;
-import java.io.*;
-import java.nio.file.*;
+import javax.crypto.SecretKey;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class EncryptedDataSetTest {
 
@@ -50,9 +55,9 @@ public class EncryptedDataSetTest {
         final EncryptedDataSet new_data_set = new EncryptedDataSet(data_set);
 
         final StringBuilder encrypted_form = new StringBuilder();
-        new_data_set.print(key, encrypted_form);
+        new_data_set.print(encrypted_form, key);
 
-        final EncryptedDataSet existing_data_set = new EncryptedDataSet(key, new ByteArrayInputStream(encrypted_form.toString().getBytes()));
+        final EncryptedDataSet existing_data_set = new EncryptedDataSet(new ByteArrayInputStream(encrypted_form.toString().getBytes()), key);
         assertEquals(new_data_set, existing_data_set);
     }
 
@@ -86,11 +91,11 @@ public class EncryptedDataSetTest {
         // Creation.
 
         final EncryptedDataSet new_data_set = new EncryptedDataSet(plain_text_path);
-        new_data_set.print(key1, cipher_text_path);
+        new_data_set.print(cipher_text_path, key1);
 
         // Use.
 
-        EncryptedDataSet existing_data_set = new EncryptedDataSet(key2, cipher_text_path);
+        EncryptedDataSet existing_data_set = new EncryptedDataSet(cipher_text_path, key2);
 
         return new EncryptedDataSet[]{new_data_set, existing_data_set};
     }

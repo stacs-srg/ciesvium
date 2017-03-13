@@ -17,14 +17,19 @@
 package uk.ac.standrews.cs.util.tools;
 
 import java.io.*;
-import java.net.*;
-import java.nio.charset.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.nio.file.attribute.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
-import java.util.jar.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Various file manipulation methods.
@@ -93,7 +98,7 @@ public class FileManipulation {
      */
     public static InputStreamReader getInputStreamReaderForResource(Class the_class, String resource_name) {
 
-        return new InputStreamReader(getResourceAsStream(the_class, resource_name));
+        return new InputStreamReader(getInputStreamForResource(the_class, resource_name));
     }
 
     /**
@@ -103,9 +108,13 @@ public class FileManipulation {
      * @param resource_name the name of the resource
      * @return the input stream
      */
-    public static InputStream getResourceAsStream(Class the_class, String resource_name) {
+    public static InputStream getInputStreamForResource(Class the_class, String resource_name) {
 
-        return the_class.getResourceAsStream(getResourceNamePrefixedWithClass(the_class, resource_name));
+        // First try to get resource from the real file system.
+        InputStream stream_from_file_system = the_class.getResourceAsStream(resource_name);
+
+        // If that doesn't work, try to get resource from jar file, in which case resource needs to be prepended with full class name.
+        return stream_from_file_system != null ? stream_from_file_system : the_class.getResourceAsStream(getResourceNamePrefixedWithClass(the_class, resource_name));
     }
 
     /**

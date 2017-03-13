@@ -16,12 +16,18 @@
  */
 package uk.ac.standrews.cs.util.dataset.encrypted.examples;
 
-import uk.ac.standrews.cs.util.dataset.encrypted.*;
-import uk.ac.standrews.cs.util.tools.*;
+import uk.ac.standrews.cs.util.dataset.encrypted.CryptoException;
+import uk.ac.standrews.cs.util.dataset.encrypted.EncryptedDataSet;
+import uk.ac.standrews.cs.util.dataset.encrypted.SymmetricEncryption;
+import uk.ac.standrews.cs.util.tools.FileManipulation;
 
-import javax.crypto.*;
-import java.io.*;
-import java.nio.file.*;
+import javax.crypto.SecretKey;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
@@ -29,6 +35,12 @@ import java.nio.file.*;
 public class SymmetricallyEncryptedDataset {
 
     public static void main(String[] args) throws CryptoException, IOException {
+
+        new SymmetricallyEncryptedDataset().testDataSetUsingFiles();
+        new SymmetricallyEncryptedDataset().testDataSetUsingResources();
+    }
+
+    private void testDataSetUsingFiles() throws IOException, CryptoException {
 
         // Set up.
 
@@ -47,11 +59,53 @@ public class SymmetricallyEncryptedDataset {
         final EncryptedDataSet new_data_set = new EncryptedDataSet(plain_text_path);
         final SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
 
-        new_data_set.print(key, cipher_text_path);
+        new_data_set.print(cipher_text_path, key);
 
         // Use.
 
-        EncryptedDataSet existing_data_set = new EncryptedDataSet(SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw=="), cipher_text_path);
+        EncryptedDataSet existing_data_set = new EncryptedDataSet(cipher_text_path, SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw=="));
+        existing_data_set.print(System.out);
+    }
+
+    private void testDataSetUsingResources() throws IOException, CryptoException {
+
+        // Assume that encrypted dataset has already been created and copied into resources tree.
+
+        // Key string previously created using generate-AES-key.
+        SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
+
+        final InputStream input_stream = FileManipulation.getInputStreamForResource(getClass(), "cipher_text.txt");
+
+        EncryptedDataSet existing_data_set = new EncryptedDataSet(input_stream, key);
+        existing_data_set.print(System.out);
+    }
+
+    // Following methods defined in order to check that website examples compile.
+
+    private static void create() throws CryptoException, IOException {
+
+        Path plain_text_path = Paths.get("/path/to/plain_text.csv");
+        EncryptedDataSet new_data_set = new EncryptedDataSet(plain_text_path);
+
+        // Data hasn't been encrypted yet.
+
+        // Key string previously created using generate-AES-key.
+        SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
+
+        Path cipher_text_path = Paths.get("/path/to/cipher/text.txt");
+
+        // Output encrypted data.
+        new_data_set.print(cipher_text_path, key);
+    }
+
+    private static void access() throws CryptoException, IOException {
+
+        Path cipher_text_path = Paths.get("/path/to/cipher_text.txt");
+
+        // Key string previously created using generate-AES-key.
+        SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
+
+        EncryptedDataSet existing_data_set = new EncryptedDataSet(cipher_text_path, key);
         existing_data_set.print(System.out);
     }
 }
