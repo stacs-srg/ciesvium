@@ -16,15 +16,24 @@
  */
 package uk.ac.standrews.cs.util.dataset;
 
-import org.apache.commons.csv.*;
-import uk.ac.standrews.cs.util.dataset.derived.*;
-import uk.ac.standrews.cs.util.tools.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+import uk.ac.standrews.cs.util.dataset.derived.Extender;
+import uk.ac.standrews.cs.util.dataset.derived.Mapper;
+import uk.ac.standrews.cs.util.dataset.derived.Projector;
+import uk.ac.standrews.cs.util.dataset.derived.Selector;
+import uk.ac.standrews.cs.util.tools.FileManipulation;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Simple abstraction over a plain-text dataset. Data is represented as a list of rows, each of which is a list of strings, plus
@@ -128,6 +137,8 @@ public class DataSet {
                     records.add(items);
                 }
             }
+
+            reader.close();
         }
         catch (IOException e) {
             throw new RuntimeException(e);
