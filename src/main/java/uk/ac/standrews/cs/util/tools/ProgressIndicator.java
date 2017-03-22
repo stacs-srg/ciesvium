@@ -16,7 +16,7 @@
  */
 package uk.ac.standrews.cs.util.tools;
 
-import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Abstract progress indicator class. Subclasses define how an amount of progress is displayed.
@@ -52,7 +52,7 @@ public abstract class ProgressIndicator {
     public void setTotalSteps(final int total_steps) {
 
         this.total_steps.set(total_steps);
-        number_of_steps_per_update.set(total_steps / number_of_updates.get());
+        number_of_steps_per_update.set(number_of_updates.get() <= 0 ? Integer.MAX_VALUE : total_steps / number_of_updates.get());
     }
 
     /**
