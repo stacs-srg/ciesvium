@@ -63,9 +63,9 @@ public abstract class ProgressIndicator {
         number_of_steps_completed.getAndIncrement();
         number_of_steps_since_last_update.getAndIncrement();
 
-        if (number_of_steps_since_last_update.get() >= number_of_steps_per_update.get()) {
+        if (number_of_steps_per_update.get() > 0 && number_of_steps_since_last_update.get() >= number_of_steps_per_update.get()) {
 
-            proportion_complete = (double) number_of_steps_completed.get() / (double) total_steps.get();
+            proportion_complete = Math.min((double) number_of_steps_completed.get() / (double) total_steps.get(), 1.0);
             number_of_steps_since_last_update.set(0);
 
             indicateProgress(proportion_complete);
