@@ -103,7 +103,7 @@ public class DataSet {
     /**
      * Creates a new dataset with column labels and data read from the given Reader, using the default CSV input format and a specified delimiter.
      *
-     * @param reader the Reader to read column labels and data from
+     * @param reader    the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
      * @throws IOException if the data cannot be read
      */
@@ -115,7 +115,7 @@ public class DataSet {
     /**
      * Creates a new dataset with column labels and data read from the given Reader, using a specified input format.
      *
-     * @param reader the Reader to read column labels and data from
+     * @param reader       the Reader to read column labels and data from
      * @param input_format the format
      * @throws IOException if the data cannot be read
      */
@@ -139,8 +139,7 @@ public class DataSet {
             }
 
             reader.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -233,12 +232,18 @@ public class DataSet {
      * Gets the value for a specified column label, from a given record.
      *
      * @param record the record
-     * @param label the label of the required column
+     * @param label  the label of the required column
      * @return the value of the column for the record
+     * @throws RuntimeException if the specified label is not present
      */
     public String getValue(List<String> record, String label) {
 
-        return record.get(labels.indexOf(label));
+        int index = labels.indexOf(label);
+
+        if (index == -1) {
+            throw new RuntimeException("Unknown label: " + label);
+        }
+        return record.get(index);
     }
 
     /**
@@ -286,13 +291,9 @@ public class DataSet {
             return false;
         }
 
-        final DataSet dataSet = (DataSet) o;
+        final DataSet other_dataset = (DataSet) o;
 
-        if (!labels.equals(dataSet.labels)) {
-            return false;
-        }
-        return records.equals(dataSet.records);
-
+        return labels.equals(other_dataset.labels) && records.equals(other_dataset.records);
     }
 
     @Override
@@ -384,12 +385,14 @@ public class DataSet {
     private List<String> project(List<String> record, List<String> projected_columns) {
 
         if (containsDuplicates(projected_columns)) {
+            // Can't throw checked exception because this is used in a stream map operation.
             throw new RuntimeException("duplicate column labels in projection");
         }
 
         List<String> values = new ArrayList<>();
 
         for (String projected_column_label : projected_columns) {
+
             values.add(getValue(record, projected_column_label));
         }
 
