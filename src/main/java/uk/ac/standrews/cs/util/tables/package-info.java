@@ -1,6 +1,6 @@
 /*
- * Copyright 2016 Digitising Scotland project:
- * <http://digitisingscotland.cs.st-andrews.ac.uk/>
+ * Copyright 2017 Systems Research Group, University of St Andrews:
+ * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
  *
@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License along with ciesvium. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-
 /**
  * Classes to manipulate numerical data in rectangular tables.
  */

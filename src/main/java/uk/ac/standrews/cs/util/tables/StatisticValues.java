@@ -1,6 +1,6 @@
 /*
- * Copyright 2016 Digitising Scotland project:
- * <http://digitisingscotland.cs.st-andrews.ac.uk/>
+ * Copyright 2017 Systems Research Group, University of St Andrews:
+ * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
  *
@@ -16,10 +16,9 @@
  */
 package uk.ac.standrews.cs.util.tables;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 /**
  * Abstract superclass for simple statistical calculations over a rectangular numerical table.

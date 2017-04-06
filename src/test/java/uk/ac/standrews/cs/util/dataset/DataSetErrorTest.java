@@ -1,6 +1,6 @@
 /*
- * Copyright 2016 Digitising Scotland project:
- * <http://digitisingscotland.cs.st-andrews.ac.uk/>
+ * Copyright 2017 Systems Research Group, University of St Andrews:
+ * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
  *
@@ -16,9 +16,10 @@
  */
 package uk.ac.standrews.cs.util.dataset;
 
-import org.junit.*;
+import org.junit.Test;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class DataSetErrorTest {
 

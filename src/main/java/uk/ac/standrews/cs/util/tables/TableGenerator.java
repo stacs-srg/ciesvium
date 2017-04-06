@@ -1,6 +1,6 @@
 /*
- * Copyright 2016 Digitising Scotland project:
- * <http://digitisingscotland.cs.st-andrews.ac.uk/>
+ * Copyright 2017 Systems Research Group, University of St Andrews:
+ * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
  *
@@ -16,10 +16,11 @@
  */
 package uk.ac.standrews.cs.util.tables;
 
-import uk.ac.standrews.cs.util.dataset.*;
-import uk.ac.standrews.cs.util.tools.*;
+import uk.ac.standrews.cs.util.dataset.DataSet;
+import uk.ac.standrews.cs.util.tools.Formatting;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class to generate a table summarising a set of datasets, intended for combining results from multiple runs

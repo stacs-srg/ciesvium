@@ -1,6 +1,6 @@
 /*
- * Copyright 2016 Digitising Scotland project:
- * <http://digitisingscotland.cs.st-andrews.ac.uk/>
+ * Copyright 2017 Systems Research Group, University of St Andrews:
+ * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
  *
@@ -16,11 +16,17 @@
  */
 package uk.ac.standrews.cs.util.tools;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Random;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.fail;

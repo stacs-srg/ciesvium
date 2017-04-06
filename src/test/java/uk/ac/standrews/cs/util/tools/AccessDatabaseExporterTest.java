@@ -1,6 +1,6 @@
 /*
- * Copyright 2016 Digitising Scotland project:
- * <http://digitisingscotland.cs.st-andrews.ac.uk/>
+ * Copyright 2017 Systems Research Group, University of St Andrews:
+ * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
  *
@@ -17,11 +17,14 @@
 package uk.ac.standrews.cs.util.tools;
 
 import com.healthmarketscience.jackcess.*;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.io.*;
-import java.net.*;
-import java.nio.file.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class AccessDatabaseExporterTest {
 

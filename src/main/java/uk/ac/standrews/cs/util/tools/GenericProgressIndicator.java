@@ -1,6 +1,6 @@
 /*
- * Copyright 2016 Digitising Scotland project:
- * <http://digitisingscotland.cs.st-andrews.ac.uk/>
+ * Copyright 2017 Systems Research Group, University of St Andrews:
+ * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
  *
@@ -16,7 +16,7 @@
  */
 package uk.ac.standrews.cs.util.tools;
 
-import java.util.function.*;
+import java.util.function.Consumer;
 
 /**
  * Progress indicator that passes on progress step information to a given consumer.

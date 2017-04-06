@@ -1,6 +1,6 @@
 /*
- * Copyright 2016 Digitising Scotland project:
- * <http://digitisingscotland.cs.st-andrews.ac.uk/>
+ * Copyright 2017 Systems Research Group, University of St Andrews:
+ * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
  *
@@ -16,10 +16,12 @@
  */
 package uk.ac.standrews.cs.util.dataset.derived;
 
-import uk.ac.standrews.cs.util.dataset.*;
+import uk.ac.standrews.cs.util.dataset.DataSet;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Abstract superclass for datasets derived from existing datasets via a sequence of relational-style transformations.

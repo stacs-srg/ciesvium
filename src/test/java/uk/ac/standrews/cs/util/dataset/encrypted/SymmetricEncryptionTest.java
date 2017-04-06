@@ -1,6 +1,6 @@
 /*
- * Copyright 2016 Digitising Scotland project:
- * <http://digitisingscotland.cs.st-andrews.ac.uk/>
+ * Copyright 2017 Systems Research Group, University of St Andrews:
+ * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
  *
@@ -16,14 +16,17 @@
  */
 package uk.ac.standrews.cs.util.dataset.encrypted;
 
-import org.junit.*;
-import uk.ac.standrews.cs.util.tools.*;
+import org.junit.Before;
+import org.junit.Test;
+import uk.ac.standrews.cs.util.tools.FileManipulation;
 
-import javax.crypto.*;
-import java.io.*;
-import java.nio.file.*;
+import javax.crypto.SecretKey;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SymmetricEncryptionTest {
 

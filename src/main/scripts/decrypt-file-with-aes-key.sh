@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-# Copyright 2016 Digitising Scotland project:
-# <http://digitisingscotland.cs.st-andrews.ac.uk/>
+# Copyright 2017 Systems Research Group, University of St Andrews:
+# <https://github.com/stacs-srg>
 #
 # This file is part of the module ciesvium.
 #
