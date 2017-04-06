@@ -31,8 +31,8 @@ import java.nio.file.Paths;
  */
 public class AccessDatabaseExporter {
 
-    public static final String FIELD_SEPARATOR = ",";
-    public static final String FILE_SUFFIX = "csv";
+    private static final String FIELD_SEPARATOR = ",";
+    static final String FILE_SUFFIX = "csv";
 
     private ExportUtil.Builder builder;
     private File export_directory;
@@ -48,7 +48,7 @@ public class AccessDatabaseExporter {
         new AccessDatabaseExporter(args[0], args[1]).exportDatabase();
     }
 
-    public AccessDatabaseExporter(String database_path, String output_directory_path) throws IOException {
+    AccessDatabaseExporter(String database_path, String output_directory_path) throws IOException {
 
         Database database = DatabaseBuilder.open(new File(database_path));
 
@@ -56,7 +56,7 @@ public class AccessDatabaseExporter {
         export_directory = Paths.get(output_directory_path).toFile();
     }
 
-    public void exportDatabase() throws IOException {
+    void exportDatabase() throws IOException {
 
         builder.exportAll(export_directory);
     }
