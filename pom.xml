@@ -1,10 +1,28 @@
+<!--
+
+    Copyright 2017 Systems Research Group, University of St Andrews:
+    <https://github.com/stacs-srg>
+
+    This file is part of the module ciesvium.
+
+    ciesvium is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+    License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+    version.
+
+    ciesvium is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along with ciesvium. If not, see
+    <http://www.gnu.org/licenses/>.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>uk.ac.standrews.cs</groupId>
-        <artifactId>common-pom</artifactId>
+        <artifactId>common-pom-2</artifactId>
         <version>2.0-SNAPSHOT</version>
     </parent>
 
@@ -13,192 +31,16 @@
     <packaging>jar</packaging>
     <name>ciesvium</name>
 
-    <description>Description of Ciesvium project</description>
-    <url>https://ciesvium.cs.st-andrews.ac.uk/</url>
+    <description>Utilities for plaintext data files</description>
+    <url>https://github.com/stacs-srg/ciesvium</url>
     <inceptionYear>2015</inceptionYear>
-
-    <properties>
-        <repository.type>hg</repository.type>
-        <repository.location>http://quicksilver.hg.cs.st-andrews.ac.uk/ciesvium</repository.location>
-        <jdk.version>1.8</jdk.version>
-        <maven.compiler.source>${jdk.version}</maven.compiler.source>
-        <maven.compiler.target>${jdk.version}</maven.compiler.target>
-    </properties>
-
-    <build>
-        <plugins>
-
-            <plugin>
-                <!-- This plugin checks that the required licence (currently GPL3, specified in the licence
-                     template file, is applied to all source files. The build will fail if any such files
-                     do not contain the licence. -->
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>2.11</version>
-                <configuration>
-                    <header>src/main/resources/license-template.txt</header>
-                    <headerDefinitions>
-                        <!-- This custom style is used to override the default formatting for Java files,
-                             which uses Javadoc format, therefore causing confusion with the actual class-level
-                             Javadoc. -->
-                        <headerDefinition>src/main/resources/license-custom-style.xml</headerDefinition>
-                    </headerDefinitions>
-                    <mapping>
-                        <java>JAVA_STYLE</java>
-                    </mapping>
-                    <includes>
-                        <include>src/**</include>
-                    </includes>
-                    <excludes>
-                        <exclude>src/test/resources/**</exclude>
-                        <exclude>src/main/resources/**</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                <configuration>
-                    <detectLinks>true</detectLinks>
-                    <links>
-                        <link>http://www.json.org/javadoc</link>
-                        <link>http://junit.org/javadoc/4.11/</link>
-                    </links>
-                    <aggregate>true</aggregate>
-                    <show>public</show>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.4</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>lt.velykis.maven.skins</groupId>
-                        <artifactId>reflow-velocity-tools</artifactId>
-                        <version>1.1.1</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.velocity</groupId>
-                        <artifactId>velocity</artifactId>
-                        <version>1.7</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <generateReports>true</generateReports>
-                    <inputEncoding>UTF-8</inputEncoding>
-                    <outputEncoding>UTF-8</outputEncoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-            </plugin>
-
-        </plugins>
-
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh-external</artifactId>
-                <version>2.10</version>
-            </extension>
-        </extensions>
-    </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.9</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>summary</report>
-                            <report>dependency-info</report>
-                            <report>cim</report>
-                            <report>scm</report>
-                            <report>dependencies</report>
-                            <report>modules</report>
-                            <report>license</report>
-                            <report>project-team</report>
-                            <report>dependency-management</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                <reportSets>
-                <reportSet>
-                    <reports><!-- select non-aggregate reports -->
-                        <report>javadoc</report>
-                    </reports>
-                </reportSet>
-                </reportSets>
-                <configuration>
-                    <detectLinks>true</detectLinks>
-                    <links>
-                        <link>http://www.json.org/javadoc</link>
-                        <link>http://junit.org/javadoc/4.11/</link>
-                    </links>
-                    <aggregate>true</aggregate>
-                    <show>public</show>
-                    <additionalparam>-Xdoclint:none</additionalparam>
-                </configuration>
-            </plugin>
-
-        </plugins>
-    </reporting>
-
-    <distributionManagement>
-        <site>
-            <id>digitisingscotland.cs</id>
-            <url>scpexe://quicksilver@quicksilver.host.cs.st-andrews.ac.uk/cs/home/quicksilver/public_html/ciesvium/</url>
-        </site>
-        <downloadUrl>http://maven.cs.st-andrews.ac.uk/</downloadUrl>
-    </distributionManagement>
-
-    <ciManagement>
-        <system>teamcity</system>
-        <url>https://beast.cs.st-andrews.ac.uk/teamcity/project.html?projectId=Ciesvium&amp;tab=projectOverview</url>
-    </ciManagement>
-
-    <scm>
-        <connection>scm:${repository.type}:${repository.location}</connection>
-        <developerConnection>scm:${repository.type}:${repository.location}</developerConnection>
-        <url>${repository.location}</url>
-    </scm>
 
     <dependencies>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
         </dependency>
 
         <dependency>
@@ -228,30 +70,5 @@
         </dependency>
 
     </dependencies>
-
-    <developers>
-
-        <developer>
-            <id/>
-            <name>Graham Kirby</name>
-            <email>graham.kirby@st-andrews.ac.uk</email>
-            <url>http://graham.host.cs.st-andrews.ac.uk/</url>
-            <organization>University of St Andrews</organization>
-            <organizationUrl>http://www.st-andrews.ac.uk/</organizationUrl>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-
-    </developers>
-    <contributors>
-        <contributor>
-            <name>Masih Hajiarab Derkani</name>
-            <organization>Previously University of St Andrews</organization>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </contributor>
-    </contributors>
 
 </project>
