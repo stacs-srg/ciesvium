@@ -32,7 +32,7 @@
     <name>ciesvium</name>
 
     <description>Utilities for plaintext data files</description>
-    <url>https://github.com/stacs-srg/ciesvium</url>
+    <url>https://stacs-srg.github.io/ciesvium/</url>
     <inceptionYear>2015</inceptionYear>
 
     <dependencies>
