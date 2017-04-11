@@ -31,8 +31,8 @@ import java.util.Base64;
 import java.util.Random;
 
 /**
- * A utility class that encrypts or decrypts a finite-length stream using AES.
- * The encrypted data is also Base64 MIME-encoded.
+ * <p>A utility class that encrypts or decrypts a finite-length stream using AES.
+ * The encrypted data is also Base64 MIME-encoded.</p>
  *
  * <p>Code derived from articles linked below.</p>
  *
@@ -54,25 +54,24 @@ public class SymmetricEncryption {
     static {
         try {
             CIPHER = Cipher.getInstance(TRANSFORMATION);
-        }
-        catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new RuntimeException("error loading cipher " + TRANSFORMATION);
         }
     }
 
     private SymmetricEncryption() {
-
     }
 
     /**
      * Encrypts the given plain text string using the given AES key, and MIME-encodes the result.
      *
-     * @param key the AES key
+     * @param key        the AES key
      * @param plain_text the plain text
      * @return the encrypted and MIME-encoded text
      * @throws CryptoException if the text cannot be encrypted
      */
-    public static String encrypt(SecretKey key, final String plain_text) throws CryptoException {
+    public static String encrypt(final SecretKey key, final String plain_text) throws CryptoException {
 
         try (final InputStream input_stream = new ByteArrayInputStream(plain_text.getBytes());
              final ByteArrayOutputStream output_stream = new ByteArrayOutputStream()) {
@@ -80,8 +79,8 @@ public class SymmetricEncryption {
             encrypt(key, input_stream, output_stream);
 
             return new String(output_stream.toByteArray());
-        }
-        catch (IOException e) {
+
+        } catch (IOException e) {
             throw new CryptoException(e);
         }
     }
@@ -89,12 +88,12 @@ public class SymmetricEncryption {
     /**
      * Decrypts the given encrypted and MIME-encoded text string using the given AES key.
      *
-     * @param key the AES key
+     * @param key         the AES key
      * @param cipher_text the encrypted and MIME-encoded text
      * @return the plain text
      * @throws CryptoException if the decryption cannot be completed
      */
-    public static String decrypt(SecretKey key, final String cipher_text) throws CryptoException {
+    public static String decrypt(final SecretKey key, final String cipher_text) throws CryptoException {
 
         try (final InputStream input_stream = new ByteArrayInputStream(cipher_text.getBytes());
              final ByteArrayOutputStream output_stream = new ByteArrayOutputStream()) {
@@ -102,8 +101,8 @@ public class SymmetricEncryption {
             decrypt(key, input_stream, output_stream);
 
             return new String(output_stream.toByteArray());
-        }
-        catch (IOException e) {
+
+        } catch (IOException e) {
             throw new CryptoException(e);
         }
     }
@@ -111,82 +110,82 @@ public class SymmetricEncryption {
     /**
      * Encrypts the given plain text file to another file, using the given AES key, and MIME-encodes the result.
      *
-     * @param key the AES key
-     * @param plain_text_path the path of the plain text file
+     * @param key              the AES key
+     * @param plain_text_path  the path of the plain text file
      * @param cipher_text_path the path of the resulting encrypted file
      * @throws CryptoException if the encryption cannot be completed
-     * @throws IOException if a file cannot be accessed
+     * @throws IOException     if a file cannot be accessed
      */
-    public static void encrypt(SecretKey key, final Path plain_text_path, final Path cipher_text_path) throws CryptoException, IOException {
+    public static void encrypt(final SecretKey key, final Path plain_text_path, final Path cipher_text_path) throws CryptoException, IOException {
 
-        try (InputStream inputStream = Files.newInputStream(plain_text_path);
-             OutputStream outputStream = Files.newOutputStream(cipher_text_path)) {
+        try (final InputStream input_stream = Files.newInputStream(plain_text_path);
+             final OutputStream output_stream = Files.newOutputStream(cipher_text_path)) {
 
-            encrypt(key, inputStream, outputStream);
+            encrypt(key, input_stream, output_stream);
         }
     }
 
     /**
      * Decrypts the given encrypted and MIME-encoded text file to another file, using the given AES key.
      *
-     * @param key the AES key
+     * @param key              the AES key
      * @param cipher_text_path the path of the encrypted file
-     * @param plain_text_path the path of the resulting plain text file
+     * @param plain_text_path  the path of the resulting plain text file
      * @throws CryptoException if the encryption cannot be completed
-     * @throws IOException if a file cannot be accessed
+     * @throws IOException     if a file cannot be accessed
      */
-    public static void decrypt(SecretKey key, final Path cipher_text_path, final Path plain_text_path) throws CryptoException, IOException {
+    public static void decrypt(final SecretKey key, final Path cipher_text_path, final Path plain_text_path) throws CryptoException, IOException {
 
-        try (InputStream inputStream = Files.newInputStream(cipher_text_path);
-             OutputStream outputStream = Files.newOutputStream(plain_text_path)) {
+        try (final InputStream input_stream = Files.newInputStream(cipher_text_path);
+             final OutputStream output_stream = Files.newOutputStream(plain_text_path)) {
 
-            decrypt(key, inputStream, outputStream);
+            decrypt(key, input_stream, output_stream);
         }
     }
 
     /**
      * Encrypts the given plain text file to another file, using the given AES key, and MIME-encodes the result.
      *
-     * @param key the AES key
+     * @param key             the AES key
      * @param plain_text_path the path of the plain text file
-     * @param output_stream the output stream for the resulting encrypted data
+     * @param output_stream   the output stream for the resulting encrypted data
      * @throws CryptoException if the encryption cannot be completed
-     * @throws IOException if a file cannot be accessed
+     * @throws IOException     if a file cannot be accessed
      */
-    public static void encrypt(SecretKey key, final Path plain_text_path, final OutputStream output_stream) throws CryptoException, IOException {
+    public static void encrypt(final SecretKey key, final Path plain_text_path, final OutputStream output_stream) throws CryptoException, IOException {
 
-        try (InputStream inputStream = Files.newInputStream(plain_text_path)) {
+        try (final InputStream input_stream = Files.newInputStream(plain_text_path)) {
 
-            encrypt(key, inputStream, output_stream);
+            encrypt(key, input_stream, output_stream);
         }
     }
 
     /**
      * Decrypts the given encrypted and MIME-encoded text file to another file, using the given AES key.
      *
-     * @param key the AES key
+     * @param key              the AES key
      * @param cipher_text_path the path of the encrypted file
-     * @param output_stream the output stream for the resulting data
+     * @param output_stream    the output stream for the resulting data
      * @throws CryptoException if the encryption cannot be completed
-     * @throws IOException if a file cannot be accessed
+     * @throws IOException     if a file cannot be accessed
      */
-    public static void decrypt(SecretKey key, final Path cipher_text_path, final OutputStream output_stream) throws CryptoException, IOException {
+    public static void decrypt(final SecretKey key, final Path cipher_text_path, final OutputStream output_stream) throws CryptoException, IOException {
 
-        try (InputStream inputStream = Files.newInputStream(cipher_text_path)) {
+        try (final InputStream input_stream = Files.newInputStream(cipher_text_path)) {
 
-            decrypt(key, inputStream, output_stream);
+            decrypt(key, input_stream, output_stream);
         }
     }
 
     /**
      * Encrypts the given plain text file to another file, using the given AES key, and MIME-encodes the result.
      *
-     * @param key the AES key
-     * @param input_stream the input stream for the plain text
+     * @param key           the AES key
+     * @param input_stream  the input stream for the plain text
      * @param output_stream the output stream for the resulting encrypted data
      * @throws CryptoException if the encryption cannot be completed
      */
-    public static void encrypt(SecretKey key, InputStream input_stream, OutputStream output_stream) throws CryptoException {
+    public static void encrypt(final SecretKey key, InputStream input_stream, OutputStream output_stream) throws CryptoException {
 
         try {
             CIPHER.init(Cipher.ENCRYPT_MODE, key);
@@ -198,8 +197,8 @@ public class SymmetricEncryption {
 
             output_stream.write(mime_encoded);
             output_stream.flush();
-        }
-        catch (BadPaddingException | InvalidKeyException | IllegalBlockSizeException | IOException e) {
+
+        } catch (BadPaddingException | InvalidKeyException | IllegalBlockSizeException | IOException e) {
             throw new CryptoException(e);
         }
     }
@@ -207,12 +206,12 @@ public class SymmetricEncryption {
     /**
      * Decrypts the given encrypted and MIME-encoded text file to another file, using the given AES key.
      *
-     * @param key the AES key
-     * @param input_stream the input stream for the encrypted file
+     * @param key           the AES key
+     * @param input_stream  the input stream for the encrypted file
      * @param output_stream the output stream for the resulting data
      * @throws CryptoException if the encryption cannot be completed
      */
-    public static void decrypt(SecretKey key, InputStream input_stream, OutputStream output_stream) throws CryptoException {
+    public static void decrypt(final SecretKey key, final InputStream input_stream, final OutputStream output_stream) throws CryptoException {
 
         try {
             CIPHER.init(Cipher.DECRYPT_MODE, key);
@@ -226,11 +225,10 @@ public class SymmetricEncryption {
             final byte[] plain_text = stripHeader(plain_text_with_header);
 
             output_stream.write(plain_text);
-        }
-        catch (BadPaddingException e) {
+
+        } catch (BadPaddingException e) {
             throw new CryptoException("Incorrect key");
-        }
-        catch (InvalidKeyException | IllegalBlockSizeException | IOException e) {
+        } catch (InvalidKeyException | IllegalBlockSizeException | IOException e) {
             throw new CryptoException(e);
         }
     }
@@ -251,8 +249,8 @@ public class SymmetricEncryption {
                 throw new CryptoException("Key length must be " + KEY_LENGTH_IN_BYTES);
             }
             return getKey(key_bytes);
-        }
-        catch (IllegalArgumentException e) {
+
+        } catch (IllegalArgumentException e) {
             throw new CryptoException("Invalid MIME-encoded key: " + mime_encoded_AES_key);
         }
     }
@@ -270,7 +268,7 @@ public class SymmetricEncryption {
      */
     public static SecretKey generateRandomKey() throws CryptoException {
 
-        byte[] key_bytes = new byte[KEY_LENGTH_IN_BYTES];
+        final byte[] key_bytes = new byte[KEY_LENGTH_IN_BYTES];
 
         RANDOM.nextBytes(key_bytes);
 
@@ -281,8 +279,8 @@ public class SymmetricEncryption {
 
         try {
             return new SecretKeySpec(key_bytes, 0, KEY_LENGTH_IN_BYTES, ALGORITHM);
-        }
-        catch (IllegalArgumentException e) {
+
+        } catch (IllegalArgumentException e) {
             throw new CryptoException(e);
         }
     }
@@ -311,7 +309,7 @@ public class SymmetricEncryption {
 
     private static byte[] prependHeader(final byte[] output_bytes) {
 
-        byte[] temp = new byte[output_bytes.length + CIPHER_TEXT_HEADER.length()];
+        final byte[] temp = new byte[output_bytes.length + CIPHER_TEXT_HEADER.length()];
 
         System.arraycopy(CIPHER_TEXT_HEADER.getBytes(), 0, temp, 0, CIPHER_TEXT_HEADER.length());
         System.arraycopy(output_bytes, 0, temp, CIPHER_TEXT_HEADER.length(), output_bytes.length);

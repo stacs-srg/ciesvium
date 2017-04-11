@@ -109,8 +109,8 @@ public class AsymmetricEncryption {
 
             CIPHER = Cipher.getInstance(TRANSFORMATION);
             KEY_FACTORY = KeyFactory.getInstance(ALGORITHM);
-        }
-        catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new RuntimeException("error loading cipher " + TRANSFORMATION + " or algorithm " + ALGORITHM);
         }
     }
@@ -135,8 +135,8 @@ public class AsymmetricEncryption {
             encrypt(public_key, input_stream, output_stream);
 
             return new String(output_stream.toByteArray());
-        }
-        catch (IOException e) {
+
+        } catch (IOException e) {
             throw new CryptoException(e);
         }
     }
@@ -157,8 +157,8 @@ public class AsymmetricEncryption {
             decrypt(private_key, input_stream, output_stream);
 
             return new String(output_stream.toByteArray());
-        }
-        catch (IOException e) {
+
+        } catch (IOException e) {
             throw new CryptoException(e);
         }
     }
@@ -166,72 +166,78 @@ public class AsymmetricEncryption {
     /**
      * Encrypts the given plain text file to another file, using the given public key, and MIME-encodes the result.
      *
-     * @param public_key the public key
-     * @param plain_text_path the path of the plain text file
+     * @param public_key       the public key
+     * @param plain_text_path  the path of the plain text file
      * @param cipher_text_path the path of the resulting encrypted file
      * @throws CryptoException if the encryption cannot be completed
-     * @throws IOException if a file cannot be accessed
+     * @throws IOException     if a file cannot be accessed
      */
     public static void encrypt(PublicKey public_key, final Path plain_text_path, final Path cipher_text_path) throws CryptoException, IOException {
 
-        try (InputStream inputStream = Files.newInputStream(plain_text_path);
-             OutputStream outputStream = Files.newOutputStream(cipher_text_path)) {
+        try (final InputStream input_stream = Files.newInputStream(plain_text_path);
+             final OutputStream output_stream = Files.newOutputStream(cipher_text_path)) {
 
-            encrypt(public_key, inputStream, outputStream);
+            encrypt(public_key, input_stream, output_stream);
         }
-
     }
 
     /**
      * Decrypts the given encrypted and MIME-encoded text file to another file, using the given private key.
      *
-     * @param private_key the private key
+     * @param private_key      the private key
      * @param cipher_text_path the path of the encrypted file
-     * @param plain_text_path the path of the resulting plain text file
+     * @param plain_text_path  the path of the resulting plain text file
      * @throws CryptoException if the encryption cannot be completed
-     * @throws IOException if a file cannot be accessed
+     * @throws IOException     if a file cannot be accessed
      */
     public static void decrypt(PrivateKey private_key, final Path cipher_text_path, final Path plain_text_path) throws CryptoException, IOException {
 
-        decrypt(private_key, Files.newInputStream(cipher_text_path), Files.newOutputStream(plain_text_path));
+        try (final InputStream input_stream = Files.newInputStream(cipher_text_path);
+             final OutputStream output_stream = Files.newOutputStream(plain_text_path)) {
+
+            decrypt(private_key, input_stream, output_stream);
+        }
     }
 
     /**
      * Encrypts the given plain text file, using the given public key, MIME-encodes the result, and outputs it to the given stream.
      *
-     * @param public_key the public key
+     * @param public_key      the public key
      * @param plain_text_path the path of the plain text file
-     * @param output_stream the output stream for the resulting encrypted data
+     * @param output_stream   the output stream for the resulting encrypted data
      * @throws CryptoException if the encryption cannot be completed
-     * @throws IOException if the plain text file cannot be accessed
+     * @throws IOException     if the plain text file cannot be accessed
      */
     public static void encrypt(PublicKey public_key, final Path plain_text_path, final OutputStream output_stream) throws CryptoException, IOException {
 
-        try (InputStream inputStream = Files.newInputStream(plain_text_path)) {
+        try (final InputStream input_stream = Files.newInputStream(plain_text_path)) {
 
-            encrypt(public_key, inputStream, output_stream);
+            encrypt(public_key, input_stream, output_stream);
         }
     }
 
     /**
      * Decrypts the given encrypted and MIME-encoded text file, using the given private key, and outputs it to the given stream.
      *
-     * @param private_key the private key
+     * @param private_key      the private key
      * @param cipher_text_path the path of the encrypted file
-     * @param output_stream the output stream for the resulting data
+     * @param output_stream    the output stream for the resulting data
      * @throws CryptoException if the encryption cannot be completed
-     * @throws IOException if the encrypted file cannot be accessed
+     * @throws IOException     if the encrypted file cannot be accessed
      */
     public static void decrypt(PrivateKey private_key, final Path cipher_text_path, final OutputStream output_stream) throws CryptoException, IOException {
 
-        decrypt(private_key, Files.newInputStream(cipher_text_path), output_stream);
+        try (final InputStream input_stream = Files.newInputStream(cipher_text_path)) {
+
+            decrypt(private_key, input_stream, output_stream);
+        }
     }
 
     /**
      * Encrypts the plain text read from the given stream, using the given public key, MIME-encodes the result, and outputs it to another given stream.
      *
-     * @param public_key the public key
-     * @param input_stream the input stream for the plain text
+     * @param public_key    the public key
+     * @param input_stream  the input stream for the plain text
      * @param output_stream the output stream for the resulting encrypted data
      * @throws CryptoException if the encryption cannot be completed
      */
@@ -245,8 +251,8 @@ public class AsymmetricEncryption {
             final byte[] mime_encoded = Base64.getMimeEncoder().encode(encrypted);
 
             output_stream.write(mime_encoded);
-        }
-        catch (BadPaddingException | InvalidKeyException | IllegalBlockSizeException | IOException e) {
+
+        } catch (BadPaddingException | InvalidKeyException | IllegalBlockSizeException | IOException e) {
             throw new CryptoException(e);
         }
     }
@@ -254,8 +260,8 @@ public class AsymmetricEncryption {
     /**
      * Decrypts the encrypted and MIME-encoded data read from the given stream, using the given private key, and outputs it to another given stream.
      *
-     * @param private_key the private key
-     * @param input_stream the input stream for the encrypted file
+     * @param private_key   the private key
+     * @param input_stream  the input stream for the encrypted file
      * @param output_stream the output stream for the resulting data
      * @throws CryptoException if the encryption cannot be completed
      */
@@ -269,8 +275,8 @@ public class AsymmetricEncryption {
             final byte[] plain_text = CIPHER.doFinal(encrypted);
 
             output_stream.write(plain_text);
-        }
-        catch (BadPaddingException | InvalidKeyException | IllegalBlockSizeException | IOException e) {
+
+        } catch (BadPaddingException | InvalidKeyException | IllegalBlockSizeException | IOException e) {
             throw new CryptoException(e);
         }
     }
@@ -340,8 +346,8 @@ public class AsymmetricEncryption {
             final byte[] private_key = Base64.getMimeDecoder().decode(base64_encoded_private_key);
 
             return KEY_FACTORY.generatePrivate(new PKCS8EncodedKeySpec(private_key));
-        }
-        catch (InvalidKeySpecException e) {
+
+        } catch (InvalidKeySpecException e) {
             throw new CryptoException(e);
         }
     }
@@ -361,8 +367,8 @@ public class AsymmetricEncryption {
             final byte[] public_key = Base64.getMimeDecoder().decode(base64_encoded_public_key);
 
             return KEY_FACTORY.generatePublic(new X509EncodedKeySpec(public_key));
-        }
-        catch (InvalidKeySpecException e) {
+
+        } catch (InvalidKeySpecException e) {
             throw new CryptoException(e);
         }
     }
@@ -390,8 +396,7 @@ public class AsymmetricEncryption {
                     builder = new StringBuilder();
                     builder.append(line);
                     builder.append("\n");
-                }
-                else {
+                } else {
                     if (line.equals(PUBLIC_KEY_FOOTER)) {
 
                         if (builder != null) {
@@ -399,8 +404,7 @@ public class AsymmetricEncryption {
                             key_list.add(getPublicKeyFromString(builder.toString()));
                             builder = null;
                         }
-                    }
-                    else {
+                    } else {
                         if (builder != null) {
                             builder.append(line);
                             builder.append("\n");
@@ -421,12 +425,14 @@ public class AsymmetricEncryption {
      *
      * @param encrypted_keys the file containing encrypted keys
      * @return the decrypted AES key
-     * @throws IOException if the input stream cannot be read
+     * @throws IOException     if the input stream cannot be read
      * @throws CryptoException if no key can be successfully decrypted
      */
     public static SecretKey getAESKey(Path encrypted_keys) throws IOException, CryptoException {
 
-        return getAESKey(Files.newInputStream(encrypted_keys));
+        try (final InputStream encrypted_key_stream = Files.newInputStream(encrypted_keys)) {
+            return getAESKey(encrypted_key_stream);
+        }
     }
 
     /**
@@ -437,7 +443,7 @@ public class AsymmetricEncryption {
      *
      * @param encrypted_key_stream the input stream containing encrypted keys
      * @return the decrypted AES key
-     * @throws IOException if the input stream cannot be read
+     * @throws IOException     if the input stream cannot be read
      * @throws CryptoException if no key can be successfully decrypted
      */
     public static SecretKey getAESKey(InputStream encrypted_key_stream) throws IOException, CryptoException {
@@ -459,9 +465,9 @@ public class AsymmetricEncryption {
 
                     try {
                         return SymmetricEncryption.getKey(decrypt(private_key, builder.toString()));
-                    }
-                    catch (CryptoException e) {
 
+                    } catch (CryptoException e) {
+                        // Couldn't decrypt, try the next one.
                         builder = new StringBuilder();
                     }
                 }
@@ -505,8 +511,8 @@ public class AsymmetricEncryption {
 
         try {
             return new String(Files.readAllBytes(key_path));
-        }
-        catch (IOException e) {
+
+        } catch (IOException e) {
             throw new CryptoException("can't access key file: " + key_path);
         }
     }
