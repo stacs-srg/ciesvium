@@ -74,12 +74,16 @@ public class SymmetricEncryption {
      */
     public static String encrypt(SecretKey key, final String plain_text) throws CryptoException {
 
-        final InputStream input_stream = new ByteArrayInputStream(plain_text.getBytes());
-        final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
+        try (final InputStream input_stream = new ByteArrayInputStream(plain_text.getBytes());
+             final ByteArrayOutputStream output_stream = new ByteArrayOutputStream()) {
 
-        encrypt(key, input_stream, output_stream);
+            encrypt(key, input_stream, output_stream);
 
-        return new String(output_stream.toByteArray());
+            return new String(output_stream.toByteArray());
+        }
+        catch (IOException e) {
+            throw new CryptoException(e);
+        }
     }
 
     /**
@@ -92,12 +96,16 @@ public class SymmetricEncryption {
      */
     public static String decrypt(SecretKey key, final String cipher_text) throws CryptoException {
 
-        final InputStream input_stream = new ByteArrayInputStream(cipher_text.getBytes());
-        final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
+        try (final InputStream input_stream = new ByteArrayInputStream(cipher_text.getBytes());
+             final ByteArrayOutputStream output_stream = new ByteArrayOutputStream()) {
 
-        decrypt(key, input_stream, output_stream);
+            decrypt(key, input_stream, output_stream);
 
-        return new String(output_stream.toByteArray());
+            return new String(output_stream.toByteArray());
+        }
+        catch (IOException e) {
+            throw new CryptoException(e);
+        }
     }
 
     /**
@@ -111,7 +119,11 @@ public class SymmetricEncryption {
      */
     public static void encrypt(SecretKey key, final Path plain_text_path, final Path cipher_text_path) throws CryptoException, IOException {
 
-        encrypt(key, Files.newInputStream(plain_text_path), Files.newOutputStream(cipher_text_path));
+        try (InputStream inputStream = Files.newInputStream(plain_text_path);
+             OutputStream outputStream = Files.newOutputStream(cipher_text_path)) {
+
+            encrypt(key, inputStream, outputStream);
+        }
     }
 
     /**
@@ -125,7 +137,11 @@ public class SymmetricEncryption {
      */
     public static void decrypt(SecretKey key, final Path cipher_text_path, final Path plain_text_path) throws CryptoException, IOException {
 
-        decrypt(key, Files.newInputStream(cipher_text_path), Files.newOutputStream(plain_text_path));
+        try (InputStream inputStream = Files.newInputStream(cipher_text_path);
+             OutputStream outputStream = Files.newOutputStream(plain_text_path)) {
+
+            decrypt(key, inputStream, outputStream);
+        }
     }
 
     /**
@@ -139,7 +155,10 @@ public class SymmetricEncryption {
      */
     public static void encrypt(SecretKey key, final Path plain_text_path, final OutputStream output_stream) throws CryptoException, IOException {
 
-        encrypt(key, Files.newInputStream(plain_text_path), output_stream);
+        try (InputStream inputStream = Files.newInputStream(plain_text_path)) {
+
+            encrypt(key, inputStream, output_stream);
+        }
     }
 
     /**
@@ -153,7 +172,10 @@ public class SymmetricEncryption {
      */
     public static void decrypt(SecretKey key, final Path cipher_text_path, final OutputStream output_stream) throws CryptoException, IOException {
 
-        decrypt(key, Files.newInputStream(cipher_text_path), output_stream);
+        try (InputStream inputStream = Files.newInputStream(cipher_text_path)) {
+
+            decrypt(key, inputStream, output_stream);
+        }
     }
 
     /**
