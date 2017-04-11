@@ -7,4 +7,4 @@ where the source data is held in encrypted form, with both symmetric and asymmet
 
 ## Build status
 
-![Build status icon](http://beast.cs.st-andrews.ac.uk/teamcity/app/rest/builds/buildType:(id:Ciesvium_Base)/statusIcon)
+![Build status icon](https://beast.cs.st-andrews.ac.uk/teamcity/app/rest/builds/buildType:(id:Ciesvium_Base)/statusIcon)
