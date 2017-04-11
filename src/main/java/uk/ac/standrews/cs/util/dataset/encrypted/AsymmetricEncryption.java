@@ -129,12 +129,16 @@ public class AsymmetricEncryption {
      */
     public static String encrypt(PublicKey public_key, String plain_text) throws CryptoException {
 
-        final InputStream input_stream = new ByteArrayInputStream(plain_text.getBytes());
-        final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
+        try (final InputStream input_stream = new ByteArrayInputStream(plain_text.getBytes());
+             final ByteArrayOutputStream output_stream = new ByteArrayOutputStream()) {
 
-        encrypt(public_key, input_stream, output_stream);
+            encrypt(public_key, input_stream, output_stream);
 
-        return new String(output_stream.toByteArray());
+            return new String(output_stream.toByteArray());
+        }
+        catch (IOException e) {
+            throw new CryptoException(e);
+        }
     }
 
     /**
@@ -147,12 +151,16 @@ public class AsymmetricEncryption {
      */
     public static String decrypt(PrivateKey private_key, String cipher_text) throws CryptoException {
 
-        final InputStream input_stream = new ByteArrayInputStream(cipher_text.getBytes());
-        final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
+        try (final InputStream input_stream = new ByteArrayInputStream(cipher_text.getBytes());
+             final ByteArrayOutputStream output_stream = new ByteArrayOutputStream()) {
 
-        decrypt(private_key, input_stream, output_stream);
+            decrypt(private_key, input_stream, output_stream);
 
-        return new String(output_stream.toByteArray());
+            return new String(output_stream.toByteArray());
+        }
+        catch (IOException e) {
+            throw new CryptoException(e);
+        }
     }
 
     /**
@@ -166,7 +174,12 @@ public class AsymmetricEncryption {
      */
     public static void encrypt(PublicKey public_key, final Path plain_text_path, final Path cipher_text_path) throws CryptoException, IOException {
 
-        encrypt(public_key, Files.newInputStream(plain_text_path), Files.newOutputStream(cipher_text_path));
+        try (InputStream inputStream = Files.newInputStream(plain_text_path);
+             OutputStream outputStream = Files.newOutputStream(cipher_text_path)) {
+
+            encrypt(public_key, inputStream, outputStream);
+        }
+
     }
 
     /**
@@ -194,7 +207,10 @@ public class AsymmetricEncryption {
      */
     public static void encrypt(PublicKey public_key, final Path plain_text_path, final OutputStream output_stream) throws CryptoException, IOException {
 
-        encrypt(public_key, Files.newInputStream(plain_text_path), output_stream);
+        try (InputStream inputStream = Files.newInputStream(plain_text_path)) {
+
+            encrypt(public_key, inputStream, output_stream);
+        }
     }
 
     /**
