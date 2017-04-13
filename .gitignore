@@ -2,5 +2,12 @@ syntax: glob
 
 .DS_Store
 *.iml
-.idea
 target
+/.idea/compiler.xml
+/.idea/libraries/
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/kotlinc.xml
+/.idea/workspace.xml
+/.idea/encodings.xml
