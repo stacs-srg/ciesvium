@@ -55,14 +55,21 @@
             <version>3.4.1</version>
         </dependency>
 
-        <dependency>
-            <!-- Manipulation of MS Access files -->
-            <groupId>com.healthmarketscience.jackcess</groupId>
-            <artifactId>jackcess</artifactId>
-            <version>2.1.5</version>
-        </dependency>
-
     </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <!-- This checks that the required licence, specified in the licence template        -->
+                <!-- file src/main/resources/license-template.txt, is applied to all source files.   -->
+
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+            </plugin>
+        </plugins>
+    </build>
 
     <repositories>
 
