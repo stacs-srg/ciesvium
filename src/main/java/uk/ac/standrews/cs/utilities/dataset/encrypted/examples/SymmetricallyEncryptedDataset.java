@@ -17,9 +17,9 @@
 package uk.ac.standrews.cs.utilities.dataset.encrypted.examples;
 
 import uk.ac.standrews.cs.utilities.FileManipulation;
-import uk.ac.standrews.cs.utilities.dataset.encrypted.CryptoException;
+import uk.ac.standrews.cs.utilities.crypto.CryptoException;
+import uk.ac.standrews.cs.utilities.crypto.SymmetricEncryption;
 import uk.ac.standrews.cs.utilities.dataset.encrypted.EncryptedDataSet;
-import uk.ac.standrews.cs.utilities.dataset.encrypted.SymmetricEncryption;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;

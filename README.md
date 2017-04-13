@@ -5,6 +5,6 @@ In particular, the [dataset](https://ciesvium.cs.st-andrews.ac.uk/apidocs/index.
 over rectangular plain-text tables, with ability to import and export CSV files. It's also possible to define derived tables using relational-like select and project operations, and tables
 where the source data is held in encrypted form, with both symmetric and asymmetric encryption options.
 
-## Build status
+## See also
 
-![Build status icon](https://beast.cs.st-andrews.ac.uk/teamcity/app/rest/builds/buildType:(id:Ciesvium_Base)/statusIcon)
+* [relevant Maven goals](https://github.com/stacs-srg/hub/tree/master/maven) (private)

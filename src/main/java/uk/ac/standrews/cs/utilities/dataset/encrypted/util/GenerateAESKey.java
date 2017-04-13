@@ -16,8 +16,8 @@
  */
 package uk.ac.standrews.cs.utilities.dataset.encrypted.util;
 
-import uk.ac.standrews.cs.utilities.dataset.encrypted.CryptoException;
-import uk.ac.standrews.cs.utilities.dataset.encrypted.SymmetricEncryption;
+import uk.ac.standrews.cs.utilities.crypto.CryptoException;
+import uk.ac.standrews.cs.utilities.crypto.SymmetricEncryption;
 
 /**
  * Generates a new random symmetric key.

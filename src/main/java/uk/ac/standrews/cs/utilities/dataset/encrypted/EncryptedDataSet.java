@@ -16,6 +16,9 @@
  */
 package uk.ac.standrews.cs.utilities.dataset.encrypted;
 
+import uk.ac.standrews.cs.utilities.crypto.AsymmetricEncryption;
+import uk.ac.standrews.cs.utilities.crypto.CryptoException;
+import uk.ac.standrews.cs.utilities.crypto.SymmetricEncryption;
 import uk.ac.standrews.cs.utilities.dataset.DataSet;
 
 import javax.crypto.SecretKey;
