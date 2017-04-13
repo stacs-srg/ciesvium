@@ -28,6 +28,7 @@ import java.nio.file.Paths;
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
+@SuppressWarnings("WeakerAccess")
 public class EncryptAESKey {
 
     /**

@@ -24,6 +24,7 @@ import uk.ac.standrews.cs.utilities.crypto.SymmetricEncryption;
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
+@SuppressWarnings("WeakerAccess")
 public class GenerateAESKey {
 
     /**

@@ -20,7 +20,7 @@ import uk.ac.standrews.cs.utilities.dataset.DataSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,9 +28,10 @@ import java.util.List;
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
+@SuppressWarnings("unused")
 public abstract class DerivedDataSet extends DataSet {
 
-    protected static final String ID_COLUMN_LABEL = "ID";
+    private static final String ID_COLUMN_LABEL = "ID";
 
     private int record_count;
 
@@ -45,6 +46,7 @@ public abstract class DerivedDataSet extends DataSet {
      * @return the source dataset
      * @throws IOException if the source dataset cannot be obtained
      */
+    @SuppressWarnings("WeakerAccess")
     public abstract DataSet getSourceDataSet() throws IOException;
 
     /**
@@ -53,6 +55,7 @@ public abstract class DerivedDataSet extends DataSet {
      * @param source_data_set the source dataset
      * @return the derived dataset
      */
+    @SuppressWarnings("WeakerAccess")
     public abstract DataSet getDerivedDataSet(DataSet source_data_set);
 
     protected Extender addIdColumn() {
@@ -72,7 +75,7 @@ public abstract class DerivedDataSet extends DataSet {
             @Override
             public List<String> getColumnLabels() {
 
-                return Arrays.asList(ID_COLUMN_LABEL);
+                return Collections.singletonList(ID_COLUMN_LABEL);
             }
         };
     }

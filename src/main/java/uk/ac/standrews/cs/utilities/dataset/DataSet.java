@@ -46,11 +46,13 @@ public class DataSet {
     /**
      * The default CSV file format: <a href="https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html#RFC4180">RFC4180</a>.
      */
+    @SuppressWarnings("WeakerAccess")
     public static final CSVFormat DEFAULT_CSV_FORMAT = CSVFormat.RFC4180;
 
     /**
      * The default delimiter.
      */
+    @SuppressWarnings("WeakerAccess")
     public static final String DEFAULT_DELIMITER = ",";
 
     private List<String> labels;
@@ -150,6 +152,7 @@ public class DataSet {
      * @param selector a selector to determine which rows should be included
      * @return the new dataset
      */
+    @SuppressWarnings("WeakerAccess")
     public DataSet select(Selector selector) {
 
         return new DataSet(labels, filterRecords(selector));
@@ -161,6 +164,7 @@ public class DataSet {
      * @param projector a projector to determine which columns should be included
      * @return the new dataset
      */
+    @SuppressWarnings("WeakerAccess")
     public DataSet project(Projector projector) {
 
         return new DataSet(projector.getProjectedColumnLabels(), projectRecords(projector));
@@ -172,6 +176,7 @@ public class DataSet {
      * @param mapper a mapper to transform each row into a new row in the output dataset
      * @return the new dataset
      */
+    @SuppressWarnings("unused")
     public DataSet map(Mapper mapper) {
 
         return new DataSet(labels, mapRecords(mapper));
@@ -183,6 +188,7 @@ public class DataSet {
      * @param extender an extender to generate additional column labels and values
      * @return the new dataset
      */
+    @SuppressWarnings("unused")
     public DataSet extend(Extender extender) {
 
         return new DataSet(extendLabels(extender), extendRecords(extender));
@@ -236,6 +242,7 @@ public class DataSet {
      * @return the value of the column for the record
      * @throws RuntimeException if the specified label is not present
      */
+    @SuppressWarnings("WeakerAccess")
     public String getValue(List<String> record, String label) {
 
         int index = labels.indexOf(label);
@@ -251,6 +258,7 @@ public class DataSet {
      *
      * @param output_format the output format
      */
+    @SuppressWarnings("unused")
     public void setOutputFormat(CSVFormat output_format) {
 
         this.output_format = output_format;
@@ -274,6 +282,7 @@ public class DataSet {
         }
     }
 
+    @SuppressWarnings("unused")
     public void print(Path path) throws IOException {
 
         try (Writer writer = Files.newBufferedWriter(path)) {
@@ -314,7 +323,7 @@ public class DataSet {
         init(labels, records);
     }
 
-    protected void init(List<String> labels, List<List<String>> records) {
+    private void init(List<String> labels, List<List<String>> records) {
 
         this.labels = labels;
         this.records = records;

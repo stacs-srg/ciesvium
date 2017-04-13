@@ -31,6 +31,7 @@ public class ConfidenceIntervals extends StatisticValues {
     /**
      * The probability that the real mean lies within the confidence interval.
      */
+    @SuppressWarnings("WeakerAccess")
     public static final double CONFIDENCE_LEVEL = 0.95;
 
     private static final double ONE_TAILED_CONFIDENCE_LEVEL = 1 - (1 - CONFIDENCE_LEVEL) / 2;
@@ -40,6 +41,7 @@ public class ConfidenceIntervals extends StatisticValues {
      *
      * @param data the numerical table
      */
+    @SuppressWarnings("WeakerAccess")
     public ConfidenceIntervals(List<List<Double>> data) {
 
         super(data);
@@ -51,6 +53,7 @@ public class ConfidenceIntervals extends StatisticValues {
      * @param values the values
      * @return the confidence interval of the values
      */
+    @SuppressWarnings("WeakerAccess")
     public static double calculateConfidenceInterval(List<Double> values) {
 
         return standardError(values) * criticalValue(sampleSize(values));

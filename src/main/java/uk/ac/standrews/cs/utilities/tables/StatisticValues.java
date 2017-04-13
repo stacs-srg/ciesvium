@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 abstract class StatisticValues {
 
     protected List<List<Double>> data;
-    protected List<Double> results;
+    private List<Double> results;
 
     StatisticValues(List<List<Double>> data) {
 
@@ -43,7 +43,7 @@ abstract class StatisticValues {
      *
      * @return the results
      */
-    public List<Double> getResults() {
+    List<Double> getResults() {
         return results;
     }
 
@@ -55,8 +55,7 @@ abstract class StatisticValues {
 
         for (List<String> record : records) {
 
-            List<Double> row = record.stream().map(Double::parseDouble).collect(Collectors.toList());
-            data.add(row);
+            data.add(record.stream().map(Double::parseDouble).collect(Collectors.toList()));
         }
         return data;
     }
@@ -67,8 +66,8 @@ abstract class StatisticValues {
 
         int size = data.get(0).size();
         for (int column_number = 0; column_number < size; column_number++) {
-            List<Double> column = getColumn(column_number);
-            results.add(calculateColumnResult(column));
+
+            results.add(calculateColumnResult(getColumn(column_number)));
         }
 
         return results;
@@ -76,10 +75,6 @@ abstract class StatisticValues {
 
     private List<Double> getColumn(int column_number) {
 
-        List<Double> column = new ArrayList<>();
-        for (List<Double> value : data) {
-            column.add(value.get(column_number));
-        }
-        return column;
+        return data.stream().map(value -> value.get(column_number)).collect(Collectors.toList());
     }
 }
