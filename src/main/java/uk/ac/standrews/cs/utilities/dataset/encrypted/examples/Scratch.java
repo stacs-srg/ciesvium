@@ -22,6 +22,7 @@ import uk.ac.standrews.cs.utilities.dataset.encrypted.EncryptedDataSet;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public class Scratch {
 
     @SuppressWarnings("WeakerAccess")
@@ -32,7 +33,7 @@ public class Scratch {
         EncryptedDataSet source_data_set1 = new EncryptedDataSet(headings);
         source_data_set1.addRow("the", "quick", "brown", "fox");
 
-        @SuppressWarnings("UnusedDeclaration")
+        @SuppressWarnings("UnusedAssignment")
         EncryptedDataSet source_data_set = new EncryptedDataSet(new DataSet(headings));
     }
 }

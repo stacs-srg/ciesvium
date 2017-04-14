@@ -25,6 +25,7 @@ import java.util.List;
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
+@SuppressWarnings("UnusedDeclaration")
 public interface Mapper {
 
     /**

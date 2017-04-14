@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Abstract superclass for datasets derived from existing datasets via a sequence of relational-style transformations.
@@ -84,13 +85,10 @@ public abstract class DerivedDataSet extends DataSet {
 
         return () -> {
             List<String> result = new ArrayList<>();
-            result.add(ID_COLUMN_LABEL);
 
-            for (String source_column_label : source_column_labels) {
-                if (!source_column_label.equals(ID_COLUMN_LABEL)) {
-                    result.add(source_column_label);
-                }
-            }
+            result.add(ID_COLUMN_LABEL);
+            result.addAll(source_column_labels.stream().filter(s -> !s.equals(ID_COLUMN_LABEL)).collect(Collectors.toList()));
+
             return result;
         };
     }

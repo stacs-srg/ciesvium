@@ -92,6 +92,7 @@ public class TableGenerator {
      *
      * @return the table
      */
+    @SuppressWarnings("UnusedDeclaration")
     public DataSet getTable() {
 
         // Get the column labels from the data set for the first row - all rows should have the same labels.

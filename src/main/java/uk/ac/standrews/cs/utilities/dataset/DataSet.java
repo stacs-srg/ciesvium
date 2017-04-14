@@ -109,9 +109,8 @@ public class DataSet {
      *
      * @param reader    the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
-     * @throws IOException if the data cannot be read
      */
-    public DataSet(Reader reader, char delimiter) throws IOException {
+    public DataSet(Reader reader, char delimiter) {
 
         this(reader, DEFAULT_CSV_FORMAT.withDelimiter(delimiter));
     }
@@ -121,7 +120,6 @@ public class DataSet {
      *
      * @param reader       the Reader to read column labels and data from
      * @param input_format the format
-     * @throws IOException if the data cannot be read
      */
     @SuppressWarnings("WeakerAccess")
     public DataSet(Reader reader, CSVFormat input_format) {
