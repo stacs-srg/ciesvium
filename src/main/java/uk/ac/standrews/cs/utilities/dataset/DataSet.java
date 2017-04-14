@@ -124,7 +124,7 @@ public class DataSet {
      * @throws IOException if the data cannot be read
      */
     @SuppressWarnings("WeakerAccess")
-    public DataSet(Reader reader, CSVFormat input_format) throws IOException {
+    public DataSet(Reader reader, CSVFormat input_format) {
 
         this();
 
@@ -401,14 +401,7 @@ public class DataSet {
             throw new RuntimeException("duplicate column labels in projection");
         }
 
-        List<String> values = new ArrayList<>();
-
-        for (String projected_column_label : projected_columns) {
-
-            values.add(getValue(record, projected_column_label));
-        }
-
-        return values;
+        return projected_columns.stream().map(projected_column_label -> getValue(record, projected_column_label)).collect(Collectors.toList());
     }
 
     private boolean containsDuplicates(final List<String> strings) {

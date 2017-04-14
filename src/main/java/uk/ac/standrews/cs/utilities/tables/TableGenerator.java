@@ -49,6 +49,7 @@ public class TableGenerator {
      * @param row_labels            the labels to be used in the remainder of the first column of the resulting table
      * @param display_as_percentage a list of booleans, one per column in the input datasets, indicating whether the corresponding value should be displayed as a percentage
      */
+    @SuppressWarnings("UnusedDeclaration")
     public TableGenerator(List<DataSet> data_sets, String first_column_heading, List<String> row_labels, List<Boolean> display_as_percentage) {
 
         this.row_labels = row_labels;

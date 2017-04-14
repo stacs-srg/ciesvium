@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<additionalHeaders>
+<additionalHeaders xmlns="http://exslt.org/common">
     <java_style>
         <!-- This custom style is used to override the default formatting for Java files,
              which uses Javadoc format, therefore causing confusion with the actual class-level

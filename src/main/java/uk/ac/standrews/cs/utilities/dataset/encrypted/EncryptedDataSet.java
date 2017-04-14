@@ -69,6 +69,7 @@ public class EncryptedDataSet extends DataSet {
      * @throws IOException     if the key input stream cannot be read
      * @throws CryptoException if data cannot be read from the input stream, or the AES key cannot be extracted with this user's private key
      */
+    @SuppressWarnings("UnusedDeclaration")
     public EncryptedDataSet(InputStream encrypted_key_stream, InputStream source_data) throws IOException, CryptoException {
 
         SecretKey AES_key = AsymmetricEncryption.getAESKey(encrypted_key_stream);
@@ -99,6 +100,7 @@ public class EncryptedDataSet extends DataSet {
      * @throws IOException     if this dataset cannot be printed to the given output object
      * @throws CryptoException if the data cannot be encrypted
      */
+    @SuppressWarnings("WeakerAccess")
     public void print(Appendable out, SecretKey AES_key) throws IOException, CryptoException {
 
         final StringBuilder builder = new StringBuilder();

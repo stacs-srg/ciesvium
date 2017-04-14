@@ -29,9 +29,10 @@ import java.util.stream.Collectors;
  */
 abstract class StatisticValues {
 
-    private List<List<Double>> data;
-    private List<Double> results;
+    private final List<List<Double>> data;
+    private final List<Double> results;
 
+    @SuppressWarnings("UnusedDeclaration")
     StatisticValues(List<List<Double>> data) {
 
         this.data = data;

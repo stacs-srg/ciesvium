@@ -32,6 +32,7 @@ public class Scratch {
         EncryptedDataSet source_data_set1 = new EncryptedDataSet(headings);
         source_data_set1.addRow("the", "quick", "brown", "fox");
 
+        @SuppressWarnings("UnusedDeclaration")
         EncryptedDataSet source_data_set = new EncryptedDataSet(new DataSet(headings));
     }
 }

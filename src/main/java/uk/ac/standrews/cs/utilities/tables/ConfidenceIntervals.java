@@ -41,7 +41,7 @@ public class ConfidenceIntervals extends StatisticValues {
      *
      * @param data the numerical table
      */
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"UnusedDeclaration", "WeakerAccess"})
     public ConfidenceIntervals(List<List<Double>> data) {
 
         super(data);

@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 /**
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
+@SuppressWarnings("WeakerAccess")
 public class SymmetricallyEncryptedDataset {
 
     @SuppressWarnings("WeakerAccess")
@@ -83,6 +84,7 @@ public class SymmetricallyEncryptedDataset {
 
     // Following methods defined in order to check that website examples compile.
 
+    @SuppressWarnings("UnusedDeclaration")
     private static void create() throws CryptoException, IOException {
 
         Path plain_text_path = Paths.get("/path/to/plain_text.csv");
@@ -99,6 +101,7 @@ public class SymmetricallyEncryptedDataset {
         new_data_set.print(cipher_text_path, key);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     private static void access() throws CryptoException, IOException {
 
         Path cipher_text_path = Paths.get("/path/to/cipher_text.txt");
