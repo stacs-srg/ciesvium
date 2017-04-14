@@ -97,9 +97,8 @@ public class DataSet {
      * Creates a new dataset with column labels and data read from the given Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
      *
      * @param reader the Reader to read column labels and data from
-     * @throws IOException if the data cannot be read
      */
-    public DataSet(Reader reader) throws IOException {
+    public DataSet(Reader reader) {
 
         this(reader, DEFAULT_DELIMITER.charAt(0));
     }
