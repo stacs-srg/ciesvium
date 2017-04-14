@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  */
 abstract class StatisticValues {
 
-    protected List<List<Double>> data;
+    private List<List<Double>> data;
     private List<Double> results;
 
     StatisticValues(List<List<Double>> data) {

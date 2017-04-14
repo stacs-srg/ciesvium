@@ -75,6 +75,7 @@ public class DataSet {
      *
      * @param existing_records the dataset to copy
      */
+    @SuppressWarnings("WeakerAccess")
     public DataSet(DataSet existing_records) {
 
         init(existing_records);
@@ -86,6 +87,7 @@ public class DataSet {
      * @param path the path of the file to read column labels and data from
      * @throws IOException if the file cannot be read
      */
+    @SuppressWarnings("WeakerAccess")
     public DataSet(Path path) throws IOException {
 
         this(FileManipulation.getInputStreamReader(path));
@@ -121,6 +123,7 @@ public class DataSet {
      * @param input_format the format
      * @throws IOException if the data cannot be read
      */
+    @SuppressWarnings("WeakerAccess")
     public DataSet(Reader reader, CSVFormat input_format) throws IOException {
 
         this();

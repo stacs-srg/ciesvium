@@ -24,6 +24,7 @@ import java.util.List;
 
 public class Scratch {
 
+    @SuppressWarnings("WeakerAccess")
     public static void main(String[] args) {
 
         List<String> headings = Arrays.asList("heading 1", "heading 2", "heading 3");

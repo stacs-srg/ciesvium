@@ -33,6 +33,7 @@ import java.util.List;
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
+@SuppressWarnings("WeakerAccess")
 public class TableGenerator {
 
     private final List<String> row_labels;

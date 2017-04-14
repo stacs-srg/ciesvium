@@ -30,6 +30,7 @@ public class Means extends StatisticValues {
      *
      * @param data the numerical table
      */
+    @SuppressWarnings("WeakerAccess")
     public Means(List<List<Double>> data) {
 
         super(data);
@@ -41,7 +42,7 @@ public class Means extends StatisticValues {
      * @param values the values
      * @return the mean of the values
      */
-    public static double calculateMean(List<Double> values) {
+    private static double calculateMean(List<Double> values) {
 
         double total = 0;
         for (Double value : values) {

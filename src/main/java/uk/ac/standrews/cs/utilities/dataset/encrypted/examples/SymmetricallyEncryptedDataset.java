@@ -34,6 +34,7 @@ import java.nio.file.Paths;
  */
 public class SymmetricallyEncryptedDataset {
 
+    @SuppressWarnings("WeakerAccess")
     public static void main(String[] args) throws CryptoException, IOException {
 
         new SymmetricallyEncryptedDataset().testDataSetUsingFiles();
