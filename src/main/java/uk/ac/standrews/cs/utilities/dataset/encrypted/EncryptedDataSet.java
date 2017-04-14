@@ -134,10 +134,6 @@ public class EncryptedDataSet extends DataSet {
         ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
         SymmetricEncryption.decrypt(AES_key, source_data, output_stream);
 
-        try {
-            return new DataSet(new StringReader(new String(output_stream.toByteArray())));
-        } catch (IOException e) {
-            throw new CryptoException("unexpected IO exception reading from a string", e);
-        }
+        return new DataSet(new StringReader(new String(output_stream.toByteArray())));
     }
 }
