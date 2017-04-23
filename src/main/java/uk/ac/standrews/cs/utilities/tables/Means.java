@@ -31,7 +31,7 @@ public class Means extends StatisticValues {
      * @param data the numerical table
      */
     @SuppressWarnings({"UnusedDeclaration", "WeakerAccess"})
-    public Means(List<List<Double>> data) {
+    public Means(final List<List<Double>> data) {
 
         super(data);
     }
@@ -42,17 +42,18 @@ public class Means extends StatisticValues {
      * @param values the values
      * @return the mean of the values
      */
-    private static double calculateMean(List<Double> values) {
+    @SuppressWarnings("WeakerAccess")
+    public static double calculateMean(final List<Double> values) {
 
         double total = 0;
-        for (Double value : values) {
+        for (final Double value : values) {
             total += value;
         }
 
         return total / values.size();
     }
 
-    protected double calculateColumnResult(List<Double> values) {
+    protected double calculateColumnResult(final List<Double> values) {
 
         return calculateMean(values);
     }
