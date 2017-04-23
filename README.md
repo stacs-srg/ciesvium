@@ -15,6 +15,10 @@ where the source data is held in encrypted form, with both symmetric and asymmet
 </dependency>
 ```
 
+## Build status
+
+[![CircleCI](https://circleci.com/gh/stacs-srg/ciesvium.svg?style=svg)](https://circleci.com/gh/stacs-srg/ciesvium)
+
 ## See also
 
 * [relevant Maven goals](https://github.com/stacs-srg/hub/tree/master/maven) (private)
