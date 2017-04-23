@@ -33,7 +33,7 @@ abstract class StatisticValues {
     private final List<Double> results;
 
     @SuppressWarnings("UnusedDeclaration")
-    StatisticValues(List<List<Double>> data) {
+    StatisticValues(final List<List<Double>> data) {
 
         this.data = data;
         results = calculateResults(data);
@@ -44,17 +44,18 @@ abstract class StatisticValues {
      *
      * @return the results
      */
-    List<Double> getResults() {
+    @SuppressWarnings("WeakerAccess")
+    public List<Double> getResults() {
         return results;
     }
 
     protected abstract double calculateColumnResult(List<Double> column);
 
-    static List<List<Double>> parseStrings(List<List<String>> records) {
+    static List<List<Double>> parseStrings(final List<List<String>> records) {
 
-        List<List<Double>> data = new ArrayList<>();
+        final List<List<Double>> data = new ArrayList<>();
 
-        for (List<String> record : records) {
+        for (final List<String> record : records) {
 
             data.add(record.stream().map(Double::parseDouble).collect(Collectors.toList()));
         }
@@ -63,9 +64,9 @@ abstract class StatisticValues {
 
     private List<Double> calculateResults(final List<List<Double>> data) {
 
-        List<Double> results = new ArrayList<>();
+        final List<Double> results = new ArrayList<>();
 
-        int size = data.get(0).size();
+        final int size = data.get(0).size();
         for (int column_number = 0; column_number < size; column_number++) {
 
             results.add(calculateColumnResult(getColumn(column_number)));
@@ -74,7 +75,7 @@ abstract class StatisticValues {
         return results;
     }
 
-    private List<Double> getColumn(int column_number) {
+    private List<Double> getColumn(final int column_number) {
 
         return data.stream().map(value -> value.get(column_number)).collect(Collectors.toList());
     }
