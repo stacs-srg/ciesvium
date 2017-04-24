@@ -8,6 +8,14 @@ where the source data is held in encrypted form, with both symmetric and asymmet
 ## Usage via maven
 
 ```
+<repository>
+    <id>uk.ac.standrews.cs.maven.repository</id>
+    <name>School of Computer Science Maven Repository</name>
+    <url>http://maven.cs.st-andrews.ac.uk/</url>
+</repository>
+```
+        
+```
 <dependency>
     <groupId>uk.ac.standrews.cs</groupId>
     <artifactId>ciesvium</artifactId>
