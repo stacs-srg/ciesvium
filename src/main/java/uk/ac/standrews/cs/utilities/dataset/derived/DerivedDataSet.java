@@ -32,7 +32,8 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public abstract class DerivedDataSet extends DataSet {
 
-    private static final String ID_COLUMN_LABEL = "ID";
+    @SuppressWarnings("WeakerAccess")
+    protected static final String ID_COLUMN_LABEL = "ID";
 
     private int record_count;
 
@@ -66,9 +67,9 @@ public abstract class DerivedDataSet extends DataSet {
         return new Extender() {
 
             @Override
-            public List<String> getAdditionalValues(List<String> record, DataSet data_set) {
+            public List<String> getAdditionalValues(final List<String> record, final DataSet data_set) {
 
-                List<String> result = new ArrayList<>();
+                final List<String> result = new ArrayList<>();
                 result.add(String.valueOf(record_count++));
                 return result;
             }
@@ -81,10 +82,10 @@ public abstract class DerivedDataSet extends DataSet {
         };
     }
 
-    protected Projector moveIdColumnToFirst(List<String> source_column_labels) {
+    protected static Projector moveIdColumnToFirst(final List<String> source_column_labels) {
 
         return () -> {
-            List<String> result = new ArrayList<>();
+            final List<String> result = new ArrayList<>();
 
             result.add(ID_COLUMN_LABEL);
             result.addAll(source_column_labels.stream().filter(s -> !s.equals(ID_COLUMN_LABEL)).collect(Collectors.toList()));
