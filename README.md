@@ -27,6 +27,10 @@ where the source data is held in encrypted form, with both symmetric and asymmet
 
 [![CircleCI](https://circleci.com/gh/stacs-srg/ciesvium.svg?style=svg)](https://circleci.com/gh/stacs-srg/ciesvium)
 
+### Code coverage status
+
+[![codecov](https://codecov.io/gh/stacs-srg/ciesvium/branch/master/graph/badge.svg)](https://codecov.io/gh/stacs-srg/ciesvium)
+
 ## See also
 
 * [relevant Maven goals](https://github.com/stacs-srg/hub/tree/master/maven) (private)
