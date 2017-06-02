@@ -65,7 +65,7 @@ public class DataSet {
      *
      * @param labels the column labels
      */
-    public DataSet(List<String> labels) {
+    public DataSet(final List<String> labels) {
 
         this(labels, new ArrayList<>());
     }
@@ -76,7 +76,7 @@ public class DataSet {
      * @param existing_records the dataset to copy
      */
     @SuppressWarnings("WeakerAccess")
-    public DataSet(DataSet existing_records) {
+    public DataSet(final DataSet existing_records) {
 
         init(existing_records);
     }
@@ -88,7 +88,7 @@ public class DataSet {
      * @throws IOException if the file cannot be read
      */
     @SuppressWarnings("WeakerAccess")
-    public DataSet(Path path) throws IOException {
+    public DataSet(final Path path) throws IOException {
 
         this(FileManipulation.getInputStreamReader(path));
     }
@@ -98,7 +98,7 @@ public class DataSet {
      *
      * @param reader the Reader to read column labels and data from
      */
-    public DataSet(Reader reader) {
+    public DataSet(final Reader reader) {
 
         this(reader, DEFAULT_DELIMITER.charAt(0));
     }
@@ -109,7 +109,7 @@ public class DataSet {
      * @param reader    the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
      */
-    public DataSet(Reader reader, char delimiter) {
+    public DataSet(final Reader reader, final char delimiter) {
 
         this(reader, DEFAULT_CSV_FORMAT.withDelimiter(delimiter));
     }
@@ -121,7 +121,7 @@ public class DataSet {
      * @param input_format the format
      */
     @SuppressWarnings("WeakerAccess")
-    public DataSet(Reader reader, CSVFormat input_format) {
+    public DataSet(final Reader reader, final CSVFormat input_format) {
 
         this();
 
@@ -129,7 +129,7 @@ public class DataSet {
 
             labels.addAll(getColumnLabels(parser));
 
-            for (CSVRecord record : parser) {
+            for (final CSVRecord record : parser) {
 
                 final List<String> items = csvRecordToList(record);
                 final int size = items.size();
@@ -141,7 +141,7 @@ public class DataSet {
             }
 
             reader.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -153,7 +153,7 @@ public class DataSet {
      * @return the new dataset
      */
     @SuppressWarnings("WeakerAccess")
-    public DataSet select(Selector selector) {
+    public DataSet select(final Selector selector) {
 
         return new DataSet(labels, filterRecords(selector));
     }
@@ -165,7 +165,7 @@ public class DataSet {
      * @return the new dataset
      */
     @SuppressWarnings("WeakerAccess")
-    public DataSet project(Projector projector) {
+    public DataSet project(final Projector projector) {
 
         return new DataSet(projector.getProjectedColumnLabels(), projectRecords(projector));
     }
@@ -177,7 +177,7 @@ public class DataSet {
      * @return the new dataset
      */
     @SuppressWarnings("unused")
-    public DataSet map(Mapper mapper) {
+    public DataSet map(final Mapper mapper) {
 
         return new DataSet(labels, mapRecords(mapper));
     }
@@ -189,7 +189,7 @@ public class DataSet {
      * @return the new dataset
      */
     @SuppressWarnings("unused")
-    public DataSet extend(Extender extender) {
+    public DataSet extend(final Extender extender) {
 
         return new DataSet(extendLabels(extender), extendRecords(extender));
     }
@@ -199,7 +199,7 @@ public class DataSet {
      *
      * @param record a new record
      */
-    public void addRow(List<String> record) {
+    public void addRow(final List<String> record) {
 
         records.add(record);
     }
@@ -209,7 +209,7 @@ public class DataSet {
      *
      * @param values a new record
      */
-    public void addRow(String... values) {
+    public void addRow(final String... values) {
 
         addRow(Arrays.asList(values));
     }
@@ -243,9 +243,9 @@ public class DataSet {
      * @throws RuntimeException if the specified label is not present
      */
     @SuppressWarnings("WeakerAccess")
-    public String getValue(List<String> record, String label) {
+    public String getValue(final List<String> record, final String label) {
 
-        int index = labels.indexOf(label);
+        final int index = labels.indexOf(label);
 
         if (index == -1) {
             throw new RuntimeException("Unknown label: " + label);
@@ -259,7 +259,7 @@ public class DataSet {
      * @param output_format the output format
      */
     @SuppressWarnings("unused")
-    public void setOutputFormat(CSVFormat output_format) {
+    public void setOutputFormat(final CSVFormat output_format) {
 
         this.output_format = output_format;
     }
@@ -270,12 +270,12 @@ public class DataSet {
      * @param out the output object
      * @throws IOException if this dataset cannot be printed to the given output object
      */
-    public void print(Appendable out) throws IOException {
+    public void print(final Appendable out) throws IOException {
 
-        String[] header_array = labels.toArray(new String[labels.size()]);
-        CSVPrinter printer = new CSVPrinter(out, output_format.withHeader(header_array));
+        final String[] header_array = labels.toArray(new String[labels.size()]);
+        final CSVPrinter printer = new CSVPrinter(out, output_format.withHeader(header_array));
 
-        for (List<String> record : records) {
+        for (final List<String> record : records) {
 
             printer.printRecord(record);
             printer.flush();
@@ -283,7 +283,7 @@ public class DataSet {
     }
 
     @SuppressWarnings("unused")
-    public void print(Path path) throws IOException {
+    public void print(final Path path) throws IOException {
 
         try (Writer writer = Files.newBufferedWriter(path)) {
             print(writer);
@@ -318,52 +318,52 @@ public class DataSet {
         this(new ArrayList<>(), new ArrayList<>());
     }
 
-    private DataSet(List<String> labels, List<List<String>> records) {
+    private DataSet(final List<String> labels, final List<List<String>> records) {
 
         init(labels, records);
     }
 
-    private void init(List<String> labels, List<List<String>> records) {
+    private void init(final List<String> labels, final List<List<String>> records) {
 
         this.labels = labels;
         this.records = records;
     }
 
-    protected void init(DataSet existing_records) {
+    protected void init(final DataSet existing_records) {
 
         init(existing_records.getColumnLabels(), existing_records.getRecords());
     }
 
-    private List<List<String>> filterRecords(Selector selector) {
+    private List<List<String>> filterRecords(final Selector selector) {
 
         return records.stream().filter(record -> selector.select(record, this)).collect(Collectors.toList());
     }
 
-    private List<List<String>> projectRecords(Projector projector) {
+    private List<List<String>> projectRecords(final Projector projector) {
 
         return records.stream().map(record -> project(record, projector.getProjectedColumnLabels())).collect(Collectors.toList());
     }
 
-    private List<List<String>> mapRecords(Mapper mapper) {
+    private List<List<String>> mapRecords(final Mapper mapper) {
 
-        Function<List<String>, List<String>> listListFunction = record -> mapper.map(record, this);
+        final Function<List<String>, List<String>> listListFunction = record -> mapper.map(record, this);
         return records.stream().map(listListFunction).collect(Collectors.toList());
     }
 
     private List<String> extendLabels(final Extender extender) {
 
-        List<String> extended_labels = new ArrayList<>(labels);
+        final List<String> extended_labels = new ArrayList<>(labels);
         extended_labels.addAll(extender.getColumnLabels());
         return extended_labels;
     }
 
-    private List<List<String>> extendRecords(Extender extender) {
+    private List<List<String>> extendRecords(final Extender extender) {
 
-        List<List<String>> result = new ArrayList<>();
+        final List<List<String>> result = new ArrayList<>();
 
-        for (List<String> record : records) {
+        for (final List<String> record : records) {
 
-            List<String> new_record = new ArrayList<>(record);
+            final List<String> new_record = new ArrayList<>(record);
             new_record.addAll(extender.getAdditionalValues(record, this));
             result.add(new_record);
         }
@@ -371,27 +371,27 @@ public class DataSet {
         return result;
     }
 
-    private List<String> getColumnLabels(CSVParser parser) {
+    private static List<String> getColumnLabels(final CSVParser parser) {
 
-        Map<String, Integer> headerMap = parser.getHeaderMap();
-        List<String> labels = new ArrayList<>(headerMap.size());
-        for (String label : headerMap.keySet()) {
-            int pos = headerMap.get(label);
+        final Map<String, Integer> headerMap = parser.getHeaderMap();
+        final List<String> labels = new ArrayList<>(headerMap.size());
+        for (final String label : headerMap.keySet()) {
+            final int pos = headerMap.get(label);
             labels.add(pos, label);
         }
         return labels;
     }
 
-    private List<String> csvRecordToList(CSVRecord record) {
+    private static List<String> csvRecordToList(final CSVRecord record) {
 
-        List<String> list = new ArrayList<>();
-        for (String value : record) {
+        final List<String> list = new ArrayList<>();
+        for (final String value : record) {
             list.add(value);
         }
         return list;
     }
 
-    private List<String> project(List<String> record, List<String> projected_columns) {
+    private List<String> project(final List<String> record, final List<String> projected_columns) {
 
         if (containsDuplicates(projected_columns)) {
             // Can't throw checked exception because this is used in a stream map operation.
@@ -401,7 +401,7 @@ public class DataSet {
         return projected_columns.stream().map(projected_column_label -> getValue(record, projected_column_label)).collect(Collectors.toList());
     }
 
-    private boolean containsDuplicates(final List<String> strings) {
+    private static boolean containsDuplicates(final List<String> strings) {
 
         return new HashSet<>(strings).size() < strings.size();
     }

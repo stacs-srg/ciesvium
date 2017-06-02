@@ -16,12 +16,11 @@
  */
 package uk.ac.standrews.cs.utilities.dataset.derived;
 
+import uk.ac.standrews.cs.utilities.archive.QuickSort;
 import uk.ac.standrews.cs.utilities.dataset.DataSet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -58,8 +57,9 @@ public abstract class DerivedDataSet extends DataSet {
      * @return the derived dataset
      */
     @SuppressWarnings("WeakerAccess")
-    public abstract DataSet getDerivedDataSet(DataSet source_data_set);
+    public abstract DataSet getDerivedDataSet(DataSet source_data_set) throws IOException;
 
+    @SuppressWarnings("WeakerAccess")
     protected Extender addIdColumn() {
 
         record_count = 1;
@@ -82,6 +82,7 @@ public abstract class DerivedDataSet extends DataSet {
         };
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected static Projector moveIdColumnToFirst(final List<String> source_column_labels) {
 
         return () -> {
@@ -92,5 +93,81 @@ public abstract class DerivedDataSet extends DataSet {
 
             return result;
         };
+    }
+
+    protected DataSet renumber(final DataSet data_set) {
+
+        final List<String> source_labels = data_set.getColumnLabels();
+        return data_set.project(removeFirstColumn(source_labels)).extend(addIdColumn()).project(moveIdColumnToFirst(source_labels));
+    }
+
+    protected static DataSet removeDuplicates(final DataSet data_set) {
+
+        final DataSet result = new DataSet(data_set.getColumnLabels());
+
+        final Set<String> processed_rows = new HashSet<>();
+
+        for (final List<String> record : data_set.getRecords()) {
+
+            final String flattened = flatten(record);
+            if (!processed_rows.contains(flattened)) {
+                result.addRow(record);
+                processed_rows.add(flattened);
+            }
+        }
+
+        return result;
+    }
+
+    protected static DataSet sort(final DataSet data_set) {
+
+        final DataSet result = new DataSet(data_set.getColumnLabels());
+
+        // Make a map from flattened records to records.
+        final Map<String, Pair<Integer, List<String>>> map = new HashMap<>();
+
+        for (final List<String> record : data_set.getRecords()) {
+
+            final String flattened = flatten(record);
+            if (!map.containsKey(flattened)) {
+                map.put(flattened, new Pair<>(0, record));
+            }
+            map.get(flattened).x++;
+        }
+
+        // Sort the flattened records.
+        final List<String> sorted = new ArrayList<>(map.keySet());
+        new QuickSort<>(sorted, String::compareTo).sort();
+
+        // Retrieve the structured records.
+        for (final String flattened : sorted) {
+            final Pair<Integer, List<String>> pair = map.get(flattened);
+            for (int i = 0; i < pair.x; i++) {
+                result.addRow(pair.y);
+            }
+        }
+
+        return result;
+    }
+
+    static class Pair<X, Y> {
+
+        X x;
+        Y y;
+
+        Pair(final X x, final Y y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    private static String flatten(final List<String> record) {
+
+        return String.join("",record);
+    }
+
+    private static Projector removeFirstColumn(final List<String> labels) {
+
+        return () -> labels.subList(1, labels.size());
     }
 }
