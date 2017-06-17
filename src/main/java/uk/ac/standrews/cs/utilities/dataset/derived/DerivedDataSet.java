@@ -34,8 +34,6 @@ public abstract class DerivedDataSet extends DataSet {
     @SuppressWarnings("WeakerAccess")
     protected static final String ID_COLUMN_LABEL = "ID";
 
-    private int record_count;
-
     protected DerivedDataSet() throws IOException {
 
         init(getDerivedDataSet(getSourceDataSet()));
@@ -60,11 +58,11 @@ public abstract class DerivedDataSet extends DataSet {
     public abstract DataSet getDerivedDataSet(DataSet source_data_set) throws IOException;
 
     @SuppressWarnings("WeakerAccess")
-    protected Extender addIdColumn() {
-
-        record_count = 1;
+    protected static Extender addIdColumn() {
 
         return new Extender() {
+
+            int record_count = 1;
 
             @Override
             public List<String> getAdditionalValues(final List<String> record, final DataSet data_set) {
@@ -161,12 +159,12 @@ public abstract class DerivedDataSet extends DataSet {
         }
     }
 
-    private static String flatten(final List<String> record) {
+    protected static String flatten(final List<String> record) {
 
         return String.join("",record);
     }
 
-    private static Projector removeFirstColumn(final List<String> labels) {
+    protected static Projector removeFirstColumn(final List<String> labels) {
 
         return () -> labels.subList(1, labels.size());
     }
