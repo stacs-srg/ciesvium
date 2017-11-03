@@ -25,3 +25,5 @@ Data set use cases:
 1. [create a data set from an existing plain-text file using AES, storing data in an encrypted file](create-encrypted-dataset-with-AES-key.html)
 1. [create a data set from an existing plain-text file using public-key crypto, storing data in an encrypted file](create-encrypted-dataset-with-AES-key.html)
 1. [create a data set from an existing plain-text file using public-key crypto, storing data in an encrypted resource](create-encrypted-dataset-with-AES-key.html)
+
+{% include navigation.html %}
