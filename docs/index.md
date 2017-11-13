@@ -11,6 +11,6 @@ In particular, the [dataset](https://quicksilver.host.cs.st-andrews.ac.uk/apidoc
 
 ## Build and coverage status
 
-[![CircleCI](https://circleci.com/gh/stacs-srg/ciesvium.svg?style=svg)](https://circleci.com/gh/stacs-srg/ciesvium) [![codecov](https://codecov.io/gh/stacs-srg/ciesvium/branch/master/graph/badge.svg)](https://codecov.io/gh/stacs-srg/ciesvium)
+[![TeamCity](https://quicksilver.host.cs.st-andrews.ac.uk/buildstatus/ciesvium/build-status.png)](https://beast.cs.st-andrews.ac.uk/teamcity/viewType.html?buildTypeId=Ciesvium_Build) [![codecov](https://codecov.io/gh/stacs-srg/ciesvium/branch/master/graph/badge.svg)](https://codecov.io/gh/stacs-srg/ciesvium)
 
 {% include navigation.html %}
