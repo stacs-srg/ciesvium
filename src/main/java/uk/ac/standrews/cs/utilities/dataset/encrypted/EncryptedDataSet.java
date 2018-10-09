@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Systems Research Group, University of St Andrews:
+ * Copyright 2018 Systems Research Group, University of St Andrews:
  * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class EncryptedDataSet extends DataSet {
 
-    public EncryptedDataSet(List<String> labels) {
+    public EncryptedDataSet(final List<String> labels) {
 
         super(labels);
     }
@@ -47,14 +47,14 @@ public class EncryptedDataSet extends DataSet {
      * @param AES_key     the AES key to decrypt the input stream
      * @throws CryptoException if data cannot be read from the input stream, or the data cannot be decrypted with the given key
      */
-    public EncryptedDataSet(InputStream source_data, SecretKey AES_key) throws CryptoException {
+    public EncryptedDataSet(final InputStream source_data, final SecretKey AES_key) throws CryptoException {
 
         init(decrypt(source_data, AES_key));
     }
 
-    public EncryptedDataSet(Path source_data, SecretKey AES_key) throws CryptoException, IOException {
+    public EncryptedDataSet(final Path source_data, final SecretKey AES_key) throws CryptoException, IOException {
 
-        try (InputStream input_stream = Files.newInputStream(source_data)) {
+        try (final InputStream input_stream = Files.newInputStream(source_data)) {
             init(decrypt(input_stream, AES_key));
         }
     }
@@ -64,15 +64,15 @@ public class EncryptedDataSet extends DataSet {
      * from the given input stream, which contains versions of the AES key encrypted with various users' RSA public
      * keys.
      *
-     * @param encrypted_key_stream an input stream containing versions of the MIME-encoded AES key encrypted with various users' public keys
      * @param source_data          the encrypted data input stream
+     * @param encrypted_key_stream an input stream containing versions of the MIME-encoded AES key encrypted with various users' public keys
      * @throws IOException     if the key input stream cannot be read
      * @throws CryptoException if data cannot be read from the input stream, or the AES key cannot be extracted with this user's private key
      */
     @SuppressWarnings("UnusedDeclaration")
-    public EncryptedDataSet(InputStream encrypted_key_stream, InputStream source_data) throws IOException, CryptoException {
+    public EncryptedDataSet(final InputStream source_data, final InputStream encrypted_key_stream) throws IOException, CryptoException {
 
-        SecretKey AES_key = AsymmetricEncryption.getAESKey(encrypted_key_stream);
+        final SecretKey AES_key = AsymmetricEncryption.getAESKey(encrypted_key_stream);
 
         init(decrypt(source_data, AES_key));
     }
@@ -82,12 +82,12 @@ public class EncryptedDataSet extends DataSet {
      *
      * @param existing_records the dataset to copy
      */
-    public EncryptedDataSet(DataSet existing_records) {
+    public EncryptedDataSet(final DataSet existing_records) {
 
         super(existing_records);
     }
 
-    public EncryptedDataSet(Path source_data) throws IOException {
+    public EncryptedDataSet(final Path source_data) throws IOException {
 
         super(source_data);
     }
@@ -101,7 +101,7 @@ public class EncryptedDataSet extends DataSet {
      * @throws CryptoException if the data cannot be encrypted
      */
     @SuppressWarnings("WeakerAccess")
-    public void print(Appendable out, SecretKey AES_key) throws IOException, CryptoException {
+    public void print(final Appendable out, final SecretKey AES_key) throws IOException, CryptoException {
 
         final StringBuilder builder = new StringBuilder();
         print(builder);
@@ -110,9 +110,9 @@ public class EncryptedDataSet extends DataSet {
         SymmetricEncryption.encrypt(AES_key, input_stream, makeOutputStream(out));
     }
 
-    public void print(Path path, SecretKey AES_key) throws IOException, CryptoException {
+    public void print(final Path path, final SecretKey AES_key) throws IOException, CryptoException {
 
-        try (Writer writer = Files.newBufferedWriter(path)) {
+        try (final Writer writer = Files.newBufferedWriter(path)) {
             print(writer, AES_key);
         }
     }
@@ -129,9 +129,9 @@ public class EncryptedDataSet extends DataSet {
         };
     }
 
-    private static DataSet decrypt(final InputStream source_data, SecretKey AES_key) throws CryptoException {
+    private static DataSet decrypt(final InputStream source_data, final SecretKey AES_key) throws CryptoException {
 
-        ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
+        final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
         SymmetricEncryption.decrypt(AES_key, source_data, output_stream);
 
         return new DataSet(new StringReader(new String(output_stream.toByteArray())));

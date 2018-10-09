@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Systems Research Group, University of St Andrews:
+ * Copyright 2018 Systems Research Group, University of St Andrews:
  * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
@@ -26,14 +26,13 @@ import java.util.List;
 public class Scratch {
 
     @SuppressWarnings("WeakerAccess")
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
-        List<String> headings = Arrays.asList("heading 1", "heading 2", "heading 3");
+        final List<String> headings = Arrays.asList("heading 1", "heading 2", "heading 3");
 
-        EncryptedDataSet source_data_set1 = new EncryptedDataSet(headings);
+        final EncryptedDataSet source_data_set1 = new EncryptedDataSet(headings);
         source_data_set1.addRow("the", "quick", "brown", "fox");
 
-        @SuppressWarnings("UnusedAssignment")
-        EncryptedDataSet source_data_set = new EncryptedDataSet(new DataSet(headings));
+        @SuppressWarnings("UnusedAssignment") final EncryptedDataSet source_data_set = new EncryptedDataSet(new DataSet(headings));
     }
 }

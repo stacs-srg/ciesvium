@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Systems Research Group, University of St Andrews:
+ * Copyright 2018 Systems Research Group, University of St Andrews:
  * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
@@ -93,7 +93,7 @@ public abstract class DerivedDataSet extends DataSet {
         };
     }
 
-    protected DataSet renumber(final DataSet data_set) {
+    protected static DataSet renumber(final DataSet data_set) {
 
         final List<String> source_labels = data_set.getColumnLabels();
         return data_set.project(removeFirstColumn(source_labels)).extend(addIdColumn()).project(moveIdColumnToFirst(source_labels));
@@ -151,7 +151,7 @@ public abstract class DerivedDataSet extends DataSet {
     static class Pair<X, Y> {
 
         X x;
-        Y y;
+        final Y y;
 
         Pair(final X x, final Y y) {
             this.x = x;
@@ -159,12 +159,12 @@ public abstract class DerivedDataSet extends DataSet {
         }
     }
 
-    protected static String flatten(final List<String> record) {
+    private static String flatten(final List<String> record) {
 
         return String.join("",record);
     }
 
-    protected static Projector removeFirstColumn(final List<String> labels) {
+    private static Projector removeFirstColumn(final List<String> labels) {
 
         return () -> labels.subList(1, labels.size());
     }

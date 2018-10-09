@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright 2017 Systems Research Group, University of St Andrews:
+# Copyright 2018 Systems Research Group, University of St Andrews:
 # <https://github.com/stacs-srg>
 #
 # This file is part of the module ciesvium.
@@ -16,4 +16,4 @@
 # <http://www.gnu.org/licenses/>.
 #
 
-mvn exec:java -q -Dexec.cleanupDaemonThreads=false -Dexec.mainClass="uk.ac.standrews.cs.util.dataset.encrypted.util.EncryptAESKey" -e -Dexec.args="$1 $2 $3"
+mvn exec:java -q -Dexec.cleanupDaemonThreads=false -Dexec.mainClass="uk.ac.standrews.cs.utilities.dataset.encrypted.util.EncryptAESKey" -e -Dexec.args="$1 $2 $3"

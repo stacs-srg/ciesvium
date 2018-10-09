@@ -25,42 +25,37 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 /**
- * Extracts an AES key from a file containing the key encrypted separately with the public key
- * of each authorized user.
+ * Re-encrypts a previously encrypted symmetric key with a new list of public keys.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
 @SuppressWarnings("WeakerAccess")
-public class DecryptAESKey {
+public class ReEncryptAESKey {
 
     /**
-     * Extracts a MIME-encoded AES key from a file containing the key encrypted separately with the public key
-     * of each authorized user.
+     * Encrypts a previously encrypted AES key separately with each of a number of public keys, and over-writes the file of encrypted versions of the AES key.
      *
-     * @param args path of file containing encrypted key, path of plain-text file, path of new encrypted file
+     * @param args path of file containing public keys, path of file containing encrypted keys to be updated
      * @throws CryptoException if the encryption cannot be completed
      * @throws IOException     if a file cannot be accessed
      */
     public static void main(String[] args) throws CryptoException, IOException {
 
-        if (args.length < 1) {
+        if (args.length < 2) {
             usage();
         } else {
 
-            final String encrypted_keys_path = args[0];
+            final String authorized_keys_path = args[0];
+            final String encrypted_keys_path = args[1];
 
-            decryptAESKey(encrypted_keys_path);
+            final SecretKey AES_key = AsymmetricEncryption.getAESKey(Paths.get(encrypted_keys_path));
+
+            AsymmetricEncryption.encryptAESKey(AES_key, Paths.get(authorized_keys_path), Paths.get(encrypted_keys_path));
         }
-    }
-
-    private static void decryptAESKey(final String encrypted_keys_path) throws IOException, CryptoException {
-
-        SecretKey AES_key = AsymmetricEncryption.getAESKey(Paths.get(encrypted_keys_path));
-        System.out.println(SymmetricEncryption.keyToString(AES_key));
     }
 
     private static void usage() {
 
-        System.out.println("usage: DecryptAESKey <encrypted keys path>");
+        System.out.println("usage: ReEncryptAESKey <authorized keys path> <destination path>");
     }
 }

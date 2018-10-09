@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Systems Research Group, University of St Andrews:
+ * Copyright 2018 Systems Research Group, University of St Andrews:
  * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.
@@ -40,28 +40,28 @@ public class EncryptFileWithEncryptedAESKey {
      * @throws CryptoException if the encryption cannot be completed
      * @throws IOException     if a file cannot be accessed
      */
-    public static void main(String[] args) throws CryptoException, IOException {
+    public static void main(final String[] args) throws CryptoException, IOException {
 
         if (args.length < 3) {
             usage();
         } else {
-            final String encrypted_key_path = args[0];
-            final String plain_text_path = args[1];
+            final String plain_text_path = args[0];
+            final String encrypted_key_path = args[1];
             final String cipher_text_path = args[2];
 
             encryptFileWithEncryptedAESKey(encrypted_key_path, plain_text_path, cipher_text_path);
         }
     }
 
-    private static void encryptFileWithEncryptedAESKey(final String encrypted_key_path, final String plain_text_path, final String cipher_text_path) throws IOException, CryptoException {
+    private static void encryptFileWithEncryptedAESKey(final String plain_text_path, final String encrypted_key_path, final String cipher_text_path) throws IOException, CryptoException {
 
-        SecretKey AES_key = AsymmetricEncryption.getAESKey(Paths.get(encrypted_key_path));
+        final SecretKey AES_key = AsymmetricEncryption.getAESKey(Paths.get(encrypted_key_path));
 
         SymmetricEncryption.encrypt(AES_key, Paths.get(plain_text_path), Paths.get(cipher_text_path));
     }
 
     private static void usage() {
 
-        System.out.println("usage: EncryptFileWithEncryptedAESKey <encrypted key path> <plain text path> <cipher text path>");
+        System.out.println("usage: EncryptFileWithEncryptedAESKey <plain text path> <encrypted key path> <cipher text path>");
     }
 }
