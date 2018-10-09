@@ -1,4 +1,4 @@
-## Use Case: Encrypt AES Key
+## Operation: Encrypt AES Key
 
 This encrypts a MIME-encoded AES key using public-key encryption. The AES key is encrypted separately with each of a
 number of authorized public keys read from a specified file. The resulting encrypted versions of the AES key are written
@@ -15,9 +15,9 @@ this page for an example of how to generate a PEM key pair.
  
 **Bash script**:
  
-    src/main/scripts/encrypt-aes-key.sh <mime-encoded AES key> <path of public keys file> <path of new encrypted file>
+    src/main/scripts/encrypt-aes-key.sh <mime-encoded AES key> <path of authorized public keys file> <path of AES key encrypted for authorized users>
 
-**Result**: file containing encrypted keys is written to specified path
+**Result**: file containing encrypted versions of the key is written to specified path
 
 **Example input key**:
 
@@ -76,7 +76,7 @@ cm+4NfhasqddIj/uLm7yWw3NpzSQoeGML4UtaQ==</pre>
 
 **Generating a key pair**:
 
-A key pair in PEM format can be generated on Unix as follows:
+A key pair in [PEM format](http://serverfault.com/questions/9708/what-is-a-pem-file-and-how-does-it-differ-from-other-openssl-generated-key-file) can be generated on Unix using [OpenSSL](https://www.openssl.org/docs/manmaster/man1/openssl-genrsa.html) on Unix:
 
 <pre>cd ~/.ssh
 openssl genrsa -out private_key.pem 2048

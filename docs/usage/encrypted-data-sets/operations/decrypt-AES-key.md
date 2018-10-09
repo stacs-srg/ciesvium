@@ -10,6 +10,6 @@ with this user's private key, until a valid AES key is extracted, which is then 
  
 **Bash script**:
  
-    src/main/scripts/decrypt-aes-key.sh <path of encrypted AES key>
+    src/main/scripts/decrypt-aes-key.sh <path of AES key encrypted for authorized users>
 
 **Result**: extracted key is printed to standard out

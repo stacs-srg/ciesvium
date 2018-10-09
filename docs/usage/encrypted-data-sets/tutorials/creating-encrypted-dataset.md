@@ -1,15 +1,17 @@
-## Tutorial: Creating an Encrypted Data Set
+## Tutorial: Creating an Encapsulated Encrypted Data Set
 
-This describes how to 
+This describes how to create a self-contained encrypted data set within a Java Maven project, encrypted using public-key
+encryption. The result is that a user who is authorized to access the data can do so simply by adding the project as a
+Maven dependency in their own project, without needing to do any explicit key management.
 
 **Initial assumptions**
 
 * The data to be encrypted is initially stored in the plain-text non-encrypted file <code>plain_text.csv</code>.
-* The encrypted data is to be stored in a Java Maven project, with the root package <code>uk.ac.standrews.cs.data</code>.
+* The encrypted data is to be stored in a Maven project with the root package <code>uk.ac.standrews.cs.data</code>.
 
 **Generate public and private keys**
 
-If you don't already have a PEM key pair, create one. For example, using [OpenSSL](https://www.openssl.org/docs/manmaster/man1/openssl-genrsa.html) on Unix:
+If you don't already have a [PEM key pair](http://serverfault.com/questions/9708/what-is-a-pem-file-and-how-does-it-differ-from-other-openssl-generated-key-file), create one. For example, using [OpenSSL](https://www.openssl.org/docs/manmaster/man1/openssl-genrsa.html) on Unix:
 
 <pre>cd ~/.ssh
 openssl genrsa -out private_key.pem 2048
@@ -30,6 +32,19 @@ Copy your public key file:
 
 <pre>cat ~/.ssh/public_key.pem >> src/main/resources/uk/ac/standrews/cs/data/authorized_keys.txt</pre>
 
+Example:
+
+<pre>graham.kirby@st-andrews.ac.uk
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzTDV8GGUcZByuw2zRu8+
+SEbJTg+lT9Vx8H+5N/BNUViHVZb+zToQdzwnRE2vqQAdRfLwoNBHoiD+buUivy+l
+2QOizY9Qs9X4952yWeGeSU8zo/hImtyM5vAi9nG+llKuFRHv3S7GKJW1shIuauG3
+9dRWvSzDDhJaGTuH/gG0WPw0k+7sR3t473R5DD5bfx2SVprGPWP9r4ETo2u5Qqw+
+7/pkLOdKw46qlMGVV/NlrEq89gpRenbQ8fSKHhakIhIcAMMmImqpTzbhidA7cMe/
+HIE9ckCBYundUJOZD7L7AZCbxkKmscxtlljaWyqIGg79pOF++dD9NOSuSL35IIgr
+twIDAQAB
+-----END PUBLIC KEY-----</pre>
+
 Repeat with the PEM public keys for any other users who should be able to access the data. 
 
 **Generate new symmetric key**
@@ -38,6 +53,14 @@ Generate a new AES key and encrypt it separately using each of the authorized pu
 encrypted versions in a resource file:
 
 <pre>src/main/scripts/generate-and-encrypt-aes-key.sh src/main/resources/uk/ac/standrews/cs/data/authorized_keys.txt src/main/resources/uk/ac/standrews/cs/data/encrypted_key.txt</pre>
+
+Example:
+
+<pre>UX3+4gkpe51+9tOhDBnaQ/7JIjPylqdhruQL3kzAHYBPJkrQwVqwcDQYDAHqcaE5+00XHXkb1HiT
+/vO7W2HmAT8mkJMBVje054KXJ7SM1RRAwcKaUI6oXVjs/qJx0ZZszn19SMPTaBxjrS9suwnUZD9+
+NXkEAHiBlsO3Jg5+ef/OQcAaVco6qgyfmMUuWP0PmnhkE7u2dIlp4nK7CV6fzTDs9cHL81qAba4H
+igOn3LBekVK9O1ka8OJPxJVM1NvQahoV2Cf1zgO79htVIlrDJULU2e1DNhYhaIe+YR6Zs1udVipN
+WKU0p+JREtn0y8WHHhg8NVg5FtvwwHuv7sMx4A==</pre>
 
 If you're curious, you can print out the AES key:
 

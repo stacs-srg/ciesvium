@@ -1,4 +1,4 @@
-## Use Case: Generate Random AES Key
+## Operation: Generate Random AES Key
 
 This generates a new random MIME-encoded AES key.
 

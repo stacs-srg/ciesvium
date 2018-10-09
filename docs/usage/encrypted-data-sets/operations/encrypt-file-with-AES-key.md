@@ -1,4 +1,4 @@
-## Use Case: Encrypt File With AES Key
+## Operation: Encrypt File With AES Key
 
 This encrypts a plain-text file using a given MIME-encoded AES key.
 
