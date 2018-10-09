@@ -36,7 +36,7 @@ import java.nio.file.Paths;
 public class SymmetricallyEncryptedDataset {
 
     @SuppressWarnings("WeakerAccess")
-    public static void main(String[] args) throws CryptoException, IOException {
+    public static void main(final String[] args) throws CryptoException, IOException {
 
         new SymmetricallyEncryptedDataset().testDataSetUsingFiles();
         new SymmetricallyEncryptedDataset().testDataSetUsingResources();
@@ -55,8 +55,8 @@ public class SymmetricallyEncryptedDataset {
 
         // Creation.
 
-        Path plain_text_path = Paths.get(plain_text_path_string);
-        Path cipher_text_path = Paths.get(cipher_text_path_string);
+        final Path plain_text_path = Paths.get(plain_text_path_string);
+        final Path cipher_text_path = Paths.get(cipher_text_path_string);
 
         final EncryptedDataSet new_data_set = new EncryptedDataSet(plain_text_path);
         final SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
@@ -65,7 +65,7 @@ public class SymmetricallyEncryptedDataset {
 
         // Use.
 
-        EncryptedDataSet existing_data_set = new EncryptedDataSet(cipher_text_path, SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw=="));
+        final EncryptedDataSet existing_data_set = new EncryptedDataSet(cipher_text_path, SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw=="));
         existing_data_set.print(System.out);
     }
 
@@ -74,11 +74,11 @@ public class SymmetricallyEncryptedDataset {
         // Assume that encrypted dataset has already been created and copied into resources tree.
 
         // Key string previously created using generate-AES-key.
-        SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
+        final SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
 
-        final InputStream input_stream = FileManipulation.getInputStreamForResource(getClass(), "cipher_text.txt");
+        final InputStream input_stream = getClass().getResourceAsStream("cipher_text.txt");
 
-        EncryptedDataSet existing_data_set = new EncryptedDataSet(input_stream, key);
+        final EncryptedDataSet existing_data_set = new EncryptedDataSet(input_stream, key);
         existing_data_set.print(System.out);
     }
 
@@ -87,15 +87,15 @@ public class SymmetricallyEncryptedDataset {
     @SuppressWarnings("UnusedDeclaration")
     private static void create() throws CryptoException, IOException {
 
-        Path plain_text_path = Paths.get("/path/to/plain_text.csv");
-        EncryptedDataSet new_data_set = new EncryptedDataSet(plain_text_path);
+        final Path plain_text_path = Paths.get("/path/to/plain_text.csv");
+        final EncryptedDataSet new_data_set = new EncryptedDataSet(plain_text_path);
 
         // Data hasn't been encrypted yet.
 
         // Key string previously created using generate-AES-key.
-        SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
+        final SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
 
-        Path cipher_text_path = Paths.get("/path/to/cipher/text.txt");
+        final Path cipher_text_path = Paths.get("/path/to/cipher/text.txt");
 
         // Output encrypted data.
         new_data_set.print(cipher_text_path, key);
@@ -104,12 +104,12 @@ public class SymmetricallyEncryptedDataset {
     @SuppressWarnings("UnusedDeclaration")
     private static void access() throws CryptoException, IOException {
 
-        Path cipher_text_path = Paths.get("/path/to/cipher_text.txt");
+        final Path cipher_text_path = Paths.get("/path/to/cipher_text.txt");
 
         // Key string previously created using generate-AES-key.
-        SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
+        final SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
 
-        EncryptedDataSet existing_data_set = new EncryptedDataSet(cipher_text_path, key);
+        final EncryptedDataSet existing_data_set = new EncryptedDataSet(cipher_text_path, key);
         existing_data_set.print(System.out);
     }
 }

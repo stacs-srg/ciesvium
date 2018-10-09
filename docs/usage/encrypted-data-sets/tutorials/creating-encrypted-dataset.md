@@ -82,7 +82,7 @@ of the key for the data:
 <pre>package uk.ac.standrews.cs.data;
 import uk.ac.standrews.cs.utilities.dataset.encrypted.EncryptedDataSet;
 
-public class ExampleDataSet extends <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/ciesvium/index.html?uk/ac/standrews/cs/utilities/dataset/encrypted/EncryptedDataSet.html">EncryptedDataSet</a> {
+public class ExampleDataSet extends <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/ciesvium/?uk/ac/standrews/cs/utilities/dataset/encrypted/EncryptedDataSet.html">EncryptedDataSet</a> {
 
     public ExampleDataSet() throws Exception {
         super(
@@ -105,7 +105,9 @@ public class ExampleDataSetUse {
 
     public static void main(String[] args) throws Exception {
 
-        <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/ciesvium/index.html?uk/ac/standrews/cs/utilities/dataset/DataSet.html">DataSet</a> my_data = new ExampleDataSet();
+        <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/ciesvium/?uk/ac/standrews/cs/utilities/dataset/DataSet.html">DataSet</a> my_data = new ExampleDataSet();
         my_data.print(System.out);
     }
 }</pre>
+
+{% include navigation.html %}

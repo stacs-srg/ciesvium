@@ -14,3 +14,5 @@ able to access the data. Perhaps less obviously, you will not be able to make fu
 Re-generate the encrypted versions of the AES key using the updated authorized user list:
 
 <pre>src/main/scripts/re-encrypt-aes-key.sh src/main/resources/uk/ac/standrews/cs/data/authorized_keys.txt src/main/resources/uk/ac/standrews/cs/data/encrypted_key.txt</pre>
+
+{% include navigation.html %}
