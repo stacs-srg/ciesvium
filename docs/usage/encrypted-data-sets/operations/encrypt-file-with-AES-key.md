@@ -11,3 +11,5 @@ This encrypts a plain-text file using a given MIME-encoded AES key.
     src/main/scripts/encrypt-file-with-aes-key.sh <mime-encoded AES key> <path of plain-text file> <path of new encrypted file>
  
 **Result**: encrypted file is written to specified path
+
+{% include navigation.html %}

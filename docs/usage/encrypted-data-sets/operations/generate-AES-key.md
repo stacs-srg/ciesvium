@@ -11,3 +11,5 @@ This generates a new random MIME-encoded AES key.
     src/main/scripts/generate-aes-key.sh
 
 **Result**: new key is printed to standard out
+
+{% include navigation.html %}

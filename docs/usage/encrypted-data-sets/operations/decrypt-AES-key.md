@@ -1,4 +1,4 @@
-## Use Case: Decrypt AES Key
+## Operation: Decrypt AES Key
 
 This extracts a MIME-encoded AES key from a file containing the key
 encrypted with a number of authorized public keys. Each of the encrypted keys is decrypted in turn 
@@ -13,3 +13,5 @@ with this user's private key, until a valid AES key is extracted, which is then 
     src/main/scripts/decrypt-aes-key.sh <path of AES key encrypted for authorized users>
 
 **Result**: extracted key is printed to standard out
+
+{% include navigation.html %}

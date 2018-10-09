@@ -13,3 +13,5 @@ to a given file.
     src/main/scripts/generate-and-encrypt-aes-key.sh <path of authorized public keys file> <path of AES key encrypted for authorized users>
 
 **Result**: file containing new encrypted versions of the key is written to specified path
+
+{% include navigation.html %}

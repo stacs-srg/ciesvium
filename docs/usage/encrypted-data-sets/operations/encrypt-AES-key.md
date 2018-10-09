@@ -82,3 +82,5 @@ A key pair in [PEM format](http://serverfault.com/questions/9708/what-is-a-pem-f
 openssl genrsa -out private_key.pem 2048
 chmod 600 private_key.pem
 openssl rsa -in private_key.pem -pubout > public_key.pem</pre>
+
+{% include navigation.html %}

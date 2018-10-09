@@ -14,3 +14,5 @@ file.
     src/main/scripts/encrypt-file-with-encrypted-aes-key.sh <path of AES key encrypted for authorized users> <path of plain-text file> <path of new encrypted file>
 
 **Result**: encrypted file is written to specified path
+
+{% include navigation.html %}
