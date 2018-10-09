@@ -6,7 +6,7 @@ Maven dependency in their own project, without needing to do any explicit key ma
 
 **Initial assumptions**
 
-* The data to be encrypted is initially stored in the plain-text non-encrypted file <code>plain_text.csv</code>.
+* The data to be encrypted is initially stored in the plain-text non-encrypted CSV file <code>plain_text.csv</code>.
 * The encrypted data is to be stored in a Maven project with the root package <code>uk.ac.standrews.cs.data</code>.
 
 **Generate public and private keys**
@@ -26,7 +26,7 @@ Public keys for the users authorized to access the encrypted data can be stored 
 It's not essential to keep this file here, but it makes things simpler to keep track of. Solely for documentation
 purposes, first add a user identifier (e.g. email address), which is ignored by the code:
 
-<pre>cat user@email.com >> src/main/resources/uk/ac/standrews/cs/data/authorized_keys.txt</pre>
+<pre>cat graham.kirby@st-andrews.ac.uk >> src/main/resources/uk/ac/standrews/cs/data/authorized_keys.txt</pre>
 
 Copy your public key file:
 
@@ -45,7 +45,7 @@ HIE9ckCBYundUJOZD7L7AZCbxkKmscxtlljaWyqIGg79pOF++dD9NOSuSL35IIgr
 twIDAQAB
 -----END PUBLIC KEY-----</pre>
 
-Repeat with the PEM public keys for any other users who should be able to access the data. 
+Repeat with the public keys for any other users who should be able to access the data. 
 
 **Generate new symmetric key**
 
@@ -82,7 +82,7 @@ of the key for the data:
 <pre>package uk.ac.standrews.cs.data;
 import uk.ac.standrews.cs.utilities.dataset.encrypted.EncryptedDataSet;
 
-public class ExampleDataSet extends <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/index.html?uk/ac/standrews/cs/utilities/dataset/encrypted/EncryptedDataSet">EncryptedDataSet</a> {
+public class ExampleDataSet extends <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/index.html?uk/ac/standrews/cs/utilities/dataset/encrypted/EncryptedDataSet.html">EncryptedDataSet</a> {
 
     public ExampleDataSet() throws Exception {
         super(
@@ -105,7 +105,7 @@ public class ExampleDataSetUse {
 
     public static void main(String[] args) throws Exception {
 
-        <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/index.html?uk/ac/standrews/cs/utilities/dataset/encrypted/EncryptedDataSet">DataSet</a> my_data = new ExampleDataSet();
+        <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/index.html?uk/ac/standrews/cs/utilities/dataset/DataSet.html">DataSet</a> my_data = new ExampleDataSet();
         my_data.print(System.out);
     }
 }</pre>

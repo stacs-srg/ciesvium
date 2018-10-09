@@ -1,8 +1,6 @@
 ## Tutorial: Updating the Authorized Users for an Encapsulated Encrypted Data Set
 
-This describes how to add and remove authorized users for an [encapsulated data set](creating-encrypted-dataset.html).
-
-
+This describes how to add and remove authorized users for an existing [encapsulated data set](creating-encrypted-dataset.html).
 
 **Update the public key file**
 
