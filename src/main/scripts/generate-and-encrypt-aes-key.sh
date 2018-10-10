@@ -16,4 +16,4 @@
 # <http://www.gnu.org/licenses/>.
 #
 
-mvn exec:java -q -Dexec.cleanupDaemonThreads=false -Dexec.mainClass="uk.ac.standrews.cs.utilities.dataset.encrypted.util.GenerateAndEncryptAESKey" -e
+mvn exec:java -q -Dexec.cleanupDaemonThreads=false -Dexec.mainClass="uk.ac.standrews.cs.utilities.dataset.encrypted.util.GenerateAndEncryptAESKey" -e -Dexec.args="$1 $2"
