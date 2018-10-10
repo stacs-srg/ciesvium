@@ -82,34 +82,4 @@ public class SymmetricallyEncryptedDataset {
         existing_data_set.print(System.out);
     }
 
-    // Following methods defined in order to check that website examples compile.
-
-    @SuppressWarnings("UnusedDeclaration")
-    private static void create() throws CryptoException, IOException {
-
-        final Path plain_text_path = Paths.get("/path/to/plain_text.csv");
-        final EncryptedDataSet new_data_set = new EncryptedDataSet(plain_text_path);
-
-        // Data hasn't been encrypted yet.
-
-        // Key string previously created using generate-AES-key.
-        final SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
-
-        final Path cipher_text_path = Paths.get("/path/to/cipher/text.txt");
-
-        // Output encrypted data.
-        new_data_set.print(cipher_text_path, key);
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    private static void access() throws CryptoException, IOException {
-
-        final Path cipher_text_path = Paths.get("/path/to/cipher_text.txt");
-
-        // Key string previously created using generate-AES-key.
-        final SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
-
-        final EncryptedDataSet existing_data_set = new EncryptedDataSet(cipher_text_path, key);
-        existing_data_set.print(System.out);
-    }
 }

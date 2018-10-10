@@ -58,7 +58,7 @@ public abstract class DerivedDataSet extends DataSet {
     public abstract DataSet getDerivedDataSet(DataSet source_data_set) throws IOException;
 
     @SuppressWarnings("WeakerAccess")
-    protected static Extender addIdColumn() {
+    public static Extender addIdColumn() {
 
         return new Extender() {
 
@@ -81,7 +81,7 @@ public abstract class DerivedDataSet extends DataSet {
     }
 
     @SuppressWarnings("WeakerAccess")
-    protected static Projector moveIdColumnToFirst(final List<String> source_column_labels) {
+    public static Projector moveIdColumnToFirst(final List<String> source_column_labels) {
 
         return () -> {
             final List<String> result = new ArrayList<>();
@@ -93,13 +93,13 @@ public abstract class DerivedDataSet extends DataSet {
         };
     }
 
-    protected static DataSet renumber(final DataSet data_set) {
+    public static DataSet renumber(final DataSet data_set) {
 
         final List<String> source_labels = data_set.getColumnLabels();
         return data_set.project(removeFirstColumn(source_labels)).extend(addIdColumn()).project(moveIdColumnToFirst(source_labels));
     }
 
-    protected static DataSet removeDuplicates(final DataSet data_set) {
+    public static DataSet removeDuplicates(final DataSet data_set) {
 
         final DataSet result = new DataSet(data_set.getColumnLabels());
 
@@ -117,7 +117,7 @@ public abstract class DerivedDataSet extends DataSet {
         return result;
     }
 
-    protected static DataSet sort(final DataSet data_set) {
+    public static DataSet sort(final DataSet data_set) {
 
         final DataSet result = new DataSet(data_set.getColumnLabels());
 
