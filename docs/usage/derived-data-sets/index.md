@@ -1,7 +1,8 @@
 ## Usage: Derived Data Sets
 
 A derived data set allows a new data set to be defined in terms of various transformations applied to an existing data
-set, by extending class DerivedDataSet. The following methods need to be defined:
+set, by extending class <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/ciesvium/?uk/ac/standrews/cs/utilities/dataset/derived/DerivedDataSet.html">DerivedDataSet</a>.
+The following methods need to be defined:
 
     public DataSet getSourceDataSet() throws IOException;
     public abstract DataSet getDerivedDataSet(DataSet source_data_set) throws IOException;
