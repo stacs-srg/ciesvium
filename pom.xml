@@ -93,27 +93,16 @@
             </plugin>
 
             <plugin>
-
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.0.1</version>
-                <configuration>
-                    <detectLinks>true</detectLinks>
+                <configuration  combine.self="override">
                     <show>public</show>
+                    <isOffline>false</isOffline>
                     <links>
-                        <link>https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/utilities/</link>
+                        <link>http://quicksilver.host.cs.st-andrews.ac.uk/apidocs/utilities/</link>
                     </links>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                            <goal>javadoc</goal>
-                        </goals>
-                    </execution>
-
-                </executions>
             </plugin>
 
         </plugins>

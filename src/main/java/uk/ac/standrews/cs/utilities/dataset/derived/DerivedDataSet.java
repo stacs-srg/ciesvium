@@ -53,6 +53,7 @@ public abstract class DerivedDataSet extends DataSet {
      *
      * @param source_data_set the source dataset
      * @return the derived dataset
+     * @throws IOException if the derived dataset cannot be obtained
      */
     @SuppressWarnings("WeakerAccess")
     public abstract DataSet getDerivedDataSet(DataSet source_data_set) throws IOException;

@@ -30,9 +30,10 @@ public class GenerateAESKey {
     /**
      * Generates a new AES key and prints it in MIME-encoded form.
      *
+     * @param args ignored
      * @throws CryptoException if the key cannot be generated
      */
-    public static void main(String[] args) throws CryptoException {
+    public static void main(final String[] args) throws CryptoException {
 
         System.out.println(SymmetricEncryption.keyToString(SymmetricEncryption.generateRandomKey()));
     }
