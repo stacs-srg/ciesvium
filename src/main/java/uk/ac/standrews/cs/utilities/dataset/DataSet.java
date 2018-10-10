@@ -125,7 +125,7 @@ public class DataSet {
 
         this();
 
-        try (CSVParser parser = new CSVParser(reader, input_format.withHeader())) {
+        try (final CSVParser parser = new CSVParser(reader, input_format.withHeader())) {
 
             labels.addAll(getColumnLabels(parser));
 
@@ -272,24 +272,32 @@ public class DataSet {
      */
     public void print(final Appendable out) throws IOException {
 
-        final String[] header_array = labels.toArray(new String[labels.size()]);
-        final CSVPrinter printer = new CSVPrinter(out, output_format.withHeader(header_array));
+        final String[] header_array = labels.toArray(new String[0]);
+        try (final CSVPrinter printer = new CSVPrinter(out, output_format.withHeader(header_array))) {
 
-        for (final List<String> record : records) {
+            for (final List<String> record : records) {
 
-            printer.printRecord(record);
-            printer.flush();
+                printer.printRecord(record);
+                printer.flush();
+            }
         }
     }
 
+    /**
+     * Prints this dataset to the given file.
+     *
+     * @param path the path of the output file
+     * @throws IOException if this dataset cannot be printed to the given file
+     */
     @SuppressWarnings("unused")
     public void print(final Path path) throws IOException {
 
-        try (Writer writer = Files.newBufferedWriter(path)) {
+        try (final Writer writer = Files.newBufferedWriter(path)) {
             print(writer);
         }
     }
 
+    @SuppressWarnings("NonFinalFieldReferenceInEquals")
     @Override
     public boolean equals(final Object o) {
 
@@ -305,6 +313,7 @@ public class DataSet {
         return labels.equals(other_dataset.labels) && records.equals(other_dataset.records);
     }
 
+    @SuppressWarnings("NonFinalFieldReferencedInHashCode")
     @Override
     public int hashCode() {
 

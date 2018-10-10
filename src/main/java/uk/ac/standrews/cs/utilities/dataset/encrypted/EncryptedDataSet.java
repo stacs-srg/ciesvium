@@ -35,9 +35,35 @@ import java.util.List;
  */
 public class EncryptedDataSet extends DataSet {
 
+    /**
+     * Creates a new dataset with column labels and data read from a file with the given path.
+     *
+     * @param path the path of the file to read column labels and data from
+     * @throws IOException if the file cannot be read
+     */
+    public EncryptedDataSet(final Path path) throws IOException {
+
+        super(path);
+    }
+
+    /**
+     * Creates a new empty dataset with given column labels.
+     *
+     * @param labels the column labels
+     */
     public EncryptedDataSet(final List<String> labels) {
 
         super(labels);
+    }
+
+    /**
+     * Creates a new dataset containing a copy of the given dataset.
+     *
+     * @param existing_records the dataset to copy
+     */
+    public EncryptedDataSet(final DataSet existing_records) {
+
+        super(existing_records);
     }
 
     /**
@@ -52,9 +78,17 @@ public class EncryptedDataSet extends DataSet {
         init(decrypt(source_data, AES_key));
     }
 
-    public EncryptedDataSet(final Path source_data, final SecretKey AES_key) throws CryptoException, IOException {
+    /**
+     * Creates a new dataset from an encrypted file.
+     *
+     * @param path the path of the encrypted file
+     * @param AES_key     the AES key to decrypt the file
+     * @throws CryptoException if the data cannot be decrypted with the given key
+     * @throws IOException if data cannot be read from the file
+     */
+    public EncryptedDataSet(final Path path, final SecretKey AES_key) throws CryptoException, IOException {
 
-        try (final InputStream input_stream = Files.newInputStream(source_data)) {
+        try (final InputStream input_stream = Files.newInputStream(path)) {
             init(decrypt(input_stream, AES_key));
         }
     }
@@ -66,8 +100,8 @@ public class EncryptedDataSet extends DataSet {
      *
      * @param source_data          the encrypted data input stream
      * @param encrypted_key_stream an input stream containing versions of the MIME-encoded AES key encrypted with various users' public keys
-     * @throws IOException     if the key input stream cannot be read
-     * @throws CryptoException if data cannot be read from the input stream, or the AES key cannot be extracted with this user's private key
+     * @throws CryptoException if the AES key cannot be extracted with this user's private key
+     * @throws IOException     if either input stream cannot be read
      */
     @SuppressWarnings("UnusedDeclaration")
     public EncryptedDataSet(final InputStream source_data, final InputStream encrypted_key_stream) throws IOException, CryptoException {
@@ -75,21 +109,6 @@ public class EncryptedDataSet extends DataSet {
         final SecretKey AES_key = AsymmetricEncryption.getAESKey(encrypted_key_stream);
 
         init(decrypt(source_data, AES_key));
-    }
-
-    /**
-     * Creates a new dataset containing a copy of the given dataset.
-     *
-     * @param existing_records the dataset to copy
-     */
-    public EncryptedDataSet(final DataSet existing_records) {
-
-        super(existing_records);
-    }
-
-    public EncryptedDataSet(final Path source_data) throws IOException {
-
-        super(source_data);
     }
 
     /**
@@ -110,7 +129,14 @@ public class EncryptedDataSet extends DataSet {
         SymmetricEncryption.encrypt(AES_key, input_stream, makeOutputStream(out));
     }
 
-    public void print(final Path path, final SecretKey AES_key) throws IOException, CryptoException {
+    /**
+     * Prints this dataset, in encrypted form, to the given file.
+     *
+     * @param path     the path of the output file
+     * @param AES_key the AES key to encrypt the dataset
+     * @throws IOException     if this dataset cannot be printed to the given output object
+     * @throws CryptoException if the data cannot be encrypted
+     */    public void print(final Path path, final SecretKey AES_key) throws IOException, CryptoException {
 
         try (final Writer writer = Files.newBufferedWriter(path)) {
             print(writer, AES_key);
