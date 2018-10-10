@@ -4,6 +4,8 @@ This describes how to create a self-contained encrypted data set within a Java M
 encryption. The result is that a user who is authorized to access the data can do so simply by adding the project as a
 Maven dependency in their own project, without needing to do any explicit key management.
 
+A full example of an encapsulated encrypted data set project is [available on GitHub](https://github.com/stacs-srg/ciesvium-data-test).
+
 **Initial assumptions**
 
 * The  Maven project <code><a href="https://github.com/stacs-srg/ciesvium">ciesvium</a></code> has been cloned locally,
@@ -81,8 +83,9 @@ Encrypt the data file using the encrypted AES key, storing the resulting encrypt
 
 **Define a data access class**
 
-Create a class in <code>data-test</code> to access the encrypted data, containing references to the encrypted data file and the encrypted versions
-of the key for the data:
+Create a class in <code>data-test</code> to access the encrypted data, containing references to the encrypted data file
+and the encrypted versions of the key for the data. The package containing the class needs to correspond exactly to the
+the directory structure containing the resource files:
 
 <pre>package uk.ac.standrews.cs.data;
 import uk.ac.standrews.cs.utilities.dataset.encrypted.EncryptedDataSet;
@@ -114,5 +117,7 @@ public class ExampleDataSetUse {
         my_data.print(System.out);
     }
 }</pre>
+
+The full project containing this example is [available on GitHub](https://github.com/stacs-srg/ciesvium-data-use-test).
 
 {% include navigation.html %}
