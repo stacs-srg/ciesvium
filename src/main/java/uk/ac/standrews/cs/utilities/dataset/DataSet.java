@@ -141,6 +141,7 @@ public class DataSet {
             }
 
             reader.close();
+
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
@@ -273,13 +274,12 @@ public class DataSet {
     public void print(final Appendable out) throws IOException {
 
         final String[] header_array = labels.toArray(new String[0]);
-        try (final CSVPrinter printer = new CSVPrinter(out, output_format.withHeader(header_array))) {
+        @SuppressWarnings("resource") final CSVPrinter printer = new CSVPrinter(out, output_format.withHeader(header_array));
 
-            for (final List<String> record : records) {
+        for (final List<String> record : records) {
 
-                printer.printRecord(record);
-                printer.flush();
-            }
+            printer.printRecord(record);
+            printer.flush();
         }
     }
 
