@@ -55,8 +55,7 @@ public abstract class DerivedDataSet extends DataSet {
      * @return the derived dataset
      * @throws IOException if the derived dataset cannot be obtained
      */
-    @SuppressWarnings("WeakerAccess")
-    public abstract DataSet getDerivedDataSet(DataSet source_data_set) throws IOException;
+    protected abstract DataSet getDerivedDataSet(DataSet source_data_set) throws IOException;
 
     @SuppressWarnings("WeakerAccess")
     public static Extender addIdColumn() {

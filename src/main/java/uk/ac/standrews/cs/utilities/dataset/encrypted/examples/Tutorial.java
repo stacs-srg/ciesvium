@@ -18,15 +18,12 @@ package uk.ac.standrews.cs.utilities.dataset.encrypted.examples;
 
 import uk.ac.standrews.cs.utilities.crypto.CryptoException;
 import uk.ac.standrews.cs.utilities.crypto.SymmetricEncryption;
-import uk.ac.standrews.cs.utilities.dataset.DataSet;
 import uk.ac.standrews.cs.utilities.dataset.encrypted.EncryptedDataSet;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
 public class Tutorial {

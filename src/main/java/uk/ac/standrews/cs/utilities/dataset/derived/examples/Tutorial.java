@@ -18,7 +18,6 @@ package uk.ac.standrews.cs.utilities.dataset.derived.examples;
 
 import uk.ac.standrews.cs.utilities.dataset.DataSet;
 import uk.ac.standrews.cs.utilities.dataset.derived.DerivedDataSet;
-import uk.ac.standrews.cs.utilities.dataset.derived.Mapper;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -210,6 +210,7 @@ public class DataSet {
      *
      * @param values a new record
      */
+    @SuppressWarnings("unused")
     public void addRow(final String... values) {
 
         addRow(Arrays.asList(values));
