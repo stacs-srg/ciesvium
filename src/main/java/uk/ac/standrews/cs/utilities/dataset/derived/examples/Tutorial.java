@@ -18,6 +18,7 @@ package uk.ac.standrews.cs.utilities.dataset.derived.examples;
 
 import uk.ac.standrews.cs.utilities.dataset.DataSet;
 import uk.ac.standrews.cs.utilities.dataset.derived.DerivedDataSet;
+import uk.ac.standrews.cs.utilities.dataset.derived.Mapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -173,12 +174,22 @@ public class Tutorial {
         @Override
         public DataSet getDerivedDataSet(final DataSet source_data_set) {
 
-            return source_data_set.map((record, data_set) -> {
-                final List<String> new_row = new ArrayList<>();
-                for (final String element : record) {
-                    new_row.add(element.toUpperCase());
+            return source_data_set.map(new Mapper() {
+
+                @Override
+                public List<String> mapRecord(final List<String> record, final List<String> labels) {
+                    final List<String> new_row = new ArrayList<>();
+
+                    for (final String element : record) {
+                        new_row.add(element.toUpperCase());
+                    }
+                    return new_row;
                 }
-                return new_row;
+
+                @Override
+                public List<String> mapColumnLabels(final List<String> labels) {
+                    return labels;
+                }
             });
         }
     }

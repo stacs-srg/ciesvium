@@ -26,9 +26,7 @@ import uk.ac.standrews.cs.utilities.dataset.derived.Mapper;
 import uk.ac.standrews.cs.utilities.dataset.derived.Projector;
 import uk.ac.standrews.cs.utilities.dataset.derived.Selector;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -90,7 +88,7 @@ public class DataSet {
     @SuppressWarnings("WeakerAccess")
     public DataSet(final Path path) throws IOException {
 
-        this(FileManipulation.getInputStreamReader(path));
+        this(FileManipulation.getInputStream(path));
     }
 
     /**
@@ -98,7 +96,7 @@ public class DataSet {
      *
      * @param reader the Reader to read column labels and data from
      */
-    public DataSet(final Reader reader) {
+    public DataSet(final InputStream reader) {
 
         this(reader, DEFAULT_DELIMITER.charAt(0));
     }
@@ -109,7 +107,7 @@ public class DataSet {
      * @param reader    the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
      */
-    public DataSet(final Reader reader, final char delimiter) {
+    public DataSet(final InputStream reader, final char delimiter) {
 
         this(reader, DEFAULT_CSV_FORMAT.withDelimiter(delimiter));
     }
@@ -121,11 +119,11 @@ public class DataSet {
      * @param input_format the format
      */
     @SuppressWarnings("WeakerAccess")
-    public DataSet(final Reader reader, final CSVFormat input_format) {
+    public DataSet(final InputStream reader, final CSVFormat input_format) {
 
         this();
 
-        try (final CSVParser parser = new CSVParser(reader, input_format.withHeader())) {
+        try (final CSVParser parser = new CSVParser(new InputStreamReader(reader), input_format.withHeader())) {
 
             labels.addAll(getColumnLabels(parser));
 
@@ -139,8 +137,6 @@ public class DataSet {
                     records.add(items);
                 }
             }
-
-            reader.close();
 
         } catch (final IOException e) {
             throw new RuntimeException(e);
@@ -180,7 +176,7 @@ public class DataSet {
     @SuppressWarnings("unused")
     public DataSet map(final Mapper mapper) {
 
-        return new DataSet(labels, mapRecords(mapper));
+        return new DataSet(mapper.mapColumnLabels(labels), mapRecords(mapper));
     }
 
     /**
@@ -356,8 +352,9 @@ public class DataSet {
 
     private List<List<String>> mapRecords(final Mapper mapper) {
 
-        final Function<List<String>, List<String>> listListFunction = record -> mapper.map(record, this);
-        return records.stream().map(listListFunction).collect(Collectors.toList());
+        final Function<List<String>, List<String>> map_function = record -> mapper.mapRecord(record, labels);
+
+        return records.stream().map(map_function).collect(Collectors.toList());
     }
 
     private List<String> extendLabels(final Extender extender) {
@@ -383,11 +380,10 @@ public class DataSet {
 
     private static List<String> getColumnLabels(final CSVParser parser) {
 
-        final Map<String, Integer> headerMap = parser.getHeaderMap();
-        final List<String> labels = new ArrayList<>(headerMap.size());
-        for (final String label : headerMap.keySet()) {
-            final int pos = headerMap.get(label);
-            labels.add(pos, label);
+        final Map<String, Integer> header_map = parser.getHeaderMap();
+        final List<String> labels = new ArrayList<>(header_map.size());
+        for (final String label : header_map.keySet()) {
+            labels.add(header_map.get(label), label);
         }
         return labels;
     }

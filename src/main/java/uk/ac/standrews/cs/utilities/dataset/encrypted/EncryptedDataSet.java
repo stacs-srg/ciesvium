@@ -81,10 +81,10 @@ public class EncryptedDataSet extends DataSet {
     /**
      * Creates a new dataset from an encrypted file.
      *
-     * @param path the path of the encrypted file
-     * @param AES_key     the AES key to decrypt the file
+     * @param path    the path of the encrypted file
+     * @param AES_key the AES key to decrypt the file
      * @throws CryptoException if the data cannot be decrypted with the given key
-     * @throws IOException if data cannot be read from the file
+     * @throws IOException     if data cannot be read from the file
      */
     public EncryptedDataSet(final Path path, final SecretKey AES_key) throws CryptoException, IOException {
 
@@ -132,7 +132,7 @@ public class EncryptedDataSet extends DataSet {
     /**
      * Prints this dataset, in encrypted form, to the given file.
      *
-     * @param path     the path of the output file
+     * @param path    the path of the output file
      * @param AES_key the AES key to encrypt the dataset
      * @throws IOException     if this dataset cannot be printed to the given output object
      * @throws CryptoException if the data cannot be encrypted
@@ -161,6 +161,6 @@ public class EncryptedDataSet extends DataSet {
         final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
         SymmetricEncryption.decrypt(AES_key, source_data, output_stream);
 
-        return new DataSet(new StringReader(new String(output_stream.toByteArray())));
+        return new DataSet(new ByteArrayInputStream(output_stream.toByteArray()));
     }
 }

@@ -26,7 +26,6 @@ import uk.ac.standrews.cs.utilities.dataset.DataSet;
 import javax.crypto.SecretKey;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,12 +40,9 @@ public class EncryptedDataSetTest {
     private DataSet data_set;
 
     @Before
-    public void setup() throws IOException {
+    public void setup() {
 
-        try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(NON_EMPTY_DATA_SET_FILE_NAME))) {
-
-            data_set = new DataSet(reader, DELIMITER);
-        }
+        data_set = new DataSet(getClass().getResourceAsStream(NON_EMPTY_DATA_SET_FILE_NAME), DELIMITER);
     }
 
     @Test
@@ -68,7 +64,7 @@ public class EncryptedDataSetTest {
 
         final SecretKey key = SymmetricEncryption.generateRandomKey();
 
-        EncryptedDataSet[] data_sets = createAndReadDataSet(key, key);
+        final EncryptedDataSet[] data_sets = createAndReadDataSet(key, key);
         assertEquals(data_sets[0], data_sets[1]);
     }
 
@@ -81,7 +77,7 @@ public class EncryptedDataSetTest {
         createAndReadDataSet(key1, key2);
     }
 
-    private EncryptedDataSet[] createAndReadDataSet(SecretKey key1, SecretKey key2) throws IOException, CryptoException {
+    private static EncryptedDataSet[] createAndReadDataSet(final SecretKey key1, final SecretKey key2) throws IOException, CryptoException {
 
         final Path plain_text_path = Files.createTempFile("test", ".csv");
         final Path cipher_text_path = Files.createTempFile("test", ".txt");
@@ -97,7 +93,7 @@ public class EncryptedDataSetTest {
 
         // Use.
 
-        EncryptedDataSet existing_data_set = new EncryptedDataSet(cipher_text_path, key2);
+        final EncryptedDataSet existing_data_set = new EncryptedDataSet(cipher_text_path, key2);
 
         return new EncryptedDataSet[]{new_data_set, existing_data_set};
     }

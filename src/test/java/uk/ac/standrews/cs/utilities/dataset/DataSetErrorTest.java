@@ -30,18 +30,12 @@ public class DataSetErrorTest {
     @Test(expected = RuntimeException.class)
     public void fieldStartingButNotEndingWithQuoteThrowsException() throws IOException {
 
-        try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(DATA_FILE_NAME1))) {
-
-            new DataSet(reader, DELIMITER);
-        }
+        new DataSet(getClass().getResourceAsStream(DATA_FILE_NAME1), DELIMITER);
     }
 
     @Test(expected = RuntimeException.class)
     public void quotedFieldContainingUnescapedQuotesThrowsException() throws IOException {
 
-        try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(DATA_FILE_NAME2))) {
-
-            new DataSet(reader, DELIMITER);
-        }
+        new DataSet(getClass().getResourceAsStream(DATA_FILE_NAME2), DELIMITER);
     }
 }
