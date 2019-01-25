@@ -16,9 +16,6 @@
  */
 package uk.ac.standrews.cs.utilities.tables;
 
-import org.apache.commons.math3.distribution.TDistribution;
-import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
-
 import java.util.List;
 
 /**
@@ -31,10 +28,7 @@ public class ConfidenceIntervals extends StatisticValues {
     /**
      * The probability that the real mean lies within the confidence interval.
      */
-    @SuppressWarnings("WeakerAccess")
-    public static final double CONFIDENCE_LEVEL = 0.95;
-
-    private static final double ONE_TAILED_CONFIDENCE_LEVEL = 1 - (1 - CONFIDENCE_LEVEL) / 2;
+    public static final double DEFAULT_CONFIDENCE_LEVEL = 0.95;
 
     /**
      * Creates a new calculation.
@@ -42,50 +36,13 @@ public class ConfidenceIntervals extends StatisticValues {
      * @param data the numerical table
      */
     @SuppressWarnings({"UnusedDeclaration", "WeakerAccess"})
-    public ConfidenceIntervals(List<List<Double>> data) {
+    public ConfidenceIntervals(final List<List<Double>> data) {
 
         super(data);
     }
 
-    /**
-     * Calculates the confidence interval for a list of values.
-     *
-     * @param values the values
-     * @return the confidence interval of the values
-     */
-    @SuppressWarnings("WeakerAccess")
-    public static double calculateConfidenceInterval(List<Double> values) {
+    protected double calculateColumnResult(final List<Double> values) {
 
-        return standardError(values) * criticalValue(sampleSize(values));
-    }
-
-    protected double calculateColumnResult(List<Double> values) {
-
-        return calculateConfidenceInterval(values);
-    }
-
-    private static double standardError(List<Double> values) {
-
-        return standardDeviation(values) / Math.sqrt(sampleSize(values));
-    }
-
-    private static double standardDeviation(List<Double> values) {
-
-        double[] array = new double[values.size()];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = values.get(i);
-        }
-        return new StandardDeviation().evaluate(array);
-    }
-
-    private static double criticalValue(int number_of_values) {
-
-        int degrees_of_freedom = number_of_values - 1;
-        return new TDistribution(degrees_of_freedom).inverseCumulativeProbability(ONE_TAILED_CONFIDENCE_LEVEL);
-    }
-
-    private static int sampleSize(List<Double> values) {
-
-        return values.size();
+        return uk.ac.standrews.cs.utilities.stats.ConfidenceIntervals.calculateConfidenceInterval(values);
     }
 }
