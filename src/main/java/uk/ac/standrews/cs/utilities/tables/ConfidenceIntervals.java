@@ -16,6 +16,8 @@
  */
 package uk.ac.standrews.cs.utilities.tables;
 
+import uk.ac.standrews.cs.utilities.Statistics;
+
 import java.util.List;
 
 /**
@@ -43,6 +45,6 @@ public class ConfidenceIntervals extends StatisticValues {
 
     protected double calculateColumnResult(final List<Double> values) {
 
-        return uk.ac.standrews.cs.utilities.stats.ConfidenceIntervals.calculateConfidenceInterval(values);
+        return Statistics.confidenceInterval(values);
     }
 }

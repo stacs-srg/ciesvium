@@ -16,6 +16,8 @@
  */
 package uk.ac.standrews.cs.utilities.tables;
 
+import uk.ac.standrews.cs.utilities.Statistics;
+
 import java.util.List;
 
 /**
@@ -36,25 +38,8 @@ public class Means extends StatisticValues {
         super(data);
     }
 
-    /**
-     * Calculates the arithmetic mean of a list of values.
-     *
-     * @param values the values
-     * @return the mean of the values
-     */
-    @SuppressWarnings("WeakerAccess")
-    public static double calculateMean(final List<Double> values) {
-
-        double total = 0;
-        for (final Double value : values) {
-            total += value;
-        }
-
-        return total / values.size();
-    }
-
     protected double calculateColumnResult(final List<Double> values) {
 
-        return calculateMean(values);
+        return Statistics.mean(values);
     }
 }
