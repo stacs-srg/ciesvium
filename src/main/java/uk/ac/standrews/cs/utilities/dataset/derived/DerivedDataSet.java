@@ -20,6 +20,7 @@ import uk.ac.standrews.cs.utilities.archive.QuickSort;
 import uk.ac.standrews.cs.utilities.dataset.DataSet;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,10 @@ public abstract class DerivedDataSet extends DataSet {
     protected DerivedDataSet() throws IOException {
 
         init(getDerivedDataSet(getSourceDataSet()));
+    }
+
+    protected DerivedDataSet(Path path) throws IOException {
+        super(path);
     }
 
     /**
