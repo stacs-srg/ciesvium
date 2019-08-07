@@ -40,10 +40,6 @@ public abstract class DerivedDataSet extends DataSet {
         init(getDerivedDataSet(getSourceDataSet()));
     }
 
-    protected DerivedDataSet(Path path) throws IOException {
-        super(path);
-    }
-
     /**
      * Gets the source dataset.
      *
