@@ -28,7 +28,7 @@
 
     <groupId>com.github.stacs-srg</groupId>
     <artifactId>ciesvium</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>ciesvium</name>
 
