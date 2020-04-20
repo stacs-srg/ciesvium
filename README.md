@@ -6,26 +6,17 @@ over rectangular plain-text tables, with ability to import and export CSV files.
 where the source data is held in encrypted form, with both symmetric and asymmetric encryption options.
 
 ## Usage via maven
-
-```
-<repository>
-    <id>uk.ac.standrews.cs.maven.repository</id>
-    <name>School of Computer Science Maven Repository</name>
-    <url>https://maven.cs.st-andrews.ac.uk/</url>
-</repository>
-```
         
 ```
 <dependency>
-    <groupId>uk.ac.standrews.cs</groupId>
+    <groupId>com.github.stacs-srg</groupId>
     <artifactId>ciesvium</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
 ## See also
 
-* [API documentation](https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/ciesvium/)
+* [API documentation](https://javadoc.io/doc/com.github.stacs-srg/ciesvium)
 * [project website](https://stacs-srg.github.io/ciesvium/)
-* [build server](https://beast.cs.st-andrews.ac.uk/teamcity/viewType.html?buildTypeId=Ciesvium_Build) (private)
 * [relevant Maven goals](https://github.com/stacs-srg/hub/tree/master/maven) (private)
