@@ -12,6 +12,7 @@ In particular, the [dataset](https://javadoc.io/static/com.github.stacs-srg/cies
 
 ## Status
 
-![Java CI with Maven](https://github.com/stacs-srg/ciesvium/workflows/Java%20CI%20with%20Maven/badge.svg) [![codecov](https://codecov.io/gh/stacs-srg/ciesvium/branch/master/graph/badge.svg)](https://codecov.io/gh/stacs-srg/ciesvium)
+![Java CI with Maven](https://github.com/stacs-srg/ciesvium/workflows/Java%20CI%20with%20Maven/badge.svg) 
+[![codecov](https://codecov.io/gh/stacs-srg/ciesvium/branch/master/graph/badge.svg)](https://codecov.io/gh/stacs-srg/ciesvium)
 
 {% include navigation.html %}
