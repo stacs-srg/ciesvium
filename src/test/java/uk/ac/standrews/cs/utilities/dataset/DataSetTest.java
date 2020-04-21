@@ -179,11 +179,6 @@ public class DataSetTest {
     }
 
     @Test
-    public void dummy() {
-        fail();
-    }
-
-    @Test
     public void dataSetRoundTripGivesExpectedResults() throws IOException {
 
         final Path temp_path = Files.createTempFile("cvs_test", ".csv");
