@@ -6,7 +6,6 @@ over rectangular plain-text tables, with ability to import and export CSV files.
 where the source data is held in encrypted form, with both symmetric and asymmetric encryption options.
 
 ![Java CI with Maven](https://github.com/stacs-srg/ciesvium/workflows/Java%20CI%20with%20Maven/badge.svg)
-<img src="https://github.com/stacs-srg/ciesvium/workflows/Java%20CI%20with%20Maven/badge.svg">
 [![javadoc](https://javadoc.io/badge2/com.github.stacs-srg/ciesvium/javadoc.svg)](https://javadoc.io/doc/com.github.stacs-srg/ciesvium)
 [![codecov](https://codecov.io/gh/stacs-srg/ciesvium/branch/master/graph/badge.svg)](https://codecov.io/gh/stacs-srg/ciesvium)
 
