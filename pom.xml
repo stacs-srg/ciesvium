@@ -20,7 +20,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.stacs-srg</groupId>
+    <parent>
+        <groupId>com.github.stacs-srg</groupId>
+        <artifactId>common-pom</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
     <artifactId>ciesvium</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -30,48 +35,18 @@
     <url>https://stacs-srg.github.io/ciesvium/</url>
     <inceptionYear>2015</inceptionYear>
 
-    <organization>
-        <name>School of Computer Science at University of St Andrews</name>
-        <url>https://www.st-andrews.ac.uk/computer-science/</url>
-    </organization>
-
-    <licenses>
-        <license>
-            <name>GNU General Public License 3.0</name>
-            <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
     <scm>
         <connection>scm:git:git://github.com/stacs-srg/ciesvium.git</connection>
         <developerConnection>scm:git:ssh://github.com:stacs-srg/ciesvium.git</developerConnection>
         <url>https://github.com/stacs-srg/ciesvium/tree/dev</url>
     </scm>
 
-    <properties>
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.8</jdk.version>
-
-        <license.template>src/main/resources/license-template.txt</license.template>
-        <license.style>src/main/resources/license-custom-style.xml</license.style>
-
-        <maven.compiler.source>${jdk.version}</maven.compiler.source>
-        <maven.compiler.target>${jdk.version}</maven.compiler.target>
-        <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
-        <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
-
-        <test.normallyExcludedTestCategories>uk.ac.standrews.cs.test.category.Slow</test.normallyExcludedTestCategories>
-
-    </properties>
-
     <dependencies>
 
         <dependency>
-            <groupId>uk.ac.standrews.cs</groupId>
+            <groupId>com.github.stacs-srg</groupId>
             <artifactId>utilities</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
@@ -88,263 +63,29 @@
 
     </dependencies>
 
-    <build>
-        <sourceDirectory>src/main/java</sourceDirectory>
-        
-        <plugins>
-
-            <plugin>
-                <!-- This checks that the required licence, specified in the licence template        -->
-                <!-- file src/main/resources/license-template.txt, is applied to all source files.   -->
-
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>3.0</version>
-            </plugin>
-
-            <!-- Needed for Codecov -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.9</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
-                <configuration  combine.self="override">
-                    <show>public</show>
-                    <isOffline>false</isOffline>
-                    <links>
-                        <link>http://quicksilver.host.cs.st-andrews.ac.uk/apidocs/utilities/</link>
-                    </links>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-
-        </plugins>
-        <pluginManagement>
-
-            <plugins>
-
-                <plugin>
-                    <!-- This checks that the required licence, specified in the licence template        -->
-                    <!-- file src/main/resources/license-template.txt, is applied to all source files.   -->
-
-                    <groupId>com.mycila</groupId>
-                    <artifactId>license-maven-plugin</artifactId>
-                    <version>3.0</version>
-                    <configuration>
-                        <header>${license.template}</header>
-
-                        <headerDefinitions>
-
-                            <!-- This custom style is used to override the default formatting for Java   -->
-                            <!-- files, which uses Javadoc format, therefore causing confusion with the  -->
-                            <!-- actual class-level Javadoc.                                             -->
-                            <headerDefinition>${license.style}</headerDefinition>
-
-                        </headerDefinitions>
-
-                        <mapping>
-                            <java>JAVA_STYLE</java>
-                        </mapping>
-
-                        <includes>
-                            <include>src/**</include>
-                            <include>pom.xml</include>
-                        </includes>
-
-                        <excludes>
-                            <exclude>**/README</exclude>
-                            <exclude>src/test/resources/**</exclude>
-                            <exclude>src/main/resources/**</exclude>
-                            <exclude>src/docs/**</exclude>
-                            <exclude>src/site/**</exclude>
-                        </excludes>
-
-                    </configuration>
-
-                    <executions>
-                        <execution>
-                            <phase>initialize</phase>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
-    </build>
-
-    <repositories>
-
-        <!-- Repository to which this module is deployed, and others retrieved from.                 -->
-        <!-- This has to be replicated from the parent POM so the parent POM can be found.           -->
-        <repository>
-            <id>uk.ac.standrews.cs.maven.repository</id>
-            <name>School of Computer Science Maven Repository</name>
-            <url>https://maven.cs.st-andrews.ac.uk/</url>
-        </repository>
-
-    </repositories>
-
-    <distributionManagement>
-        <!-- Central Repository -->
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
     <profiles>
         <!-- Deployment profile (required so these plugins are only used when deploying) -->
         <profile>
             <id>deploy</id>
             <build>
                 <plugins>
-                    <!-- Source plugin -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
 
-                    <!-- Javadoc plugin -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.0.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <!-- GPG plugin -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                                <configuration>
-                                    <!-- Prevent `gpg` from using pinentry programs -->
-                                    <gpgArguments>
-                                        <arg>--pinentry-mode</arg>
-                                        <arg>loopback</arg>
-                                    </gpgArguments>
-                                </configuration>
-                            </execution>
-                        </executions>
+                        <!-- combine.self option suppresses settings from parent POM -->
+                        <configuration  combine.self="override">
+                            <show>public</show>
+                            <isOffline>false</isOffline>
+                            <links>
+                                <link>https://javadoc.io/doc/com.github.stacs-srg/utilities/</link>
+                            </links>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
-
-    <developers>
-        <developer>
-            <id/>
-            <name>Alan Dearle</name>
-            <email>alan.dearle@st-andrews.ac.uk</email>
-            <url>https://al.host.cs.st-andrews.ac.uk/</url>
-            <organization>University of St Andrews</organization>
-            <organizationUrl>http://www.st-andrews.ac.uk/</organizationUrl>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id/>
-            <name>Graham Kirby</name>
-            <email>graham.kirby@st-andrews.ac.uk</email>
-            <url>https://graham.host.cs.st-andrews.ac.uk/</url>
-            <organization>University of St Andrews</organization>
-            <organizationUrl>http://www.st-andrews.ac.uk/</organizationUrl>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id/>
-            <name>Özgür Akgün</name>
-            <email>ozgur.akgun@st-andrews.ac.uk</email>
-            <url>https://ozgur.host.cs.st-andrews.ac.uk/</url>
-            <organization>University of St Andrews</organization>
-            <organizationUrl>http://www.st-andrews.ac.uk/</organizationUrl>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id/>
-            <name>Tom Dalton</name>
-            <email>tsd4@st-andrews.ac.uk</email>
-            <organization>University of St Andrews</organization>
-            <organizationUrl>http://www.st-andrews.ac.uk/</organizationUrl>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-    </developers>
-    <contributors>
-        <contributor>
-            <name>Masih Hajiarab Derkani</name>
-            <organization>Previously University of St Andrews</organization>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </contributor>
-    </contributors>
 
 </project>
