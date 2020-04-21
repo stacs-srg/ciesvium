@@ -20,15 +20,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class DataSetTest {
 
@@ -178,6 +176,11 @@ public class DataSetTest {
         assertEquals(1, projected_data_set.getRecords().size());
         assertEquals(3, projected_data_set.getRecords().get(0).size());
         assertEquals("jkl", projected_data_set.getValue(projected_data_set.getRecords().get(0), "col4"));
+    }
+
+    @Test
+    public void dummy() {
+        fail();
     }
 
     @Test
