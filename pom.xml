@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.github.stacs-srg</groupId>
         <artifactId>common-pom</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.2</version>
     </parent>
 
     <artifactId>ciesvium</artifactId>
@@ -43,10 +43,13 @@
 
     <dependencies>
 
+        <!-- To check for updated versions of dependencies, run on command line:
+             mvn versions:display-dependency-updates -->
+
         <dependency>
             <groupId>com.github.stacs-srg</groupId>
             <artifactId>utilities</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.3</version>
         </dependency>
 
         <dependency>
