@@ -12,8 +12,8 @@ able to access the data. Perhaps less obviously, you will not be able to make fu
 
 **Regenerate the encrypted versions of the symmetric key**
 
-Re-generate the encrypted versions of the AES key using the updated authorized user list:
+Re-generate the encrypted versions of the AES key using the updated authorized user list, from within the ciesvium root directory:
 
-<pre>ciesvium/src/main/scripts/re-encrypt-aes-key.sh data-test/src/main/resources/uk/ac/standrews/cs/data/authorized_keys.txt data-test/src/main/resources/uk/ac/standrews/cs/data/encrypted_key.txt</pre>
+<pre>src/main/scripts/re-encrypt-aes-key.sh ../data-test/src/main/resources/uk/ac/standrews/cs/data/authorized-keys.txt ../data-test/src/main/resources/uk/ac/standrews/cs/data/encrypted-key.txt</pre>
 
 {% include navigation.html %}
