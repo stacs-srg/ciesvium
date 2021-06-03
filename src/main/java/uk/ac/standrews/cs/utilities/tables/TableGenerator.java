@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Systems Research Group, University of St Andrews:
+ * Copyright 2021 Systems Research Group, University of St Andrews:
  * <https://github.com/stacs-srg>
  *
  * This file is part of the module ciesvium.

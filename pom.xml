@@ -1,6 +1,6 @@
 <!--
 
-    Copyright 2020 Systems Research Group, University of St Andrews:
+    Copyright 2021 Systems Research Group, University of St Andrews:
     <https://github.com/stacs-srg>
 
     This file is part of the module ciesvium.
@@ -21,13 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.stacs-srg</groupId>
+        <groupId>uk.ac.standrews.cs</groupId>
         <artifactId>common-pom</artifactId>
-        <version>1.0.2</version>
+        <version>4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>ciesvium</artifactId>
-    <version>1.0.2</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>ciesvium</name>
 
@@ -35,11 +35,22 @@
     <url>https://stacs-srg.github.io/ciesvium/</url>
     <inceptionYear>2015</inceptionYear>
 
-    <scm>
-        <connection>scm:git:git://github.com/stacs-srg/ciesvium.git</connection>
-        <developerConnection>scm:git:ssh://github.com:stacs-srg/ciesvium.git</developerConnection>
-        <url>https://github.com/stacs-srg/ciesvium/tree/dev</url>
-    </scm>
+    <properties>
+
+        <commons-csv-version>1.8</commons-csv-version>
+
+    </properties>
+
+    <repositories>
+
+        <!-- This has to be replicated from the parent POM so the parent POM can be found. -->
+        <repository>
+            <id>uk.ac.standrews.cs.maven.repository</id>
+            <name>School of Computer Science Maven Repository</name>
+            <url>https://maven.cs.st-andrews.ac.uk/</url>
+        </repository>
+
+    </repositories>
 
     <dependencies>
 
@@ -47,48 +58,17 @@
              mvn versions:display-dependency-updates -->
 
         <dependency>
-            <groupId>com.github.stacs-srg</groupId>
+            <groupId>uk.ac.standrews.cs</groupId>
             <artifactId>utilities</artifactId>
-            <version>1.0.3</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
-            <version>1.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>3.6</version>
+            <version>${commons-csv-version}</version>
         </dependency>
 
     </dependencies>
-
-    <profiles>
-        <!-- Deployment profile (required so these plugins are only used when deploying) -->
-        <profile>
-            <id>deploy</id>
-            <build>
-                <plugins>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.0.1</version>
-                        <!-- combine.self option suppresses settings from parent POM -->
-                        <configuration  combine.self="override">
-                            <show>public</show>
-                            <isOffline>false</isOffline>
-                            <links>
-                                <link>https://javadoc.io/doc/com.github.stacs-srg/utilities/</link>
-                            </links>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>
