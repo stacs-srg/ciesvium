@@ -37,7 +37,7 @@
 
     <properties>
 
-        <commons-csv-version>1.8</commons-csv-version>
+        <commons-csv-version>1.9.0</commons-csv-version>
 
     </properties>
 
@@ -70,5 +70,21 @@
         </dependency>
 
     </dependencies>
+
+    <developers>
+
+        <developer>
+            <id/>
+            <name>Graham Kirby</name>
+            <email>graham.kirby@st-andrews.ac.uk</email>
+            <url>https://www.st-andrews.ac.uk/computer-science/people/gnck</url>
+            <organization>University of St Andrews</organization>
+            <organizationUrl>https://www.st-andrews.ac.uk/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+
+    </developers>
 
 </project>
