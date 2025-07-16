@@ -72,10 +72,13 @@ public class EncryptedDataSet extends DataSet {
      * @param source_data the encrypted data input stream
      * @param AES_key     the AES key to decrypt the input stream
      * @throws CryptoException if data cannot be read from the input stream, or the data cannot be decrypted with the given key
+     * @throws IOException     if an IOError occurs when auto-closing streams
      */
-    public EncryptedDataSet(final InputStream source_data, final SecretKey AES_key) throws CryptoException {
-
-        init(decrypt(source_data, AES_key));
+    public EncryptedDataSet(final InputStream source_data, final SecretKey AES_key) throws CryptoException, IOException {
+        try (InputStream in = source_data) {
+             init(decrypt(source_data, AES_key));
+        }
+       
     }
 
     /**
@@ -88,9 +91,7 @@ public class EncryptedDataSet extends DataSet {
      */
     public EncryptedDataSet(final Path path, final SecretKey AES_key) throws CryptoException, IOException {
 
-        try (final InputStream input_stream = Files.newInputStream(path)) {
-            init(decrypt(input_stream, AES_key));
-        }
+        this(Files.newInputStream(path), AES_key);
     }
 
     /**
@@ -106,9 +107,7 @@ public class EncryptedDataSet extends DataSet {
     @SuppressWarnings("UnusedDeclaration")
     public EncryptedDataSet(final InputStream source_data, final InputStream encrypted_key_stream) throws IOException, CryptoException {
 
-        final SecretKey AES_key = AsymmetricEncryption.getAESKey(encrypted_key_stream);
-
-        init(decrypt(source_data, AES_key));
+        this(source_data, AsymmetricEncryption.getAESKey(encrypted_key_stream));
     }
 
     /**
