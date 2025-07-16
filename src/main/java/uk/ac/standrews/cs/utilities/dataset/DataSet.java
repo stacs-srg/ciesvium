@@ -91,7 +91,7 @@ public class DataSet {
     @SuppressWarnings("WeakerAccess")
     public DataSet(final Path path) throws IOException {
 
-        this(path, Charset.defaultCharset());
+        this(FileManipulation.getInputStream(path), Charset.defaultCharset());
     }
 
     /**
@@ -116,7 +116,7 @@ public class DataSet {
      */
     public DataSet(final InputStream reader) {
 
-        this(reader, Charset.defaultCharset());
+        this(reader, DEFAULT_DELIMITER.charAt(0), Charset.defaultCharset());
     }
 
     /**
@@ -140,7 +140,7 @@ public class DataSet {
      */
     public DataSet(final InputStream reader, final char delimiter) {
 
-        this(reader, delimiter, Charset.defaultCharset());
+        this(reader, DEFAULT_CSV_FORMAT.builder().setDelimiter(delimiter).build(), Charset.defaultCharset());
     }
 
     /**
