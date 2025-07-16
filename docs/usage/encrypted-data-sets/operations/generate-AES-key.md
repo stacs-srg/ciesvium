@@ -4,12 +4,17 @@ This generates a new random MIME-encoded AES key.
 
 **Java class**:
 
-    uk.ac.standrews.cs.util.dataset.encrypted.util.GenerateAESKey
+``java
+uk.ac.standrews.cs.util.dataset.encrypted.util.GenerateAESKey
+```
 
 **Bash script**:
 
-    src/main/scripts/generate-aes-key.sh
+```sh
+src/main/scripts/generate-aes-key.sh
+```
+**Result**:
 
-**Result**: new key is printed to standard out
+New key is printed to standard out
 
 {% include navigation.html %}
