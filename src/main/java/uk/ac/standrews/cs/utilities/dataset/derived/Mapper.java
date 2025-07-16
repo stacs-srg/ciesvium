@@ -16,8 +16,6 @@
  */
 package uk.ac.standrews.cs.utilities.dataset.derived;
 
-import uk.ac.standrews.cs.utilities.dataset.DataSet;
-
 import java.util.List;
 
 /**
