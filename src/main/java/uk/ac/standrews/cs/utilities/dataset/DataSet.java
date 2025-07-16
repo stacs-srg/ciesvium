@@ -44,7 +44,8 @@ import java.util.stream.Collectors;
 public class DataSet {
 
     /**
-     * The default CSV file format: <a href="https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html#RFC4180">RFC4180</a>.
+     * The default CSV file format:
+     * <a href="https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html#RFC4180">RFC4180</a>.
      */
     @SuppressWarnings("WeakerAccess")
     public static final CSVFormat DEFAULT_CSV_FORMAT = CSVFormat.RFC4180;
@@ -99,7 +100,7 @@ public class DataSet {
      * the given path.
      *
      * @param path the path of the file to read column labels and data from
-     * @param charset the charset to use
+     * @param charset charset of the input file
      * @throws IOException if the file cannot be read
      */
     @SuppressWarnings("WeakerAccess")
@@ -124,7 +125,7 @@ public class DataSet {
      * Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
      *
      * @param reader the Reader to read column labels and data from
-     * @param charset charset to use
+     * @param charset charset of the input stream data
      */
     public DataSet(final InputStream reader, final Charset charset) {
 
@@ -149,7 +150,7 @@ public class DataSet {
      *
      * @param reader    the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
-     * @param charset   the charset to use
+     * @param charset   charset of the input stream data
      */
     public DataSet(final InputStream reader, final char delimiter, final Charset charset) {
 
@@ -202,7 +203,8 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset from this dataset, with the same column labels and selected rows.
+     * Creates a new dataset from this dataset, with the same column labels and
+     * selected rows.
      *
      * @param selector a selector to determine which rows should be included
      * @return the new dataset
@@ -216,7 +218,8 @@ public class DataSet {
     /**
      * Creates a new dataset from this dataset, with specified columns.
      *
-     * @param projector a projector to determine which columns should be included
+     * @param projector a projector to determine which columns should be
+     *                  included
      * @return the new dataset
      */
     @SuppressWarnings("WeakerAccess")
@@ -226,9 +229,11 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset from this dataset, with each row transformed in a specified way.
+     * Creates a new dataset from this dataset, with each row transformed in a
+     * specified way.
      *
-     * @param mapper a mapper to transform each row into a new row in the output dataset
+     * @param mapper a mapper to transform each row into a new row in the output
+     *               dataset
      * @return the new dataset
      */
     @SuppressWarnings("unused")
@@ -238,9 +243,11 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset from this dataset, with additional generated columns.
+     * Creates a new dataset from this dataset, with additional generated
+     * columns.
      *
-     * @param extender an extender to generate additional column labels and values
+     * @param extender an extender to generate additional column labels and
+     *                 values
      * @return the new dataset
      */
     @SuppressWarnings("unused")
@@ -294,7 +301,7 @@ public class DataSet {
      * Gets the value for a specified column label, from a given record.
      *
      * @param record the record
-     * @param label  the label of the required column
+     * @param label the label of the required column
      * @return the value of the column for the record
      * @throws RuntimeException if the specified label is not present
      */
@@ -324,7 +331,8 @@ public class DataSet {
      * Prints this dataset to the given output object.
      *
      * @param out the output object
-     * @throws IOException if this dataset cannot be printed to the given output object
+     * @throws IOException if this dataset cannot be printed to the given output
+     *                     object.
      */
     public void print(final Appendable out) throws IOException {
 
