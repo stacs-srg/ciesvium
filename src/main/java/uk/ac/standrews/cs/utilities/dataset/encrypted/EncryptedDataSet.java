@@ -23,6 +23,7 @@ import uk.ac.standrews.cs.utilities.dataset.DataSet;
 
 import javax.crypto.SecretKey;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -75,10 +76,10 @@ public class EncryptedDataSet extends DataSet {
      * @throws IOException     if an IOError occurs when auto-closing streams
      */
     public EncryptedDataSet(final InputStream source_data, final SecretKey AES_key) throws CryptoException, IOException {
+
         try (InputStream in = source_data) {
              init(decrypt(source_data, AES_key));
         }
-       
     }
 
     /**
@@ -156,10 +157,15 @@ public class EncryptedDataSet extends DataSet {
     }
 
     private static DataSet decrypt(final InputStream source_data, final SecretKey AES_key) throws CryptoException {
+        
+        return decrypt(source_data, AES_key, Charset.defaultCharset());
+    }
+
+    private static DataSet decrypt(final InputStream source_data, final SecretKey AES_key, final Charset charset) throws CryptoException {
 
         final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
         SymmetricEncryption.decrypt(AES_key, source_data, output_stream);
 
-        return new DataSet(new ByteArrayInputStream(output_stream.toByteArray()));
+        return new DataSet(new ByteArrayInputStream(output_stream.toByteArray()), charset);
     }
 }

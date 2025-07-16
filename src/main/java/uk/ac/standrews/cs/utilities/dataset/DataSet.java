@@ -35,8 +35,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Simple abstraction over a plain-text dataset. Data is represented as a list of rows, each of which is a list of strings, plus
- * a list of string column labels.
+ * Simple abstraction over a plain-text dataset. Data is represented as a list
+ * of rows, each of which is a list of strings, plus a list of string column
+ * labels.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
@@ -81,7 +82,8 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset with column labels and data read from a file with the given path.
+     * Creates a new dataset with column labels and data read from a file with
+     * the given path.
      *
      * @param path the path of the file to read column labels and data from
      * @throws IOException if the file cannot be read
@@ -89,28 +91,69 @@ public class DataSet {
     @SuppressWarnings("WeakerAccess")
     public DataSet(final Path path) throws IOException {
 
-        this(FileManipulation.getInputStream(path));
+        this(path, Charset.defaultCharset());
     }
 
     /**
-     * Creates a new dataset with column labels and data read from the given Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
+     * Creates a new dataset with column labels and data read from a file with
+     * the given path.
+     *
+     * @param path the path of the file to read column labels and data from
+     * @param charset the charset to use
+     * @throws IOException if the file cannot be read
+     */
+    @SuppressWarnings("WeakerAccess")
+    public DataSet(final Path path, Charset charset) throws IOException {
+
+        this(FileManipulation.getInputStream(path), charset);
+    }
+
+    /**
+     * Creates a new dataset with column labels and data read from the given
+     * Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
      *
      * @param reader the Reader to read column labels and data from
      */
     public DataSet(final InputStream reader) {
 
-        this(reader, DEFAULT_DELIMITER.charAt(0));
+        this(reader, Charset.defaultCharset());
     }
 
     /**
-     * Creates a new dataset with column labels and data read from the given Reader, using the default CSV input format and a specified delimiter.
+     * Creates a new dataset with column labels and data read from the given
+     * Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
+     *
+     * @param reader the Reader to read column labels and data from
+     * @param charset charset to use
+     */
+    public DataSet(final InputStream reader, final Charset charset) {
+
+        this(reader, DEFAULT_DELIMITER.charAt(0), charset);
+    }
+
+    /**
+     * Creates a new dataset with column labels and data read from the given
+     * Reader, using the default CSV input format and a specified delimiter.
      *
      * @param reader    the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
      */
     public DataSet(final InputStream reader, final char delimiter) {
 
-        this(reader, DEFAULT_CSV_FORMAT.builder().setDelimiter(delimiter).build());
+        this(reader, delimiter, Charset.defaultCharset());
+    }
+
+    /**
+     * Creates a new dataset with column labels and data read from the given
+     * Reader, using the default CSV input format and a specified delimiter.
+     *
+     * @param reader    the Reader to read column labels and data from
+     * @param delimiter the delimiter for labels and values
+     * @param charset   the charset to use
+     */
+    public DataSet(final InputStream reader, final char delimiter, final Charset charset) {
+
+        this(reader, DEFAULT_CSV_FORMAT.builder().setDelimiter(delimiter).build(), charset);
     }
 
     /**
