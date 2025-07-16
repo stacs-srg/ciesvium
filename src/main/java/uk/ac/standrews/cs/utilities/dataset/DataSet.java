@@ -110,7 +110,7 @@ public class DataSet {
      */
     public DataSet(final InputStream reader, final char delimiter) {
 
-        this(reader, DEFAULT_CSV_FORMAT.withDelimiter(delimiter));
+        this(reader, DEFAULT_CSV_FORMAT.builder().setDelimiter(delimiter).build());
     }
 
     /**
@@ -138,7 +138,7 @@ public class DataSet {
 
         this();
 
-        try (final CSVParser parser = new CSVParser(new InputStreamReader(reader, charset), input_format.withHeader())) {
+        try (final CSVParser parser = new CSVParser(new InputStreamReader(reader, charset), input_format.builder().setHeader().setSkipHeaderRecord(true).build())) {
 
             labels.addAll(getColumnLabels(parser));
 
@@ -286,7 +286,7 @@ public class DataSet {
     public void print(final Appendable out) throws IOException {
 
         final String[] header_array = labels.toArray(new String[0]);
-        @SuppressWarnings("resource") final CSVPrinter printer = new CSVPrinter(out, output_format.withHeader(header_array));
+        @SuppressWarnings("resource") final CSVPrinter printer = new CSVPrinter(out, output_format.builder().setHeader(header_array).build());
 
         for (final List<String> record : records) {
 
