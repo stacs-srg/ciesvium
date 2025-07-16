@@ -27,6 +27,7 @@ import uk.ac.standrews.cs.utilities.dataset.derived.Projector;
 import uk.ac.standrews.cs.utilities.dataset.derived.Selector;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -113,17 +114,31 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset with column labels and data read from the given Reader, using a specified input format.
+     * Creates a new dataset with column labels and data read from the given
+     * Reader, using a specified input format.
      *
      * @param reader       the Reader to read column labels and data from
      * @param input_format the format
      */
     @SuppressWarnings("WeakerAccess")
     public DataSet(final InputStream reader, final CSVFormat input_format) {
+        this(reader, input_format, Charset.defaultCharset());
+    }
+
+    /**
+     * Creates a new dataset with column labels and data read from the given
+     * Reader, using a specified input format and charset.
+     *
+     * @param reader       the Reader to read column labels and data from
+     * @param input_format the format
+     * @param charset      the charset of the input data
+     */
+    @SuppressWarnings("WeakerAccess")
+    public DataSet(final InputStream reader, final CSVFormat input_format, Charset charset) {
 
         this();
 
-        try (final CSVParser parser = new CSVParser(new InputStreamReader(reader), input_format.withHeader())) {
+        try (final CSVParser parser = new CSVParser(new InputStreamReader(reader, charset), input_format.withHeader())) {
 
             labels.addAll(getColumnLabels(parser));
 
