@@ -19,7 +19,6 @@ package uk.ac.standrews.cs.utilities.dataset;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class DataSetErrorTest {
 

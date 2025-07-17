@@ -1,31 +1,35 @@
 ## Operation: Encrypt AES Key
 
-This encrypts a MIME-encoded AES key using public-key encryption. The AES key is encrypted separately with each of a
-number of authorized public keys read from a specified file. The resulting encrypted versions of the AES key are written
-to a given file.
+This encrypts a MIME-encoded AES key using public-key encryption. The AES key is encrypted separately with each of a number of authorized public keys read from a specified file. The resulting encrypted versions of the AES key are written to a given file.
 
-Each public key is assumed to be in [PEM format](http://serverfault.com/questions/9708/what-is-a-pem-file-and-how-does-it-differ-from-other-openssl-generated-key-file),
-and delimited by *begin* and *end* comments as illustrated in the example
-below. The email address shown preceding each key is for reference only, and is ignored by this method. See later on
-this page for an example of how to generate a PEM key pair.
+Each public key is assumed to be in [PEM format](http://serverfault.com/questions/9708/what-is-a-pem-file-and-how-does-it-differ-from-other-openssl-generated-key-file), and delimited by *begin* and *end* comments as illustrated in the example below. The email address shown preceding each key is for reference only, and is ignored by this method. See later on this page for an example of how to generate a PEM key pair.
 
 **Java class**:
- 
-    uk.ac.standrews.cs.util.dataset.encrypted.util.EncryptAESKey
- 
-**Bash script**:
- 
-    src/main/scripts/encrypt-aes-key.sh <mime-encoded AES key> <path of authorized public keys file> <path of AES key encrypted for authorized users>
 
-**Result**: file containing encrypted versions of the key is written to specified path
+```java
+uk.ac.standrews.cs.util.dataset.encrypted.util.EncryptAESKey
+```
+
+**Bash script**:
+
+```sh
+src/main/scripts/encrypt-aes-key.sh <mime-encoded AES key> <path of authorized public keys file> <path of AES key encrypted for authorized users>
+```
+
+**Result**:
+
+File containing encrypted versions of the key is written to specified path
 
 **Example input key**:
 
-<pre>lr8Rnrakxi1+SYbX+Xnieg==</pre>
+```txt
+lr8Rnrakxi1+SYbX+Xnieg==
+```
 
 **Example input file**:
 
-<pre>graham.kirby@st-andrews.ac.uk
+```txt
+graham.kirby@st-andrews.ac.uk
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzTDV8GGUcZByuw2zRu8+
 SEbJTg+lT9Vx8H+5N/BNUViHVZb+zToQdzwnRE2vqQAdRfLwoNBHoiD+buUivy+l
@@ -54,11 +58,12 @@ wa/kd3P3UxKbT254QUUGa5fHlY8t30N84BGdE/3yI4Hi1kwdJjRStXUjY6qcjWC0
 U0CNTNEPxzvuSntWkezz8vI5SI9CqWP2UkTUUOcXuVMPiNFdyGnjH71ssgQh/14p
 AYGxSMMYJyAPfDCAgaYGpIt4DrthONHrhWltpC0cAk3Xsqa2au61IMJYcyDfvn6u
 tQIDAQAB
------END PUBLIC KEY-----</pre>
+-----END PUBLIC KEY-----
+```
 
 **Example output file**:
-
-<pre>YAgStYOQwmEMYyiRafzyuy+ixlLRzOwd2kXiWiV00758TtUoZDH4BvJOtcVt5ydxDLN6QxA0KKOt
+```txt
+YAgStYOQwmEMYyiRafzyuy+ixlLRzOwd2kXiWiV00758TtUoZDH4BvJOtcVt5ydxDLN6QxA0KKOt
 h7nbIuFjI76sOGZ+jmxa4gjpbSxJJpfa3LI7/9ygt5oLQyHxbsfCMF+xR/Czz4vgWbf/sV8i3+F9
 MfVXufks1Z2OVVxy+t8refVBVoPilguufIxnAaXR+IvS3U5BZwYDVGxjTMopgZ9GQ2/xFnNGZwlr
 2OUDresZ30+jYtJuTOnr37hur3BQiPdl+R2YgU9fHQ+IjfgDjfDUUM8KpBHeEaKYakOpYwkDBbdN
@@ -72,15 +77,18 @@ fg72ur8CIXdiPgZOEBq9P3smOJmVIanhB9Jf7aGyeQu7AjNBMzWnN3Jlqsh763ZirIndckZoMGwX
 F2Tm1IHK6yESU5Jx3A12i/2V8cWpupTGrm/L+7SKDO+CqPVpYSmobBKcZUTrqWdNCbbTdXU/J2Pu
 8Eq5H069VCJHVIglyqX5YhhyUsDWpRIHtc3ljTJWbTo95QfguHhL4n0+nyUHs+/Dx+KDETvi0KkU
 6HyKQSPyPgjzaV+xwz92Q20sOBl+qGTCAanAFL9LjjfFV69uNzufHHIf80nvJC4BTvDb9pdU7+gY
-cm+4NfhasqddIj/uLm7yWw3NpzSQoeGML4UtaQ==</pre>
+cm+4NfhasqddIj/uLm7yWw3NpzSQoeGML4UtaQ==
+```
 
 **Generating a key pair**:
 
 A key pair in [PEM format](http://serverfault.com/questions/9708/what-is-a-pem-file-and-how-does-it-differ-from-other-openssl-generated-key-file) can be generated on Unix using [OpenSSL](https://www.openssl.org/docs/manmaster/man1/openssl-genrsa.html) on Unix:
 
-<pre>cd ~/.ssh
+```sh
+cd ~/.ssh
 openssl genrsa -out private_key.pem 2048
 chmod 600 private_key.pem
-openssl rsa -in private_key.pem -pubout > public_key.pem</pre>
+openssl rsa -in private_key.pem -pubout > public_key.pem
+```
 
 {% include navigation.html %}

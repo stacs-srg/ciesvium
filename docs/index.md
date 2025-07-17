@@ -9,6 +9,6 @@ In particular, the *dataset* package and its sub-packages provide a simple abstr
 
 ## Status
 
-![Java CI with Maven](https://github.com/stacs-srg/ciesvium/workflows/Java%20CI%20with%20Maven/badge.svg) 
+* ![Java CI with Maven](https://github.com/stacs-srg/ciesvium/workflows/Java%20CI%20with%20Maven/badge.svg) 
 
 {% include navigation.html %}

@@ -32,9 +32,11 @@ import java.nio.file.Paths;
 public class GenerateAndEncryptAESKey {
 
     /**
-     * Generates a MIME-encoded key and encrypts it separately with each of a number of public keys.
+     * Generates a MIME-encoded key and encrypts it separately with each of a
+     * number of public keys.
      *
-     * @param args MIME-encoded AES key, path of file containing public keys, path of new file containing encrypted keys
+     * @param args MIME-encoded AES key, path of file containing public keys, 
+     * path of new file containing encrypted keys
      * @throws CryptoException if the encryption cannot be completed
      * @throws IOException     if a file cannot be accessed
      */

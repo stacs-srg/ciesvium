@@ -71,9 +71,12 @@ public class SymmetricallyEncryptedDataset {
 
     private void testDataSetUsingResources() throws IOException, CryptoException {
 
-        // Assume that encrypted dataset has already been created and copied into resources tree.
+        /* 
+         * Assume that encrypted dataset has already been created and copied
+         * into resources tree. Key string previously created using
+         * generate-AES-key.
+         */
 
-        // Key string previously created using generate-AES-key.
         final SecretKey key = SymmetricEncryption.getKey("L8rWNo0uZ+rBsTP08DR4Mw==");
 
         final InputStream input_stream = getClass().getResourceAsStream("cipher_text.txt");

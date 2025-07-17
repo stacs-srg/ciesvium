@@ -27,6 +27,7 @@ import uk.ac.standrews.cs.utilities.dataset.derived.Projector;
 import uk.ac.standrews.cs.utilities.dataset.derived.Selector;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -34,18 +35,26 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Simple abstraction over a plain-text dataset. Data is represented as a list of rows, each of which is a list of strings, plus
- * a list of string column labels.
+ * Simple abstraction over a plain-text dataset. Data is represented as a list
+ * of rows, each of which is a list of strings, plus a list of string column
+ * labels.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
 public class DataSet {
 
     /**
-     * The default CSV file format: <a href="https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html#RFC4180">RFC4180</a>.
+     * The default CSV file format:
+     * <a href="https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html#RFC4180">RFC4180</a>.
      */
     @SuppressWarnings("WeakerAccess")
     public static final CSVFormat DEFAULT_CSV_FORMAT = CSVFormat.RFC4180;
+
+    /**
+     * Charset to use for decoding input data.
+     */
+    @SuppressWarnings("WeakerAccess")
+    private static final Charset DEFAULT_CHARSET = Charset.defaultCharset();
 
     /**
      * The default delimiter.
@@ -80,7 +89,8 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset with column labels and data read from a file with the given path.
+     * Creates a new dataset with column labels and data read from a file with
+     * the given path.
      *
      * @param path the path of the file to read column labels and data from
      * @throws IOException if the file cannot be read
@@ -92,7 +102,8 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset with column labels and data read from the given Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
+     * Creates a new dataset with column labels and data read from the given
+     * Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
      *
      * @param reader the Reader to read column labels and data from
      */
@@ -102,18 +113,20 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset with column labels and data read from the given Reader, using the default CSV input format and a specified delimiter.
+     * Creates a new dataset with column labels and data read from the given
+     * Reader, using the default CSV input format and a specified delimiter.
      *
      * @param reader    the Reader to read column labels and data from
      * @param delimiter the delimiter for labels and values
      */
     public DataSet(final InputStream reader, final char delimiter) {
 
-        this(reader, DEFAULT_CSV_FORMAT.withDelimiter(delimiter));
+        this(reader, DEFAULT_CSV_FORMAT.builder().setDelimiter(delimiter).build());
     }
 
     /**
-     * Creates a new dataset with column labels and data read from the given Reader, using a specified input format.
+     * Creates a new dataset with column labels and data read from the given
+     * Reader, using a specified input format.
      *
      * @param reader       the Reader to read column labels and data from
      * @param input_format the format
@@ -123,7 +136,7 @@ public class DataSet {
 
         this();
 
-        try (final CSVParser parser = new CSVParser(new InputStreamReader(reader), input_format.withHeader())) {
+        try (final CSVParser parser = new CSVParser(new InputStreamReader(reader, getCharset()), input_format.builder().setHeader().setSkipHeaderRecord(true).build())) {
 
             labels.addAll(getColumnLabels(parser));
 
@@ -144,7 +157,8 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset from this dataset, with the same column labels and selected rows.
+     * Creates a new dataset from this dataset, with the same column labels and
+     * selected rows.
      *
      * @param selector a selector to determine which rows should be included
      * @return the new dataset
@@ -158,7 +172,8 @@ public class DataSet {
     /**
      * Creates a new dataset from this dataset, with specified columns.
      *
-     * @param projector a projector to determine which columns should be included
+     * @param projector a projector to determine which columns should be
+     *                  included
      * @return the new dataset
      */
     @SuppressWarnings("WeakerAccess")
@@ -168,9 +183,11 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset from this dataset, with each row transformed in a specified way.
+     * Creates a new dataset from this dataset, with each row transformed in a
+     * specified way.
      *
-     * @param mapper a mapper to transform each row into a new row in the output dataset
+     * @param mapper a mapper to transform each row into a new row in the output
+     *               dataset
      * @return the new dataset
      */
     @SuppressWarnings("unused")
@@ -180,9 +197,11 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset from this dataset, with additional generated columns.
+     * Creates a new dataset from this dataset, with additional generated
+     * columns.
      *
-     * @param extender an extender to generate additional column labels and values
+     * @param extender an extender to generate additional column labels and
+     *                 values
      * @return the new dataset
      */
     @SuppressWarnings("unused")
@@ -236,7 +255,7 @@ public class DataSet {
      * Gets the value for a specified column label, from a given record.
      *
      * @param record the record
-     * @param label  the label of the required column
+     * @param label the label of the required column
      * @return the value of the column for the record
      * @throws RuntimeException if the specified label is not present
      */
@@ -266,12 +285,13 @@ public class DataSet {
      * Prints this dataset to the given output object.
      *
      * @param out the output object
-     * @throws IOException if this dataset cannot be printed to the given output object
+     * @throws IOException if this dataset cannot be printed to the given output
+     *                     object.
      */
     public void print(final Appendable out) throws IOException {
 
         final String[] header_array = labels.toArray(new String[0]);
-        @SuppressWarnings("resource") final CSVPrinter printer = new CSVPrinter(out, output_format.withHeader(header_array));
+        @SuppressWarnings("resource") final CSVPrinter printer = new CSVPrinter(out, output_format.builder().setHeader(header_array).build());
 
         for (final List<String> record : records) {
 
@@ -410,5 +430,9 @@ public class DataSet {
     private static boolean containsDuplicates(final List<String> strings) {
 
         return new HashSet<>(strings).size() < strings.size();
+    }
+
+    protected static Charset getCharset() {
+        return DEFAULT_CHARSET;
     }
 }

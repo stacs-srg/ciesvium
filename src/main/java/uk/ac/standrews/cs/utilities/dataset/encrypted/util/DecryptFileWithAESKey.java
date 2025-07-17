@@ -33,9 +33,10 @@ public class DecryptFileWithAESKey {
     /**
      * Decrypts a file with a given AES key.
      *
-     * @param args MIME-encoded AES key, path of encrypted file, path of new plain-text file
+     * @param args MIME-encoded AES key, path of encrypted file, path of new
+     * plain-text file.
      * @throws CryptoException if the decryption cannot be completed
-     * @throws IOException     if a file cannot be accessed
+     * @throws IOException if a file cannot be accessed
      */
     public static void main(String[] args) throws CryptoException, IOException {
 

@@ -28,8 +28,9 @@ import java.util.List;
 public interface Selector {
 
     /**
-     * Determines whether a given record should be selected. The containing dataset is also
-     * made available in case the selection logic needs access to the column labels.
+     * Determines whether a given record should be selected. The containing
+     * dataset is also made available in case the selection logic needs access
+     * to the column labels.
      *
      * @param record   the record to be considered
      * @param data_set the dataset within which the record occurs

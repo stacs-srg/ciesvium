@@ -1,9 +1,6 @@
 ## Usage: Encrypted Data Sets
 
-Encrypted data sets are based on <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/ciesvium/?uk/ac/standrews/cs/utilities/dataset/encrypted/EncryptedDataSet.html">EncryptedDataSet</a>,
-a subclass of <a href="https://quicksilver.host.cs.st-andrews.ac.uk/apidocs/ciesvium/?uk/ac/standrews/cs/utilities/dataset/DataSet.html">DataSet</a>.
-They allow the persistent data to be encrypted using either symmetric or public key encryption. The latter offers the
-convenience of avoiding explicit key management for authorized users.
+Encrypted data sets are based on **`EncryptedDataSet`**, a subclass of **`DataSet`**. They allow the persistent data to be encrypted using either symmetric or public key encryption. The latter offers the convenience of avoiding explicit key management for authorized users.
 
 ### Documentation
 

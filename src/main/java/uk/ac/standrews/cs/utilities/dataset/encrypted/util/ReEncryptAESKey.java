@@ -24,7 +24,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 /**
- * Re-encrypts a previously encrypted symmetric key with a new list of public keys.
+ * Re-encrypts a previously encrypted symmetric key with a new list of public
+ * keys.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
@@ -32,9 +33,12 @@ import java.nio.file.Paths;
 public class ReEncryptAESKey {
 
     /**
-     * Encrypts a previously encrypted AES key separately with each of a number of public keys, and over-writes the file of encrypted versions of the AES key.
+     * Encrypts a previously encrypted AES key separately with each of a number
+     * of public keys, and over-writes the file of encrypted versions of the AES
+     * key.
      *
-     * @param args path of file containing public keys, path of file containing encrypted keys to be updated
+     * @param args path of file containing public keys, path of file containing
+     * encrypted keys to be updated
      * @throws CryptoException if the encryption cannot be completed
      * @throws IOException     if a file cannot be accessed
      */
