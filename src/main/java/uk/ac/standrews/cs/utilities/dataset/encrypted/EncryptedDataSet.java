@@ -23,7 +23,6 @@ import uk.ac.standrews.cs.utilities.dataset.DataSet;
 
 import javax.crypto.SecretKey;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -46,20 +45,6 @@ public class EncryptedDataSet extends DataSet {
     public EncryptedDataSet(final Path path) throws IOException {
 
         super(path);
-    }
-
-    /**
-     * Creates a new dataset with column labels and data read from a file with
-     * the given path.
-     *
-     * @param path              the path of the file to read column labels and
-     *                          data from
-     * @param charset           the charset of the input file
-     * @throws IOException      if the file cannot be read
-     */
-    public EncryptedDataSet(final Path path, final Charset charset) throws IOException {
-
-        super(path, charset);
     }
 
     /**
@@ -87,43 +72,15 @@ public class EncryptedDataSet extends DataSet {
      *
      * @param source_data       the encrypted data input stream
      * @param AES_key           the AES key to decrypt the input stream
-     * @param charset           charset of the input stream data
-     * @throws CryptoException  if data cannot be read from the input stream, or
-     *                          the data cannot be decrypted with the given key
-     * @throws IOException      if an IOError occurs when auto-closing streams
-     */
-    public EncryptedDataSet(final InputStream source_data, final SecretKey AES_key, Charset charset) throws CryptoException, IOException {
-
-        try (InputStream in = source_data) {
-            init(decrypt(source_data, AES_key, charset));
-        }
-    }
-
-        /**
-     * Creates a new dataset from an encrypted input stream.
-     *
-     * @param source_data       the encrypted data input stream
-     * @param AES_key           the AES key to decrypt the input stream
      * @throws CryptoException  if data cannot be read from the input stream, or
      *                          the data cannot be decrypted with the given key
      * @throws IOException      if an IOError occurs when auto-closing streams
      */
     public EncryptedDataSet(final InputStream source_data, final SecretKey AES_key) throws CryptoException, IOException {
-        this(source_data, AES_key, Charset.defaultCharset());
-    }
 
-    /**
-     * Creates a new dataset from an encrypted file.
-     *
-     * @param path              the path of the encrypted file
-     * @param AES_key           the AES key to decrypt the file
-     * @param charset           charset of the input file
-     * @throws CryptoException  if the data cannot be decrypted with the given key
-     * @throws IOException      if data cannot be read from the file
-     */
-    public EncryptedDataSet(final Path path, final SecretKey AES_key, Charset charset) throws CryptoException, IOException {
-
-        this(Files.newInputStream(path), AES_key, charset);
+        try (InputStream in = source_data) {
+            init(decrypt(source_data, AES_key));
+        }
     }
 
     /**
@@ -136,7 +93,7 @@ public class EncryptedDataSet extends DataSet {
      */
     public EncryptedDataSet(final Path path, final SecretKey AES_key) throws CryptoException, IOException {
 
-        this(Files.newInputStream(path), AES_key, Charset.defaultCharset());
+        this(Files.newInputStream(path), AES_key);
     }
 
     /**
@@ -206,11 +163,11 @@ public class EncryptedDataSet extends DataSet {
         };
     }
 
-    private static DataSet decrypt(final InputStream source_data, final SecretKey AES_key, final Charset charset) throws CryptoException {
+    private static DataSet decrypt(final InputStream source_data, final SecretKey AES_key) throws CryptoException {
 
         final ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
         SymmetricEncryption.decrypt(AES_key, source_data, output_stream);
 
-        return new DataSet(new ByteArrayInputStream(output_stream.toByteArray()), charset);
+        return new DataSet(new ByteArrayInputStream(output_stream.toByteArray()));
     }
 }

@@ -51,6 +51,12 @@ public class DataSet {
     public static final CSVFormat DEFAULT_CSV_FORMAT = CSVFormat.RFC4180;
 
     /**
+     * Charset to use for decoding input data.
+     */
+    @SuppressWarnings("WeakerAccess")
+    private static final Charset DEFAULT_CHARSET = Charset.defaultCharset();
+
+    /**
      * The default delimiter.
      */
     @SuppressWarnings("WeakerAccess")
@@ -92,7 +98,7 @@ public class DataSet {
     @SuppressWarnings("WeakerAccess")
     public DataSet(final Path path) throws IOException {
 
-        this(FileManipulation.getInputStream(path), Charset.defaultCharset());
+        this(FileManipulation.getInputStream(path));
     }
 
     /**
@@ -103,19 +109,7 @@ public class DataSet {
      */
     public DataSet(final InputStream reader) {
 
-        this(reader, DEFAULT_DELIMITER.charAt(0), Charset.defaultCharset());
-    }
-
-    /**
-     * Creates a new dataset with column labels and data read from the given
-     * Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
-     *
-     * @param reader the Reader to read column labels and data from
-     * @param charset charset of the input stream data
-     */
-    public DataSet(final InputStream reader, final Charset charset) {
-
-        this(reader, DEFAULT_DELIMITER.charAt(0), charset);
+        this(reader, DEFAULT_DELIMITER.charAt(0));
     }
 
     /**
@@ -127,20 +121,7 @@ public class DataSet {
      */
     public DataSet(final InputStream reader, final char delimiter) {
 
-        this(reader, DEFAULT_CSV_FORMAT.builder().setDelimiter(delimiter).build(), Charset.defaultCharset());
-    }
-
-    /**
-     * Creates a new dataset with column labels and data read from the given
-     * Reader, using the default CSV input format and a specified delimiter.
-     *
-     * @param reader    the Reader to read column labels and data from
-     * @param delimiter the delimiter for labels and values
-     * @param charset   charset of the input stream data
-     */
-    public DataSet(final InputStream reader, final char delimiter, final Charset charset) {
-
-        this(reader, DEFAULT_CSV_FORMAT.builder().setDelimiter(delimiter).build(), charset);
+        this(reader, DEFAULT_CSV_FORMAT.builder().setDelimiter(delimiter).build());
     }
 
     /**
@@ -152,23 +133,10 @@ public class DataSet {
      */
     @SuppressWarnings("WeakerAccess")
     public DataSet(final InputStream reader, final CSVFormat input_format) {
-        this(reader, input_format, Charset.defaultCharset());
-    }
-
-    /**
-     * Creates a new dataset with column labels and data read from the given
-     * Reader, using a specified input format and charset.
-     *
-     * @param reader       the Reader to read column labels and data from
-     * @param input_format the format
-     * @param charset      the charset of the input data
-     */
-    @SuppressWarnings("WeakerAccess")
-    public DataSet(final InputStream reader, final CSVFormat input_format, Charset charset) {
 
         this();
 
-        try (final CSVParser parser = new CSVParser(new InputStreamReader(reader, charset), input_format.builder().setHeader().setSkipHeaderRecord(true).build())) {
+        try (final CSVParser parser = new CSVParser(new InputStreamReader(reader, getCharset()), input_format.builder().setHeader().setSkipHeaderRecord(true).build())) {
 
             labels.addAll(getColumnLabels(parser));
 
@@ -462,5 +430,9 @@ public class DataSet {
     private static boolean containsDuplicates(final List<String> strings) {
 
         return new HashSet<>(strings).size() < strings.size();
+    }
+
+    protected static Charset getCharset() {
+        return DEFAULT_CHARSET;
     }
 }
