@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 /**
- * Extracts an AES key from a file containing the key encrypted separately with the public key
- * of each authorized user.
+ * Extracts an AES key from a file containing the key encrypted separately with
+ * the public key of each authorized user.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
@@ -34,12 +34,13 @@ import java.nio.file.Paths;
 public class DecryptAESKey {
 
     /**
-     * Extracts a MIME-encoded AES key from a file containing the key encrypted separately with the public key
-     * of each authorized user.
+     * Extracts a MIME-encoded AES key from a file containing the key encrypted
+     * separately with the public key of each authorized user.
      *
-     * @param args path of file containing encrypted key, path of plain-text file, path of new encrypted file
+     * @param args path of file containing encrypted key, path of plain-text
+     * file, path of new encrypted file.
      * @throws CryptoException if the encryption cannot be completed
-     * @throws IOException     if a file cannot be accessed
+     * @throws IOException if a file cannot be accessed
      */
     public static void main(String[] args) throws CryptoException, IOException {
 

@@ -25,7 +25,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Abstract superclass for datasets derived from existing datasets via a sequence of relational-style transformations.
+ * Abstract superclass for datasets derived from existing datasets via a
+ * sequence of relational-style transformations.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */

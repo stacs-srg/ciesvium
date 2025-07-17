@@ -33,10 +33,11 @@ import java.nio.file.Paths;
 public class EncryptFileWithEncryptedAESKey {
 
     /**
-     * Encrypts a file with an AES key extracted from a file containing the key encrypted separately with the public key
-     * of each authorized user.
+     * Encrypts a file with an AES key extracted from a file containing the key
+     * encrypted separately with the public key of each authorized user.
      *
-     * @param args path of file containing encrypted key, path of plain-text file, path of new encrypted file
+     * @param args path of file containing encrypted key, path of plain-text
+     * file, path of new encrypted file
      * @throws CryptoException if the encryption cannot be completed
      * @throws IOException     if a file cannot be accessed
      */

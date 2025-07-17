@@ -33,12 +33,13 @@ import java.nio.file.Paths;
 public class DecryptFileWithEncryptedAESKey {
 
     /**
-     * Decrypts a file with an AES key extracted from a file containing the key encrypted separately with the public key
-     * of each authorized user.
+     * Decrypts a file with an AES key extracted from a file containing the key
+     * encrypted separately with the public key of each authorized user.
      *
-     * @param args path of file containing encrypted key, path of encrypted file, path of new plain-text file
+     * @param args path of file containing encrypted key, path of encrypted file,
+     * path of new plain-text file
      * @throws CryptoException if the encryption cannot be completed
-     * @throws IOException     if a file cannot be accessed
+     * @throws IOException if a file cannot be accessed
      */
     public static void main(String[] args) throws CryptoException, IOException {
 

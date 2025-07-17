@@ -30,7 +30,8 @@ public interface Mapper {
      * Creates a new record based on an existing record.
      *
      * @param record   the existing record
-     * @param labels the column labels for the dataset within which the record occurs
+     * @param labels the column labels for the dataset within which the record
+     * occurs
      * @return a new record based on the existing record
      */
     List<String> mapRecord(List<String> record, List<String> labels);

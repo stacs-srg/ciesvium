@@ -21,7 +21,8 @@ import uk.ac.standrews.cs.utilities.Statistics;
 import java.util.List;
 
 /**
- * Class to calculate confidence intervals for values within columns in a rectangular numerical table.
+ * Class to calculate confidence intervals for values within columns in a
+ * rectangular numerical table.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */

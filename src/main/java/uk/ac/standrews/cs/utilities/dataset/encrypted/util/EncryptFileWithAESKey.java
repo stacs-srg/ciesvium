@@ -33,7 +33,8 @@ public class EncryptFileWithAESKey {
     /**
      * Encrypts a file with a given AES key.
      *
-     * @param args MIME-encoded AES key, path of plain-text file, path of new encrypted file
+     * @param args MIME-encoded AES key, path of plain-text file, path of new
+     * encrypted file
      * @throws CryptoException if the encryption cannot be completed
      * @throws IOException     if a file cannot be accessed
      */

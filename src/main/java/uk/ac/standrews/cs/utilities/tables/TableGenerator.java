@@ -23,13 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class to generate a table summarising a set of datasets, intended for combining results from multiple runs
- * of an experiment.
- * <p>
- * Each dataset is expected to have the same column headings, and numerical data in the rows.
- * The summary table contains the same column labels as the input datasets, and a row for each dataset.
- * The value at each position gives the mean and confidence interval of the values in that column for
- * the corresponding dataset.
+ * Class to generate a table summarising a set of datasets, intended for
+ * combining results from multiple runs of an experiment.
+ * 
+ * Each dataset is expected to have the same column headings, and numerical data
+ * in the rows. The summary table contains the same column labels as the input
+ * datasets, and a row for each dataset.
+ * 
+ * The value at each position gives the mean and confidence interval of the
+ * values in that column for the corresponding dataset.
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
@@ -45,9 +47,14 @@ public class TableGenerator {
      * Creates a new table generator.
      *
      * @param data_sets             the datasets to be summarised
-     * @param first_column_heading  the heading for the first column of the resulting table
-     * @param row_labels            the labels to be used in the remainder of the first column of the resulting table
-     * @param display_as_percentage a list of booleans, one per column in the input datasets, indicating whether the corresponding value should be displayed as a percentage
+     * @param first_column_heading  the heading for the first column of the
+     *                              resulting table.
+     * @param row_labels            the labels to be used in the remainder of 
+     *                              the first column of the resulting table.
+     * @param display_as_percentage a list of booleans, one per column in the
+     *                              input datasets, indicating whether the
+     *                              corresponding value should be displayed as a
+     *                              percentage.
      */
     @SuppressWarnings("UnusedDeclaration")
     public TableGenerator(List<DataSet> data_sets, String first_column_heading, List<String> row_labels, List<Boolean> display_as_percentage) {
@@ -95,8 +102,13 @@ public class TableGenerator {
     @SuppressWarnings("UnusedDeclaration")
     public DataSet getTable() {
 
-        // Get the column labels from the data set for the first row - all rows should have the same labels.
-        // Construct a new array list for column labels since DataSet#getColumnLabels() returns an unmodifiable list.
+        /*
+         * Get the column labels from the data set for the first row - all rows
+         * should have the same labels.
+         * 
+         * Construct a new array list for column labels since
+         * DataSet#getColumnLabels() returns an unmodifiable list.
+         */
         List<String> column_labels = new ArrayList<>(data_sets.get(0).getColumnLabels());
         column_labels.add(0, first_column_heading);
 

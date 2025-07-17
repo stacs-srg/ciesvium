@@ -28,12 +28,14 @@ import java.util.List;
 public interface Extender {
 
     /**
-     * Gets the additional values to be appended to a given record. The containing dataset is also
-     * made available in case the extender logic needs access to the column labels.
+     * Gets the additional values to be appended to a given record. The containing
+     * dataset is also made available in case the extender logic needs access to
+     * the column labels.
      *
      * @param record   the existing record
      * @param data_set the dataset within which the record occurs
-     * @return a list of new values to be appended to the record in the extended dataset
+     * @return a list of new values to be appended to the record in the extended
+     * dataset
      */
     @SuppressWarnings("UnusedDeclaration")
     List<String> getAdditionalValues(List<String> record, DataSet data_set);

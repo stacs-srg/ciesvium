@@ -96,20 +96,6 @@ public class DataSet {
     }
 
     /**
-     * Creates a new dataset with column labels and data read from a file with
-     * the given path.
-     *
-     * @param path the path of the file to read column labels and data from
-     * @param charset charset of the input file
-     * @throws IOException if the file cannot be read
-     */
-    @SuppressWarnings("WeakerAccess")
-    public DataSet(final Path path, Charset charset) throws IOException {
-
-        this(FileManipulation.getInputStream(path), charset);
-    }
-
-    /**
      * Creates a new dataset with column labels and data read from the given
      * Reader, using the default delimiter: {@value #DEFAULT_DELIMITER}.
      *
