@@ -432,7 +432,7 @@ public class DataSet {
         return new HashSet<>(strings).size() < strings.size();
     }
 
-    protected static Charset getCharset() {
+    protected Charset getCharset() {
         return DEFAULT_CHARSET;
     }
 }
