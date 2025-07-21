@@ -16,8 +16,8 @@
  */
 package uk.ac.standrews.cs.utilities.dataset;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -26,7 +26,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DataSetTest {
 
@@ -37,7 +37,7 @@ public class DataSetTest {
     private DataSet non_empty_data_set;
     private DataSet empty_data_set;
 
-    @Before
+    @BeforeEach
     public void dataSetCreatedWithoutError() throws IOException {
 
 //        try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(NON_EMPTY_DATA_SET_FILE_NAME))) {

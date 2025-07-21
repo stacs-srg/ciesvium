@@ -16,7 +16,9 @@
  */
 package uk.ac.standrews.cs.utilities.dataset;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -26,15 +28,19 @@ public class DataSetErrorTest {
     private static final String DATA_FILE_NAME2 = "csv_error_test_data2.csv";
     private static final char DELIMITER = ',';
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void fieldStartingButNotEndingWithQuoteThrowsException() throws IOException {
-
-        new DataSet(getClass().getResourceAsStream(DATA_FILE_NAME1), DELIMITER);
+        
+        assertThrows(RuntimeException.class, () -> {
+            new DataSet(getClass().getResourceAsStream(DATA_FILE_NAME1), DELIMITER);
+        });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void quotedFieldContainingUnescapedQuotesThrowsException() throws IOException {
 
-        new DataSet(getClass().getResourceAsStream(DATA_FILE_NAME2), DELIMITER);
+        assertThrows(RuntimeException.class, () -> {
+            new DataSet(getClass().getResourceAsStream(DATA_FILE_NAME2), DELIMITER);
+        });
     }
 }
