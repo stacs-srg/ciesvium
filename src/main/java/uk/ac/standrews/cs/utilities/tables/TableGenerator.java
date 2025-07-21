@@ -56,7 +56,7 @@ public class TableGenerator {
      *                              corresponding value should be displayed as a
      *                              percentage.
      */
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("unused")
     public TableGenerator(List<DataSet> data_sets, String first_column_heading, List<String> row_labels, List<Boolean> display_as_percentage) {
 
         this.row_labels = row_labels;
@@ -99,7 +99,7 @@ public class TableGenerator {
      *
      * @return the table
      */
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("unused")
     public DataSet getTable() {
 
         /*
