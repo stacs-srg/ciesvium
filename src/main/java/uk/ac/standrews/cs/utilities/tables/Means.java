@@ -32,7 +32,7 @@ public class Means extends StatisticValues {
      *
      * @param data the numerical table
      */
-    @SuppressWarnings({"UnusedDeclaration", "WeakerAccess"})
+    @SuppressWarnings("WeakerAccess")
     public Means(final List<List<Double>> data) {
 
         super(data);

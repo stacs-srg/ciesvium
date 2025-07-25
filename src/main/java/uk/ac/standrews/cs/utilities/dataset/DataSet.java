@@ -190,7 +190,6 @@ public class DataSet {
      *               dataset
      * @return the new dataset
      */
-    @SuppressWarnings("unused")
     public DataSet map(final Mapper mapper) {
 
         return new DataSet(mapper.mapColumnLabels(labels), mapRecords(mapper));
@@ -204,7 +203,6 @@ public class DataSet {
      *                 values
      * @return the new dataset
      */
-    @SuppressWarnings("unused")
     public DataSet extend(final Extender extender) {
 
         return new DataSet(extendLabels(extender), extendRecords(extender));
@@ -225,7 +223,6 @@ public class DataSet {
      *
      * @param values a new record
      */
-    @SuppressWarnings("unused")
     public void addRow(final String... values) {
 
         addRow(Arrays.asList(values));
@@ -275,7 +272,6 @@ public class DataSet {
      *
      * @param output_format the output format
      */
-    @SuppressWarnings("unused")
     public void setOutputFormat(final CSVFormat output_format) {
 
         this.output_format = output_format;
@@ -306,7 +302,6 @@ public class DataSet {
      * @param path the path of the output file
      * @throws IOException if this dataset cannot be printed to the given file
      */
-    @SuppressWarnings("unused")
     public void print(final Path path) throws IOException {
 
         try (final Writer writer = Files.newBufferedWriter(path)) {
@@ -432,7 +427,7 @@ public class DataSet {
         return new HashSet<>(strings).size() < strings.size();
     }
 
-    protected static Charset getCharset() {
+    protected Charset getCharset() {
         return DEFAULT_CHARSET;
     }
 }

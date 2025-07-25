@@ -32,7 +32,6 @@ abstract class StatisticValues {
     private final List<List<Double>> data;
     private final List<Double> results;
 
-    @SuppressWarnings("UnusedDeclaration")
     StatisticValues(final List<List<Double>> data) {
 
         this.data = data;
