@@ -37,7 +37,6 @@ public interface Extender {
      * @return a list of new values to be appended to the record in the extended
      * dataset
      */
-    @SuppressWarnings("unused")
     List<String> getAdditionalValues(List<String> record, DataSet data_set);
 
     /**

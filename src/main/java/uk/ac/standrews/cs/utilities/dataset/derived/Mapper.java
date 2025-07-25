@@ -23,7 +23,6 @@ import java.util.List;
  *
  * @author Graham Kirby (graham.kirby@st-andrews.ac.uk)
  */
-@SuppressWarnings("unused")
 public interface Mapper {
 
     /**
