@@ -30,7 +30,7 @@ public class Tutorial {
 
     // These methods are defined in order to check that website examples compile (although not currently included in tutorial).
 
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("unused")
     private static void create() throws CryptoException, IOException {
 
         final Path plain_text_path = Paths.get("/path/to/plain_text.csv");
@@ -47,7 +47,7 @@ public class Tutorial {
         new_data_set.print(cipher_text_path, key);
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("unused")
     private static void access() throws CryptoException, IOException {
 
         final Path cipher_text_path = Paths.get("/path/to/cipher_text.txt");

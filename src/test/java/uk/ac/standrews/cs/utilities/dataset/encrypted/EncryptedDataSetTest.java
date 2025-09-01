@@ -16,8 +16,8 @@
  */
 package uk.ac.standrews.cs.utilities.dataset.encrypted;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.ac.standrews.cs.utilities.FileManipulation;
 import uk.ac.standrews.cs.utilities.crypto.CryptoException;
 import uk.ac.standrews.cs.utilities.crypto.SymmetricEncryption;
@@ -30,7 +30,8 @@ import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EncryptedDataSetTest {
 
@@ -39,7 +40,7 @@ public class EncryptedDataSetTest {
 
     private DataSet data_set;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         data_set = new DataSet(getClass().getResourceAsStream(NON_EMPTY_DATA_SET_FILE_NAME), DELIMITER);
@@ -68,13 +69,16 @@ public class EncryptedDataSetTest {
         assertEquals(data_sets[0], data_sets[1]);
     }
 
-    @Test(expected = CryptoException.class)
+    @Test
     public void encryptedDataSetDecryptedWithWrongKeyThrowsException() throws CryptoException, IOException {
 
-        final SecretKey key1 = SymmetricEncryption.generateRandomKey();
-        final SecretKey key2 = SymmetricEncryption.generateRandomKey();
+        assertThrows(CryptoException.class, () -> {
+            final SecretKey key1 = SymmetricEncryption.generateRandomKey();
+            final SecretKey key2 = SymmetricEncryption.generateRandomKey();
 
-        createAndReadDataSet(key1, key2);
+            createAndReadDataSet(key1, key2);
+        });
+
     }
 
     private static EncryptedDataSet[] createAndReadDataSet(final SecretKey key1, final SecretKey key2) throws IOException, CryptoException {

@@ -110,7 +110,6 @@ public class EncryptedDataSet extends DataSet {
      *                              user's private key
      * @throws IOException          if either input stream cannot be read
      */
-    @SuppressWarnings("UnusedDeclaration")
     public EncryptedDataSet(final InputStream source_data, final InputStream encrypted_key_stream) throws IOException, CryptoException {
 
         this(source_data, AsymmetricEncryption.getAESKey(encrypted_key_stream));
